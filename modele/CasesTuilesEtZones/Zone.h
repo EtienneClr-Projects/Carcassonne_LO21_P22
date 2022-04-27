@@ -6,7 +6,7 @@
 #define CARCASSONNE_LO21_P22_ZONE_H
 
 
-class zone {
+class Zone {
 
 };
 
