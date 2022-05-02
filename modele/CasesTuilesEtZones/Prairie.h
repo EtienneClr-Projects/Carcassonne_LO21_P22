@@ -6,7 +6,14 @@
 #define CARCASSONNE_LO21_P22_PRAIRIE_H
 
 
-class Prairie {
+#include "Zone.h"
+
+class Prairie : public Zone {
+    std::vector<Zone *> villesAdjacentesFermees;
+
+public:
+    int compterNbVillesAdjacentesFermees();
+
 
 };
 
