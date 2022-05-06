@@ -31,9 +31,9 @@ constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRE
 
 class Config {
 public:
-    static std::string toStringDIRECTION(const DIRECTION dir);
+    static std::string toStringDIRECTION(DIRECTION dir);
 
-    static std::string toStringZONE_TYPE(const ZONE_TYPE type);
+    static std::string toStringZONE_TYPE(ZONE_TYPE type);
 };
 
 

@@ -5,7 +5,7 @@
 #include "Prairie.h"
 
 /**
- * Parcoure toutes les tuiles associées aux cases d'une zone et compte le nombre de villes adjacentes fermees.
+ * Parcoure toutes les tuiles associées aux cases d'une zone et compte le nombre de villes adjacentes fermées.
  * Appelée à la fin du jeu pour compter les points de la prairie.
  * @return le nombre de villes adjacentes fermées
  */

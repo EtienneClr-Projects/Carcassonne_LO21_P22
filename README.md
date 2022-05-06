@@ -12,5 +12,5 @@
 Pour les commandes git utiles :
 https://www.delftstack.com/howto/git/best-way-to-merge-a-git-branch-into-master/
 
-Sinon travailler avec une interface graphique (Github Desktop ou un IDE qui intègre tout ca comme CLion). C'est souvent
+Sinon travailler avec une interface graphique (Github Desktop ou un IDE qui intègre tout ça comme CLion). C'est souvent
 plus simple (surtout pour les merge délicats)

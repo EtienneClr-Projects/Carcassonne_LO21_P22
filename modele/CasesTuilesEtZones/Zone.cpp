@@ -10,7 +10,7 @@
  * @param type le type de la zone
  * @param init_case la case avec laquelle la zone est initialisée. C'est à dire la première case de la zone.
  */
-Zone::Zone(Case *init_case, std::vector<Joueur *> joueursPartie) {
+Zone::Zone(Case *init_case, const std::vector<Joueur *> &joueursPartie) {
     this->type = init_case->getZoneType();
 
     this->cases.push_back(init_case);

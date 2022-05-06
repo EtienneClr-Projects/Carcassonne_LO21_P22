@@ -34,10 +34,10 @@ protected:
     std::vector<Joueur *> joueursPartie;
 
 //##################################################################################################################
-    //Methodes
+    //Méthodes
 public:
     // Constructeur
-    explicit Zone(Case *init_case, std::vector<Joueur *> joueursPartie);
+    explicit Zone(Case *init_case, const std::vector<Joueur *> &joueursPartie);
 
     const ZONE_TYPE &getType();
 
