@@ -10,16 +10,18 @@
  * @param type le type de la zone
  * @param init_case la case avec laquelle la zone est initialisée. C'est à dire la première case de la zone.
  */
-Zone::Zone(Case *init_case) {
+Zone::Zone(Case *init_case, std::vector<Joueur *> joueursPartie) {
     this->type = init_case->getZoneType();
-    this->cases.push_back(init_case);
 
-    for (Joueur *joueur: Partie::joueurs) {//todo @Etienne : à améliorer ?
+    this->cases.push_back(init_case);
+    this->joueursPartie = joueursPartie;
+
+    for (Joueur *joueur: joueursPartie) {//todo @Etienne : à améliorer ?
         this->gagnantsActuels.insert({joueur, 0});
     }
 }
 
-ZONE_TYPE Zone::getType() {
+const ZONE_TYPE &Zone::getType() {
     return this->type;
 }
 
@@ -88,9 +90,9 @@ bool Zone::estOuverte() const {
 }
 
 std::string Zone::toString() {
-    std::string s = "ZONE de type " + std::to_string(this->type) + " : \n";
+    std::string s = "ZONE de type " + Config::toStringZONE_TYPE(this->type) + " : \n";
     for (Case *c: this->cases) {
-        s += c->toString();
+        s += c->toString() + ", ";
     }
     return s;
 }

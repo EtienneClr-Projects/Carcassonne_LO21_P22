@@ -5,7 +5,7 @@
 #ifndef CARCASSONNE_LO21_P22_PRAIRIE_H
 #define CARCASSONNE_LO21_P22_PRAIRIE_H
 
-
+#pragma once
 #include "Zone.h"
 
 class Prairie : public Zone {

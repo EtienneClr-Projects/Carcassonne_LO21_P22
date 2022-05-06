@@ -2,6 +2,7 @@
 // Created by etienne on 27/04/2022.
 //
 
+#include <iostream>
 #include "Config.h"
 
 /**
@@ -9,7 +10,7 @@
  * @param dir la DIRECTION
  * @return la direction sous forme de string. Par exemple "NORD_OUEST".
  */
-std::string Config::toStringDirection(DIRECTION dir) {
+std::string Config::toStringDIRECTION(const DIRECTION dir) {
     std::string str;
     switch (dir) {
         case DIRECTION::NORD_OUEST:
@@ -48,9 +49,10 @@ std::string Config::toStringDirection(DIRECTION dir) {
  * @param _case la case
  * @return le type de la case sous forme de string : "V", "R", "P", et "#" pour autre
  */
-std::string Config::toStringZone(Case _case) {
+std::string Config::toStringZONE_TYPE(const ZONE_TYPE type) {
+
     std::string str;
-    switch (_case.getZoneType()) {
+    switch (type) {
         case ZONE_TYPE::PRE:
             str = "P";
             break;
@@ -62,6 +64,9 @@ std::string Config::toStringZone(Case _case) {
             break;
         case ZONE_TYPE::AUTRE:
             str = "#";
+            break;
+        default:
+            str = "?";
             break;
     }
     return str;

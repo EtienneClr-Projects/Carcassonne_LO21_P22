@@ -4,7 +4,7 @@
 
 #ifndef CARCASSONNE_LO21_P22_ZONE_H
 #define CARCASSONNE_LO21_P22_ZONE_H
-
+class Zone;
 #include <map>
 #include <vector>
 #include "Gestion/Config.h"
@@ -31,14 +31,15 @@ protected:
     // Map associant le nombre de meeples de chaque joueur à la zone.
     std::map<Joueur *, int> gagnantsActuels;
     std::vector<Case *> cases;
+    std::vector<Joueur *> joueursPartie;
 
 //##################################################################################################################
     //Methodes
 public:
     // Constructeur
-    explicit Zone(Case *init_case);
+    explicit Zone(Case *init_case, std::vector<Joueur *> joueursPartie);
 
-    ZONE_TYPE getType();
+    const ZONE_TYPE &getType();
 
     int getNombreDePoints() const;
 

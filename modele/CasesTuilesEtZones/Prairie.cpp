@@ -1,10 +1,8 @@
 //
 // Created by etienne on 27/04/2022.
 //
-
 #include <set>
 #include "Prairie.h"
-#include "Tuile.h"
 
 /**
  * Parcoure toutes les tuiles associées aux cases d'une zone et compte le nombre de villes adjacentes fermees.
@@ -16,8 +14,8 @@ int Prairie::compterNbVillesAdjacentesFermees() {
     for (auto &Case: cases) {
         Tuile &tuile = Case->getTuileParente();
         for (auto &caseDeLaTuile: tuile.getCases()) {
-            if (caseDeLaTuile->getType() == ZONE_TYPE::VILLE) {
-                villesAdjacentes.insert(caseDeLaTuile);
+            if (caseDeLaTuile->getZoneType() == ZONE_TYPE::VILLE) {
+                villesAdjacentes.insert(caseDeLaTuile->getZone());
             }
         }
     }
