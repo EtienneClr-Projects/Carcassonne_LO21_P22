@@ -2,8 +2,8 @@
 // Created by etienne on 27/04/2022.
 //
 
-#ifndef CARCASSONNE_LO21_P22_CONFIG_H
-#define CARCASSONNE_LO21_P22_CONFIG_H
+#ifndef CARCASSONNE_LO21_P22_PARAMETRESPARTIE_H
+#define CARCASSONNE_LO21_P22_PARAMETRESPARTIE_H
 #pragma once
 #include <string>
 
@@ -23,13 +23,40 @@ enum class DIRECTION {
     SUD_EST, SUD, SUD_OUEST
 };
 
+/**
+ * Les différentes extensions avec lesquelles il est possible de jouer.
+ * Par exemple PAYSANS.
+ */
+enum class EXTENSION {
+    NORMAL, PAYSANS, ABBE, RIVIERE, AUBERGES_CATHEDRALES
+};
+
+//todo faire aussi un truc qui lie le chemin de l'image au machin
+
+
 constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRECTION::NORD, DIRECTION::NORD_EST,
                                                      DIRECTION::EST, DIRECTION::MILIEU, DIRECTION::OUEST,
                                                      DIRECTION::SUD_EST, DIRECTION::SUD, DIRECTION::SUD_OUEST};
 
 #include "CasesTuilesEtZones/Case.h"
 
-class Config {
+class ParametresPartie {
+private:
+    int nombreJoueurs;
+    EXTENSION extensionChoisie;
+
+public:
+    EXTENSION getExtensionChoisie() const;
+
+    void setExtensionChoisie(EXTENSION extensionChoisie);
+
+    int getNombreJoueurs() const;
+
+    void setNombreJoueurs(int nombreJoueurs);
+
+
+
+
 public:
     static std::string toStringDIRECTION(DIRECTION dir);
 
@@ -37,4 +64,4 @@ public:
 };
 
 
-#endif //CARCASSONNE_LO21_P22_CONFIG_H
+#endif //CARCASSONNE_LO21_P22_PARAMETRESPARTIE_H

@@ -7,12 +7,12 @@
 class Zone;
 #include <map>
 #include <vector>
-#include "Gestion/Config.h"
+#include "Gestion/ParametresPartie.h"
 #include "JoueurEtRessources/Joueur.h"
 
 
 class Zone {
-    // Une zone est une agrégation de cases. Elle peut être de différents types (cf. Config).
+    // Une zone est une agrégation de cases. Elle peut être de différents types (cf. ParametresPartie).
     // Une zone est ouverte ou fermée en fonction de si on peut ajouter de nouvelles cases à la zone pour l'agrandir.
     // La zone est mise à jour à chaque ajout d'une nouvelle case et les points sont augmentés.
     // Lorsque deux zones de même type sont adjacentes, elles sont fusionnées.
@@ -46,8 +46,6 @@ public:
     Joueur getGagnant();
 
     void ajouterCase(Case c);
-
-    void fusionnerAvecEtSupprimer(Zone *zone);
 
     bool estOuverte() const;
 

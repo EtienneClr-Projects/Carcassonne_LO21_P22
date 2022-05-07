@@ -2,14 +2,14 @@
 // Created by etienne on 27/04/2022.
 //
 
-#include "Config.h"
+#include "ParametresPartie.h"
 
 /**
  * Permet de transformer un DIRECTION en string pour de l'affichage
  * @param dir la DIRECTION
  * @return la direction sous forme de string. Par exemple "NORD_OUEST".
  */
-std::string Config::toStringDIRECTION(const DIRECTION dir) {
+std::string ParametresPartie::toStringDIRECTION(const DIRECTION dir) {
     std::string str;
     switch (dir) {
         case DIRECTION::NORD_OUEST:
@@ -48,7 +48,7 @@ std::string Config::toStringDIRECTION(const DIRECTION dir) {
  * @param _case la case
  * @return le type de la case sous forme de string : "V", "R", "P", et "#" pour autre
  */
-std::string Config::toStringZONE_TYPE(const ZONE_TYPE type) {
+std::string ParametresPartie::toStringZONE_TYPE(const ZONE_TYPE type) {
 
     std::string str;
     switch (type) {
@@ -69,4 +69,20 @@ std::string Config::toStringZONE_TYPE(const ZONE_TYPE type) {
             break;
     }
     return str;
+}
+
+EXTENSION ParametresPartie::getExtensionChoisie() const {
+    return extensionChoisie;
+}
+
+void ParametresPartie::setExtensionChoisie(EXTENSION extensionChoisie) {
+    ParametresPartie::extensionChoisie = extensionChoisie;
+}
+
+int ParametresPartie::getNombreJoueurs() const {
+    return nombreJoueurs;
+}
+
+void ParametresPartie::setNombreJoueurs(int nombreJoueurs) {
+    ParametresPartie::nombreJoueurs = nombreJoueurs;
 }
