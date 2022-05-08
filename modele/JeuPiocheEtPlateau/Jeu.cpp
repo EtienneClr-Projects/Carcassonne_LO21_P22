@@ -2,6 +2,7 @@
 // Created by etienne on 27/04/2022.
 //
 
+
 #include "Jeu.h"
 #include "CasesTuilesEtZones/Case.h"
 #include <string>
@@ -10,12 +11,32 @@
 #include "CasesTuilesEtZones/Tuile.h"
 #include "JoueurEtRessources/Meeple.h"
 
+
 typedef std::vector<std::string> stringVec;
 
 void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
     //on récupère le chemin du dossier en fonction de l'extension demandée
     std::string chemin = getCheminFromExtension(extension);
     chemin += TUILES; //ici on récupère les tuiles
+
+  std::string chemin; //on récupère le chemin du dossier en fonction de l'extension demandée
+    switch (extension) {
+        case EXTENSION::NORMAL:
+            chemin = RESSOURCES_NORMALES;
+            break;
+        case EXTENSION::PAYSANS:
+            chemin = RESSOURCES_PAYSANS;
+            break;
+        case EXTENSION::ABBE:
+            chemin = RESSOURCES_ABBE;
+            break;
+        case EXTENSION::RIVIERE:
+            chemin = RESSOURCES_RIVIERES;
+            break;
+        case EXTENSION::AUBERGES_CATHEDRALES:
+            chemin = RESSOURCES_AUBERGES_CATHEDRALES;
+            break;
+    }
 
     stringVec v;
     lireDossier("../" + chemin, v);
@@ -47,6 +68,7 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
                 if (c == '2') { //booléen pour l'auberge
                     auberge = true;
                 }
+
             }
             iInfo++;
 
@@ -57,6 +79,7 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
                 if (iCase==9) {//fin de la description de la tuile
                     break;
                 }
+
             }
         }
         for (int i = 0; i < nbTuilesDeCeType; i++) {
@@ -69,7 +92,6 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
         }
     }
 }
-
 
 void Jeu::getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples) {
     //on récupère le chemin du dossier en fonction de l'extension demandée
@@ -100,6 +122,7 @@ void Jeu::getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples
         }
     }
 }
+
 
 
 /**
@@ -152,3 +175,4 @@ string Jeu::getCheminFromExtension(EXTENSION extension) {
     }
     return chemin;
 }
+

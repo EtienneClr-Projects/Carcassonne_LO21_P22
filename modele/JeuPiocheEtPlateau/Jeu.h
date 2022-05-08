@@ -1,6 +1,3 @@
-//
-// Created by etienne on 27/04/2022.
-//
 
 #ifndef CARCASSONNE_LO21_P22_JEU_H
 #define CARCASSONNE_LO21_P22_JEU_H
@@ -11,6 +8,7 @@
 #include <vector>
 #include "CasesTuilesEtZones/Tuile.h"
 #include "JoueurEtRessources/Meeple.h"
+
 
 using namespace std;
 typedef std::vector<std::string> stringVec;
@@ -28,6 +26,11 @@ const string MEEPLES = "Meeples/";
 //donc un chemin vers les tuiles normales s'écrit : RESSOURCES_NORMALES + TUILES c'est à dire : Ressources/Normal/Tuiles/
 //  et un chemin vers les meeples paysans s'écrit : RESSOURCES_PAYSANS + MEEPLES c'est à dire : Ressources/Paysans/Meeples/
 
+const string RESSOURCES_NORMALES = RESSOURCES + "TuilesNormales/";
+const string RESSOURCES_RIVIERES = RESSOURCES + "TuilesRiviere/";
+const string RESSOURCES_PAYSANS = RESSOURCES + "TuilesPaysans/";
+const string RESSOURCES_ABBE = RESSOURCES + "TuilesAbbe/";
+const string RESSOURCES_AUBERGES_CATHEDRALES = RESSOURCES + "TuilesAubergesCathedrales/";
 
 class Jeu {
     static void lireDossier(const std::string &chemin, stringVec &vecteurDeStrings);
@@ -39,6 +42,8 @@ public:
     static void getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples);
 
     static string getCheminFromExtension(EXTENSION extension);
+
+    static void getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles);
 };
 
 
