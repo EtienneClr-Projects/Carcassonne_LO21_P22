@@ -59,21 +59,6 @@ void Zone::ajouterCase(Case c) {
 }
 
 /**
- * Permet de fusionner deux zones, lorsque deux tuiles adjacentes sont posées.
- * Supprime la zone passée en paramètre. //todo @Etienne
- * @param zone la zone à fusionner avec la zone courante
- */
-void Zone::fusionnerAvecEtSupprimer(Zone *zone) {
-    if (zone->getType() == this->type) {
-        for (Case *c: zone->getCases()) {
-            this->cases.push_back(c);
-        }
-    } else {
-        throw "Erreur : la zone n'est pas du bon type";
-    }
-}
-
-/**
  * Renvoie la liste des cases de la zone.
  * @return la liste des cases de la zone
  */
@@ -90,7 +75,7 @@ bool Zone::estOuverte() const {
 }
 
 std::string Zone::toString() {
-    std::string s = "ZONE de type " + Config::toStringZONE_TYPE(this->type) + " : \n";
+    std::string s = "ZONE de type " + ParametresPartie::toStringZONE_TYPE(this->type) + " : \n";
     for (Case *c: this->cases) {
         s += c->toString() + ", ";
     }

@@ -9,11 +9,17 @@
 #include <vector>
 #include <dirent.h>
 #include "CasesTuilesEtZones/Tuile.h"
+#include "JoueurEtRessources/Meeple.h"
+
 
 typedef std::vector<std::string> stringVec;
 
 void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
-    std::string chemin; //on récupère le chemin du dossier en fonction de l'extension demandée
+    //on récupère le chemin du dossier en fonction de l'extension demandée
+    std::string chemin = getCheminFromExtension(extension);
+    chemin += TUILES; //ici on récupère les tuiles
+
+  std::string chemin; //on récupère le chemin du dossier en fonction de l'extension demandée
     switch (extension) {
         case EXTENSION::NORMAL:
             chemin = RESSOURCES_NORMALES;
@@ -47,6 +53,7 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
             ZONE_TYPE type;
             int idConnexion;
             bool blason = false;
+            bool auberge = false;
 
             if (iInfo == 0) {//type de la tuile
                 type = ParametresPartie::toZONE_TYPE(c);
@@ -58,6 +65,10 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
                 if (c == '1') { //booléen pour le blason
                     blason = true;
                 }
+                if (c == '2') { //booléen pour l'auberge
+                    auberge = true;
+                }
+
             }
             iInfo++;
 
@@ -65,6 +76,10 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
                 cases[ALL_DIRECTIONS[iCase]] = new Case(type, ALL_DIRECTIONS[iCase], blason, idConnexion);
                 iCase++;
                 iInfo = 0;
+                if (iCase==9) {//fin de la description de la tuile
+                    break;
+                }
+
             }
         }
         for (int i = 0; i < nbTuilesDeCeType; i++) {
@@ -77,6 +92,38 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
         }
     }
 }
+
+void Jeu::getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples) {
+    //on récupère le chemin du dossier en fonction de l'extension demandée
+    std::string chemin = getCheminFromExtension(extension);
+    chemin += MEEPLES; //ici on récupère les meeples
+
+    stringVec v;
+    lireDossier("../" + chemin, v);
+
+    //pour chaque nom de fichier sous la forme :
+    // 7NR → 7 meeples Normaux de couleur Rouge
+    // <nb D’exemplaires><Type du Meeple><Couleur>
+    //N → Normal
+    //G → Grand Meeple
+    //A → Abbé
+
+    for (auto &s: v) {
+        //on parcourt chaque caractère de la chaine
+        int nbMeeplesDeCeType = (int) s[0] - 48; //conversion depuis l'ascii
+        string t(1,s[1]);
+        MEEPLE_TYPE type = ParametresPartie::toMEEPLE_TYPE(t);
+        string c(1,s[2]);
+        COULEUR couleur = ParametresPartie::toCOULEUR(c);
+
+        for (int i = 0; i < nbMeeplesDeCeType; i++) {
+            auto *meeple = new Meeple(type, couleur);
+            meeples->push_back(meeple);
+        }
+    }
+}
+
+
 
 /**
  * Lit le contenu d'un dossier et le stocke dans un vector de string donné en paramètre
@@ -106,3 +153,26 @@ map<DIRECTION, Case *> Jeu::deepCopyMap(const map<DIRECTION, Case *> &map1) {
     }
     return map2;
 }
+
+string Jeu::getCheminFromExtension(EXTENSION extension) {
+    string chemin;
+    switch (extension) {
+        case EXTENSION::NORMAL:
+            chemin = RESSOURCES_NORMALES;
+            break;
+        case EXTENSION::PAYSANS:
+            chemin = RESSOURCES_PAYSANS;
+            break;
+        case EXTENSION::ABBE:
+            chemin = RESSOURCES_ABBE;
+            break;
+        case EXTENSION::RIVIERE:
+            chemin = RESSOURCES_RIVIERES;
+            break;
+        case EXTENSION::AUBERGES_CATHEDRALES:
+            chemin = RESSOURCES_AUBERGES_CATHEDRALES;
+            break;
+    }
+    return chemin;
+}
+

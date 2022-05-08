@@ -9,7 +9,7 @@
  * Appelée à la fin du jeu pour compter les points de la prairie.
  * @return le nombre de villes adjacentes fermées
  */
-int Prairie::compterNbVillesAdjacentesFermees() {
+int Prairie::compterNbVillesAdjacentesFermees() {//todo @Etienne suffit pas
     std::set<Zone *> villesAdjacentes;//Set : pour qu'il n'y ait pas de doublons
     for (auto &Case: cases) {
         Tuile &tuile = Case->getTuileParente();
