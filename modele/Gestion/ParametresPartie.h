@@ -8,10 +8,10 @@
 #include <string>
 
 /**
- * Le type de la zone : PRE, VILLE, CHEMIN, ou AUTRE
+ * Le type de la zone : PRAIRIE, VILLE, CHEMIN, ou AUTRE ou FIN pour une fin de chemin
  */
 enum class ZONE_TYPE {
-    PRE, VILLE, CHEMIN, AUTRE
+    PRAIRIE, VILLE, CHEMIN, AUTRE, FIN
 };
 /**
  * La direction suivant les 9 cardinaux.
@@ -23,6 +23,13 @@ enum class DIRECTION {
     SUD_EST, SUD, SUD_OUEST
 };
 
+enum class MEEPLE_TYPE {
+    ABBE, GRAND_MEEPLE, NORMAL
+};
+
+enum class COULEUR {
+    ROUGE, BLEU, VERT, JAUNE, NOIR
+};
 /**
  * Les différentes extensions avec lesquelles il est possible de jouer.
  * Par exemple PAYSANS.
@@ -48,19 +55,25 @@ private:
 public:
     EXTENSION getExtensionChoisie() const;
 
-    void setExtensionChoisie(EXTENSION extensionChoisie);
+    void setExtensionChoisie(EXTENSION extChoisie);
 
     int getNombreJoueurs() const;
 
-    void setNombreJoueurs(int nombreJoueurs);
+    void setNombreJoueurs(int nbJoueurs);
 
-
-
-
-public:
     static std::string toStringDIRECTION(DIRECTION dir);
 
     static std::string toStringZONE_TYPE(ZONE_TYPE type);
+
+    static ZONE_TYPE toZONE_TYPE(char type);
+
+    static MEEPLE_TYPE toMEEPLE_TYPE(const std::string& str);
+
+    static COULEUR toCOULEUR(const std::string& str);
+
+    static std::string toStringCOULEUR(COULEUR couleur);
+
+    static std::string toStringMEEPLE_TYPE(MEEPLE_TYPE type);
 };
 
 
