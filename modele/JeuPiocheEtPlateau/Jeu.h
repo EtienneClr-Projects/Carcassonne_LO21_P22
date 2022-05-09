@@ -37,8 +37,6 @@ public:
 
     static string getCheminFromExtension(EXTENSION extension);
 
-    static void getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles);
 };
-
 
 #endif //CARCASSONNE_LO21_P22_JEU_H

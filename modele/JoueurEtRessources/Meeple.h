@@ -11,10 +11,12 @@
 class Meeple {
     MEEPLE_TYPE type;
     COULEUR couleur;
-    Joueur *joueur = nullptr;
+    std::string cheminImage;
 
+    Joueur *joueur = nullptr;
 public:
-    Meeple(MEEPLE_TYPE type, COULEUR couleur);
+
+    Meeple(MEEPLE_TYPE type, COULEUR couleur, std::string cheminImage);
 
     std::string toString();
 };

@@ -14,42 +14,29 @@
 
 typedef std::vector<std::string> stringVec;
 
+/**
+ * Renvoie un vecteur de tuiles contenant toutes les tuiles déjà initialisées
+ * et liées à leurs images de l'extension fournie en paramètre
+ * @param extension l'extension dont on veut récupérer les tuiles
+ * @param tuiles le vecteur de tuiles où seront stockées les tuiles
+ */
 void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
     //on récupère le chemin du dossier en fonction de l'extension demandée
-    std::string chemin = getCheminFromExtension(extension);
+    std::string chemin = "../" + getCheminFromExtension(extension);
     chemin += TUILES; //ici on récupère les tuiles
 
-  std::string chemin; //on récupère le chemin du dossier en fonction de l'extension demandée
-    switch (extension) {
-        case EXTENSION::NORMAL:
-            chemin = RESSOURCES_NORMALES;
-            break;
-        case EXTENSION::PAYSANS:
-            chemin = RESSOURCES_PAYSANS;
-            break;
-        case EXTENSION::ABBE:
-            chemin = RESSOURCES_ABBE;
-            break;
-        case EXTENSION::RIVIERE:
-            chemin = RESSOURCES_RIVIERES;
-            break;
-        case EXTENSION::AUBERGES_CATHEDRALES:
-            chemin = RESSOURCES_AUBERGES_CATHEDRALES;
-            break;
-    }
-
     stringVec v;
-    lireDossier("../" + chemin, v);
+    lireDossier(chemin, v);
 
     //pour chaque nom de fichier
-    for (auto &s: v) {
+    for (auto &cheminImage: v) {
         //on parcourt chaque caractère de la chaine
-        int nbTuilesDeCeType = (int) s[0] - 48; //conversion depuis l'ascii
+        int nbTuilesDeCeType = (int) cheminImage[0] - 48; //conversion depuis l'ascii
         int iCase = 0;
         map<DIRECTION, Case *> cases;
         int iInfo = 0;
 
-        for (auto &c: s.substr(1)) {
+        for (auto &c: cheminImage.substr(1)) {
             ZONE_TYPE type;
             int idConnexion;
             bool blason = false;
@@ -73,10 +60,10 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
             iInfo++;
 
             if (c == '_') {//fin de la description de la case
-                cases[ALL_DIRECTIONS[iCase]] = new Case(type, ALL_DIRECTIONS[iCase], blason, idConnexion);
+                cases[ALL_DIRECTIONS[iCase]] = new Case(type, ALL_DIRECTIONS[iCase], SUPP_TYPE::BLASON, idConnexion);
                 iCase++;
                 iInfo = 0;
-                if (iCase==9) {//fin de la description de la tuile
+                if (iCase == 9) {//fin de la description de la tuile
                     break;
                 }
 
@@ -84,7 +71,7 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
         }
         for (int i = 0; i < nbTuilesDeCeType; i++) {
             map<DIRECTION, Case *> casesNew = deepCopyMap(cases); //pour que les adresses des cases soient différentes
-            auto *tuile = new Tuile(casesNew);
+            auto *tuile = new Tuile(casesNew, chemin+cheminImage);
             for (auto &c: tuile->cases) { //on ajoute la tuile parente à chaque case
                 c.second->setTuileParente(tuile);
             }
@@ -93,13 +80,19 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
     }
 }
 
+/**
+ * Renvoie un vecteur de meeples contenant tous les meeples déjà initialisés
+ * et liées à leurs images de l'extension fournie en paramètre
+ * @param extension l'extension dont on veut récupérer les meeples
+ * @param meeples le vecteur de meeples où seront stockées les meeples
+ */
 void Jeu::getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples) {
     //on récupère le chemin du dossier en fonction de l'extension demandée
-    std::string chemin = getCheminFromExtension(extension);
+    std::string chemin = "../" + getCheminFromExtension(extension);
     chemin += MEEPLES; //ici on récupère les meeples
 
     stringVec v;
-    lireDossier("../" + chemin, v);
+    lireDossier(chemin, v);
 
     //pour chaque nom de fichier sous la forme :
     // 7NR → 7 meeples Normaux de couleur Rouge
@@ -108,21 +101,20 @@ void Jeu::getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples
     //G → Grand Meeple
     //A → Abbé
 
-    for (auto &s: v) {
+    for (auto &cheminImage: v) {
         //on parcourt chaque caractère de la chaine
-        int nbMeeplesDeCeType = (int) s[0] - 48; //conversion depuis l'ascii
-        string t(1,s[1]);
+        int nbMeeplesDeCeType = (int) cheminImage[0] - 48; //conversion depuis l'ascii
+        string t(1, cheminImage[1]);
         MEEPLE_TYPE type = ParametresPartie::toMEEPLE_TYPE(t);
-        string c(1,s[2]);
+        string c(1, cheminImage[2]);
         COULEUR couleur = ParametresPartie::toCOULEUR(c);
 
         for (int i = 0; i < nbMeeplesDeCeType; i++) {
-            auto *meeple = new Meeple(type, couleur);
+            auto *meeple = new Meeple(type, couleur, chemin+cheminImage);
             meeples->push_back(meeple);
         }
     }
 }
-
 
 
 /**
