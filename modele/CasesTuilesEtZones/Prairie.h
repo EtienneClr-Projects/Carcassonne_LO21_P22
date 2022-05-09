@@ -14,7 +14,7 @@ class Prairie : public Zone {
 public:
     int compterNbVillesAdjacentesFermees();
 
-
+    static std::vector<Case *> getCasesAdjacentes(Tuile *tuile, DIRECTION direction);
 };
 
 
