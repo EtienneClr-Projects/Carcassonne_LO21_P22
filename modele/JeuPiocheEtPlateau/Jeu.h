@@ -26,12 +26,6 @@ const string MEEPLES = "Meeples/";
 //donc un chemin vers les tuiles normales s'écrit : RESSOURCES_NORMALES + TUILES c'est à dire : Ressources/Normal/Tuiles/
 //  et un chemin vers les meeples paysans s'écrit : RESSOURCES_PAYSANS + MEEPLES c'est à dire : Ressources/Paysans/Meeples/
 
-const string RESSOURCES_NORMALES = RESSOURCES + "TuilesNormales/";
-const string RESSOURCES_RIVIERES = RESSOURCES + "TuilesRiviere/";
-const string RESSOURCES_PAYSANS = RESSOURCES + "TuilesPaysans/";
-const string RESSOURCES_ABBE = RESSOURCES + "TuilesAbbe/";
-const string RESSOURCES_AUBERGES_CATHEDRALES = RESSOURCES + "TuilesAubergesCathedrales/";
-
 class Jeu {
     static void lireDossier(const std::string &chemin, stringVec &vecteurDeStrings);
 

@@ -11,8 +11,8 @@
  */
 int Prairie::compterNbVillesAdjacentesFermees() {//todo @Etienne suffit pas
     std::set<Zone *> villesAdjacentes;//Set : pour qu'il n'y ait pas de doublons
-    for (auto &Case: cases) {
-        Tuile &tuile = Case->getTuileParente();
+    for (auto &C: cases) {
+        Tuile &tuile = C->getTuileParente();
         for (auto &caseDeLaTuile: tuile.getCases()) {
             if (caseDeLaTuile->getZoneType() == ZONE_TYPE::VILLE) {
                 villesAdjacentes.insert(caseDeLaTuile->getZone());

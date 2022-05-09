@@ -26,9 +26,17 @@ enum class DIRECTION {
 enum class MEEPLE_TYPE {
     ABBE, GRAND_MEEPLE, NORMAL
 };
-
+/**
+ * Les différentes couleurs des meeples
+ */
 enum class COULEUR {
     ROUGE, BLEU, VERT, JAUNE, NOIR
+};
+/**
+ * Un paramètre supplémentaire des cases. Si elles possèdent un blason par exemple.
+ */
+enum class SUPP_TYPE {
+    BLASON, AUBERGE, BLE, TONNEAU
 };
 /**
  * Les différentes extensions avec lesquelles il est possible de jouer.
