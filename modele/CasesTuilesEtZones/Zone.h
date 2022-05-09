@@ -47,8 +47,6 @@ public:
 
     void ajouterCase(Case c);
 
-    void fusionnerAvecEtSupprimer(Zone *zone);
-
     bool estOuverte() const;
 
     std::vector<Case *> getCases();

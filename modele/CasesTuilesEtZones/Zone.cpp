@@ -10,13 +10,15 @@
  * @param type le type de la zone
  * @param init_case la case avec laquelle la zone est initialisée. C'est à dire la première case de la zone.
  */
+//todo (HIGH) @Etienne : à améliorer ? Ne pas passer joueursPartie en paramètre de la fonction
 Zone::Zone(Case *init_case, const std::vector<Joueur *> &joueursPartie) {
     this->type = init_case->getZoneType();
 
     this->cases.push_back(init_case);
     this->joueursPartie = joueursPartie;
 
-    for (Joueur *joueur: joueursPartie) {//todo @Etienne : à améliorer ?
+    //faire plutot un Partie::getInstance()->getJoueurs(). Il faut que ça soit un singleton.
+    for (Joueur *joueur: joueursPartie) {
         this->gagnantsActuels.insert({joueur, 0});
     }
 }
@@ -55,21 +57,6 @@ void Zone::ajouterCase(Case c) {
         this->cases.push_back(&c);
     } else {
         throw "Erreur : la case n'appartient pas à la bonne zone";
-    }
-}
-
-/**
- * Permet de fusionner deux zones, lorsque deux tuiles adjacentes sont posées.
- * Supprime la zone passée en paramètre. //todo @Etienne
- * @param zone la zone à fusionner avec la zone courante
- */
-void Zone::fusionnerAvecEtSupprimer(Zone *zone) {
-    if (zone->getType() == this->type) {
-        for (Case *c: zone->getCases()) {
-            this->cases.push_back(c);
-        }
-    } else {
-        throw "Erreur : la zone n'est pas du bon type";
     }
 }
 
