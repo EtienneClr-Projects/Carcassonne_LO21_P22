@@ -90,16 +90,29 @@ void ParametresPartie::setNombreJoueurs(int nbJoueurs) {
 }
 
 ZONE_TYPE ParametresPartie::toZONE_TYPE(char type) {
-    if (type == 'P') {
-        return ZONE_TYPE::PRAIRIE;
-    } else if (type == 'V') {
-        return ZONE_TYPE::VILLE;
-    } else if (type == 'C') {
-        return ZONE_TYPE::CHEMIN;
-    } else if (type == 'F') {
-        return ZONE_TYPE::FIN;
-    } else {
-        throw std::invalid_argument("Type de zone invalide");
+    switch (type) {
+        case 'P':
+            return ZONE_TYPE::PRAIRIE;
+        case 'V':
+            return ZONE_TYPE::VILLE;
+        case 'C':
+            return ZONE_TYPE::CHEMIN;
+        case 'R':
+            return ZONE_TYPE::RIVIERE;
+        case 'F':
+            return ZONE_TYPE::FIN_DE_ROUTE;
+        case 'A':
+            return ZONE_TYPE::ABBAYE;
+        case 'J':
+            return ZONE_TYPE::JARDIN;
+        case 'L':
+            return ZONE_TYPE::LAC;
+        case 'S':
+            return ZONE_TYPE::SOURCE;
+        case 'c':
+            return ZONE_TYPE::CATHEDRALE;
+        default:
+            throw std::invalid_argument("Type de zone invalide");
     }
 }
 
@@ -119,49 +132,38 @@ MEEPLE_TYPE ParametresPartie::toMEEPLE_TYPE(const std::string& str) {
 }
 
 COULEUR ParametresPartie::toCOULEUR(const std::string& str) {
-    if (str=="R") {
-        return COULEUR::ROUGE;
-    }
-    else if (str=="V") {
-        return COULEUR::VERT;
-    }
-    else if (str=="B") {
-        return COULEUR::BLEU;
-    }
-    else if (str=="J") {
-        return COULEUR::JAUNE;
-    }
-    else if (str=="N") {
-        return COULEUR::NOIR;
-    }
-    else {
-        throw std::invalid_argument("Couleur invalide");
+    //simplify previous code with switch
+    switch (str[0]) {
+        case 'R':
+            return COULEUR::ROUGE;
+        case 'V':
+            return COULEUR::VERT;
+        case 'B':
+            return COULEUR::BLEU;
+        case 'J':
+            return COULEUR::JAUNE;
+        case 'N':
+            return COULEUR::NOIR;
+        default:
+            throw std::invalid_argument("Couleur invalide");
     }
 }
 
 std::string ParametresPartie::toStringCOULEUR(COULEUR couleur) {
-    std::string str;
     switch (couleur) {
         case COULEUR::ROUGE:
-            str = "R";
-            break;
+            return "R";
         case COULEUR::VERT:
-            str = "V";
-            break;
+            return "V";
         case COULEUR::BLEU:
-            str = "B";
-            break;
+            return "B";
         case COULEUR::JAUNE:
-            str = "J";
-            break;
+            return "J";
         case COULEUR::NOIR:
-            str = "N";
-            break;
+            return "N";
         default:
-            str = "?";
-            break;
+            throw std::invalid_argument("Couleur invalide");
     }
-    return str;
 }
 
 std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
