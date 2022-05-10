@@ -3,7 +3,6 @@
 //
 
 #include <stdexcept>
-#include <iostream>
 #include "ParametresPartie.h"
 
 /**
@@ -73,22 +72,43 @@ std::string ParametresPartie::toStringZONE_TYPE(const ZONE_TYPE type) {
     return str;
 }
 
+/**
+ * Renvoie l'extension choisie par l'utilisateur pour cette partie
+ * @return l'extension choisie par l'utilisateur pour cette partie
+ */
 EXTENSION ParametresPartie::getExtensionChoisie() const {
     return extensionChoisie;
 }
 
+/**
+ * Définit l'extension choisie par l'utilisateur pour cette partie
+ * @param extChoisie l'extension choisie
+ */
 void ParametresPartie::setExtensionChoisie(EXTENSION extChoisie) {
     ParametresPartie::extensionChoisie = extChoisie;
 }
 
+/**
+ * Renvoie le nombre de joueurs choisis par l'utilisateur pour cette partie
+ * @return le nombre de joueurs
+ */
 int ParametresPartie::getNombreJoueurs() const {
     return nombreJoueurs;
 }
 
+/**
+ * Définit le nombre de joueurs choisis par l'utilisateur pour cette partie
+ * @param nbJoueurs le nombre de joueurs
+ */
 void ParametresPartie::setNombreJoueurs(int nbJoueurs) {
     ParametresPartie::nombreJoueurs = nbJoueurs;
 }
 
+/**
+ * Permet de convertir le caractère représentant un type de zone en ZONE_TYPE
+ * @param type le caractère représentant un type de zone
+ * @return le type de zone
+ */
 ZONE_TYPE ParametresPartie::toZONE_TYPE(char type) {
     switch (type) {
         case 'P':
@@ -116,6 +136,11 @@ ZONE_TYPE ParametresPartie::toZONE_TYPE(char type) {
     }
 }
 
+/**
+ * Permet de convertir le string représentant un meeple en MEEPLE_TYPE
+ * @param str le string représentant un meeple
+ * @return le MEEPLE_TYPE
+ */
 MEEPLE_TYPE ParametresPartie::toMEEPLE_TYPE(const std::string& str) {
     if (str == "N") {
         return MEEPLE_TYPE::NORMAL;
@@ -131,6 +156,11 @@ MEEPLE_TYPE ParametresPartie::toMEEPLE_TYPE(const std::string& str) {
     }
 }
 
+/**
+ * Permet de convertir le string représentant une couleur en COULEUR
+ * @param str le string représentant une couleur
+ * @return la COULEUR
+ */
 COULEUR ParametresPartie::toCOULEUR(const std::string& str) {
     //simplify previous code with switch
     switch (str[0]) {
@@ -149,6 +179,11 @@ COULEUR ParametresPartie::toCOULEUR(const std::string& str) {
     }
 }
 
+/**
+ * Permet de convertir une COULEUR en string
+ * @param couleur la COULEUR
+ * @return le string représentant la COULEUR
+ */
 std::string ParametresPartie::toStringCOULEUR(COULEUR couleur) {
     switch (couleur) {
         case COULEUR::ROUGE:
@@ -166,6 +201,11 @@ std::string ParametresPartie::toStringCOULEUR(COULEUR couleur) {
     }
 }
 
+/**
+ * Permet de convertir un MEEPLE_TYPE en string
+ * @param type le MEEPLE_TYPE
+ * @return le string représentant le MEEPLE_TYPE
+ */
 std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
     std::string str;
     switch (type) {
@@ -184,9 +224,13 @@ std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
     }
     return str;
 }
-
+//L'instance singleton de ParametresPartie
 ParametresPartie* ParametresPartie::instance_ = nullptr;
 
+/**
+ * Permet de récupérer l'instance singleton de ParametresPartie
+ * @return l'instance
+ */
 ParametresPartie *ParametresPartie::getInstance() {
     if (instance_ == nullptr) {
         instance_ = new ParametresPartie();

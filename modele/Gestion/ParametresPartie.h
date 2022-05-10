@@ -24,6 +24,9 @@ enum class DIRECTION {
     SUD_EST, SUD, SUD_OUEST
 };
 
+/**
+ * Les différents types de Meeples. Par exemple, NORMAL ou ABBE.
+ */
 enum class MEEPLE_TYPE {
     ABBE, GRAND_MEEPLE, NORMAL
 };
@@ -47,9 +50,9 @@ enum class EXTENSION {
     NORMAL, PAYSANS, ABBE, RIVIERE, AUBERGES_CATHEDRALES
 };
 
-//todo faire aussi un truc qui lie le chemin de l'image au machin
-
-
+/**
+ * Permet de parcourir toutes les directions
+ */
 constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRECTION::NORD, DIRECTION::NORD_EST,
                                                      DIRECTION::EST, DIRECTION::MILIEU, DIRECTION::OUEST,
                                                      DIRECTION::SUD_EST, DIRECTION::SUD, DIRECTION::SUD_OUEST};
@@ -80,7 +83,7 @@ public:
 
     static ParametresPartie *getInstance();
 
-    //METHODES
+    //METHODES DU SINGLETON
     EXTENSION getExtensionChoisie() const;
 
     void setExtensionChoisie(EXTENSION extChoisie);
@@ -89,6 +92,8 @@ public:
 
     void setNombreJoueurs(int nbJoueurs);
 
+
+    //METHODES STATIQUES DE CONVERSION
     static std::string toStringDIRECTION(DIRECTION dir);
 
     static std::string toStringZONE_TYPE(ZONE_TYPE type);
