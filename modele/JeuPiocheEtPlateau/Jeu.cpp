@@ -39,8 +39,7 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
         for (auto &c: cheminImage.substr(1)) {
             ZONE_TYPE type;
             int idConnexion;
-            bool blason = false;
-            bool auberge = false;
+            SUPP_TYPE suppType;
 
             if (iInfo == 0) {//type de la tuile
                 type = ParametresPartie::toZONE_TYPE(c);
@@ -50,17 +49,17 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
             }
             if (iInfo == 2) {// l'info spéciale de la tuile
                 if (c == '1') { //booléen pour le blason
-                    blason = true;
+                    suppType= SUPP_TYPE::BLASON;
                 }
                 if (c == '2') { //booléen pour l'auberge
-                    auberge = true;
+                    suppType= SUPP_TYPE::AUBERGE;
                 }
 
             }
             iInfo++;
 
             if (c == '_') {//fin de la description de la case
-                cases[ALL_DIRECTIONS[iCase]] = new Case(type, ALL_DIRECTIONS[iCase], SUPP_TYPE::BLASON, idConnexion);
+                cases[ALL_DIRECTIONS[iCase]] = new Case(type, ALL_DIRECTIONS[iCase], suppType, idConnexion);
                 iCase++;
                 iInfo = 0;
                 if (iCase == 9) {//fin de la description de la tuile
