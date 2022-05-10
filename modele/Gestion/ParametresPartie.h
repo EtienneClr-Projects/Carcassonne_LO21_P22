@@ -5,6 +5,7 @@
 #ifndef CARCASSONNE_LO21_P22_PARAMETRESPARTIE_H
 #define CARCASSONNE_LO21_P22_PARAMETRESPARTIE_H
 #pragma once
+
 #include <string>
 
 /**
@@ -55,12 +56,31 @@ constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRE
 
 #include "CasesTuilesEtZones/Case.h"
 
+/**
+ * Parametres de la partie. Singleton.
+ * On trouve ici les informations nécessaires à la partie.
+ * On trouve également les enumérations des différents types de cases, zones, directions, couleurs, etc.
+ * accompagnées des méthodes pour les transformer en string ou l'inverse.
+ */
 class ParametresPartie {
 private:
     int nombreJoueurs;
     EXTENSION extensionChoisie;
 
+    //SINGLETON
+    ParametresPartie() = default;
+
+    static ParametresPartie *instance_;
+
 public:
+    //SINGLETON
+    ParametresPartie(const ParametresPartie &) = delete;
+
+    ParametresPartie &operator=(const ParametresPartie &) = delete;
+
+    static ParametresPartie *getInstance();
+
+    //METHODES
     EXTENSION getExtensionChoisie() const;
 
     void setExtensionChoisie(EXTENSION extChoisie);
@@ -75,13 +95,15 @@ public:
 
     static ZONE_TYPE toZONE_TYPE(char type);
 
-    static MEEPLE_TYPE toMEEPLE_TYPE(const std::string& str);
+    static MEEPLE_TYPE toMEEPLE_TYPE(const std::string &str);
 
-    static COULEUR toCOULEUR(const std::string& str);
+    static COULEUR toCOULEUR(const std::string &str);
 
     static std::string toStringCOULEUR(COULEUR couleur);
 
     static std::string toStringMEEPLE_TYPE(MEEPLE_TYPE type);
+
+    static std::string toStringEXTENSION(EXTENSION ext);
 };
 
 

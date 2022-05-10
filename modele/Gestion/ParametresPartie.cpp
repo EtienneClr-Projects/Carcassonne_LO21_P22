@@ -184,3 +184,34 @@ std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
     }
     return str;
 }
+
+ParametresPartie* ParametresPartie::instance_ = nullptr;
+
+ParametresPartie *ParametresPartie::getInstance() {
+    if (instance_ == nullptr) {
+        instance_ = new ParametresPartie();
+    }
+    return instance_;
+}
+
+/**
+ * Transforme les EXTENSION en string
+ * @param ext Extension à transformer
+ * @return String correspondant à l'extension
+ */
+std::string ParametresPartie::toStringEXTENSION(EXTENSION ext) {
+    switch (ext) {
+        case EXTENSION::NORMAL:
+            return "Normal";
+        case EXTENSION::PAYSANS:
+            return "Paysans";
+        case EXTENSION::ABBE:
+            return "Abbe";
+        case EXTENSION::RIVIERE:
+            return "Riviere";
+        case EXTENSION::AUBERGES_CATHEDRALES:
+            return "Auberges_Cathedrales";
+        default:
+            throw std::invalid_argument("Extension invalide");
+    }
+}
