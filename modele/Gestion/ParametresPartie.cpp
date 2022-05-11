@@ -151,6 +151,12 @@ MEEPLE_TYPE ParametresPartie::toMEEPLE_TYPE(const std::string& str) {
     else if (str=="A") {
         return MEEPLE_TYPE::ABBE;
     }
+    else if (str == "C") {
+        return MEEPLE_TYPE::COCHON;
+    }
+    else if (str =="B") {
+        return MEEPLE_TYPE::BATISSEUR;
+    }
     else {
         throw std::invalid_argument("Meeple type invalide");
     }
@@ -218,6 +224,12 @@ std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
         case MEEPLE_TYPE::ABBE:
             str = "A";
             break;
+            case MEEPLE_TYPE::COCHON:
+            str = "C";
+            break;
+        case MEEPLE_TYPE::BATISSEUR:
+            str = "B";
+            break;
         default:
             str = "?";
             break;
@@ -255,6 +267,8 @@ std::string ParametresPartie::toStringEXTENSION(EXTENSION ext) {
             return "Riviere";
         case EXTENSION::AUBERGES_CATHEDRALES:
             return "Auberges_Cathedrales";
+        case EXTENSION::MARCHANDS_BATISSEURS:
+            return "Marchands_Batisseurs";
         default:
             throw std::invalid_argument("Extension invalide");
     }

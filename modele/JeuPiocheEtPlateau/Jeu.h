@@ -19,9 +19,11 @@ const string RESSOURCES_RIVIERES = RESSOURCES + "Riviere/";
 const string RESSOURCES_PAYSANS = RESSOURCES + "Paysans/";
 const string RESSOURCES_ABBE = RESSOURCES + "Abbe/";
 const string RESSOURCES_AUBERGES_CATHEDRALES = RESSOURCES + "AubergesCathedrales/";
+const string RESSOURCES_MARCHANDS_BATISSEURS = RESSOURCES + "MarchandsBatisseurs/";
 
 const string TUILES = "Tuiles/";
 const string MEEPLES = "Meeples/";
+const string SUPPLEMENTS = "Supplements/";
 
 //donc un chemin vers les tuiles normales s'écrit : RESSOURCES_NORMALES + TUILES c'est à dire : Ressources/Normal/Tuiles/
 //  et un chemin vers les meeples paysans s'écrit : RESSOURCES_PAYSANS + MEEPLES c'est à dire : Ressources/Paysans/Meeples/
