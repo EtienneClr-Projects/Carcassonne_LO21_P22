@@ -7,7 +7,8 @@
 
 
 class Joueur {
-
+private:
+    Joueur() = default;
 };
 
 

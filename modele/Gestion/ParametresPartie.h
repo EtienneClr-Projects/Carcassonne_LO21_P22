@@ -12,7 +12,7 @@
  * Le type de la zone : PRAIRIE, VILLE, CHEMIN, ou AUTRE ou FIN pour une fin de chemin
  */
 enum class ZONE_TYPE {
-    PRAIRIE, VILLE, CHEMIN, AUTRE, FIN, RIVIERE, FIN_DE_ROUTE, ABBAYE, JARDIN, LAC, SOURCE, CATHEDRALE
+    PRAIRIE, VILLE, CHEMIN, AUTRE, RIVIERE, FIN_DE_ROUTE, ABBAYE, JARDIN, LAC, SOURCE, CATHEDRALE
 };
 /**
  * La direction suivant les 9 cardinaux.
