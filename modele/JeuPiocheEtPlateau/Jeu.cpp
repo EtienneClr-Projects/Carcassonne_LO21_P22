@@ -163,6 +163,8 @@ string Jeu::getCheminFromExtension(EXTENSION extension) {
         case EXTENSION::AUBERGES_CATHEDRALES:
             chemin = RESSOURCES_AUBERGES_CATHEDRALES;
             break;
+        case EXTENSION::MARCHANDS_BATISSEURS:
+            break;
     }
     return chemin;
 }

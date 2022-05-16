@@ -168,7 +168,6 @@ MEEPLE_TYPE ParametresPartie::toMEEPLE_TYPE(const std::string& str) {
  * @return la COULEUR
  */
 COULEUR ParametresPartie::toCOULEUR(const std::string& str) {
-    //simplify previous code with switch
     switch (str[0]) {
         case 'R':
             return COULEUR::ROUGE;
