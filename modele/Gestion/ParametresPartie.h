@@ -68,7 +68,7 @@ constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRE
 class ParametresPartie {
 private:
     int nombreJoueurs;
-    EXTENSION extensionChoisie;
+    std::vector<EXTENSION> extensionsChoisies;
 
     //SINGLETON
     ParametresPartie() = default;
@@ -84,9 +84,9 @@ public:
     static ParametresPartie *getInstance();
 
     //METHODES DU SINGLETON
-    EXTENSION getExtensionChoisie() const;
+    std::vector<EXTENSION> getExtensionsChoisies() const;
 
-    void setExtensionChoisie(EXTENSION extChoisie);
+    void setExtensionsChoisies(std::vector<EXTENSION> extsChoisies);
 
     int getNombreJoueurs() const;
 

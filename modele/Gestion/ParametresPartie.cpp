@@ -1,8 +1,5 @@
-//
-// Created by etienne on 27/04/2022.
-//
-
 #include <stdexcept>
+#include <utility>
 #include "ParametresPartie.h"
 
 /**
@@ -76,16 +73,16 @@ std::string ParametresPartie::toStringZONE_TYPE(const ZONE_TYPE type) {
  * Renvoie l'extension choisie par l'utilisateur pour cette partie
  * @return l'extension choisie par l'utilisateur pour cette partie
  */
-EXTENSION ParametresPartie::getExtensionChoisie() const {
-    return extensionChoisie;
+std::vector<EXTENSION> ParametresPartie::getExtensionsChoisies() const {
+    return extensionsChoisies;
 }
 
 /**
  * Définit l'extension choisie par l'utilisateur pour cette partie
  * @param extChoisie l'extension choisie
  */
-void ParametresPartie::setExtensionChoisie(EXTENSION extChoisie) {
-    ParametresPartie::extensionChoisie = extChoisie;
+void ParametresPartie::setExtensionsChoisies(std::vector<EXTENSION> extsChoisies) {
+    ParametresPartie::extensionsChoisies = std::move(extsChoisies);
 }
 
 /**
