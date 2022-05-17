@@ -7,6 +7,7 @@
 
 
 #include "Gestion/ParametresPartie.h"
+#include "Joueur.h"
 
 class Meeple {
     MEEPLE_TYPE type;
