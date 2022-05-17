@@ -6,8 +6,14 @@
 #define CARCASSONNE_LO21_P22_PLATEAU_H
 
 
-class Plateau {
+#include "CasesTuilesEtZones/Tuile.h"
+#include "Gestion/Coord.h"
 
+class Plateau {
+public:
+    std::map<Coord, Tuile*> plateau;
+    void fusionnerZones(Tuile* tuile);
+    std::vector<Zone*> zones;
 };
 
 

@@ -1,7 +1,3 @@
-//
-// Created by etienne on 08/05/2022.
-//
-
 #include "Meeple.h"
 
 #include <utility>

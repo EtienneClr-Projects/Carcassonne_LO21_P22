@@ -1,23 +1,18 @@
-//
-// Created by etienne on 27/04/2022.
-//
-
 #include "Zone.h"
-#include "Gestion/Partie.h"
+#include "/Gestion/Partie.h"
 
 /**
  * Constructeur principal de la classe Zone.
  * @param type le type de la zone
  * @param init_case la case avec laquelle la zone est initialisée. C'est à dire la première case de la zone.
  */
-//todo (HIGH) @Etienne : à améliorer ? Ne pas passer joueursPartie en paramètre de la fonction
-Zone::Zone(Case *init_case, const std::vector<Joueur *> &joueursPartie) {
+Zone::Zone(Case *init_case) {
     this->type = init_case->getZoneType();
 
     this->cases.push_back(init_case);
-    this->joueursPartie = joueursPartie;
+    this->joueursPartie = Partie::getInstance()->getJoueursPartie();
 
-    //faire plutot un Partie::getInstance()->getJoueurs(). Il faut que ça soit un singleton.
+    //todo @Etienne faire plutot un Partie::getInstance()->getJoueurs(). Il faut que ça soit un singleton.
     for (Joueur *joueur: joueursPartie) {
         this->gagnantsActuels.insert({joueur, 0});
     }
@@ -52,9 +47,9 @@ Joueur Zone::getGagnant() {
  * Permet l'ajout d'une case à la zone. Vérifie également si la zone est bien ouverte.
  * @param c la case à ajouter
  */
-void Zone::ajouterCase(Case c) {
-    if (ouverte && c.getZoneType() == this->type) {
-        this->cases.push_back(&c);
+void Zone::ajouterCase(Case *c) {
+    if (ouverte && c->getZoneType() == this->type) {
+        this->cases.push_back(c);
     } else {
         throw "Erreur : la case n'appartient pas à la bonne zone";
     }
@@ -82,4 +77,13 @@ std::string Zone::toString() {
         s += c->toString() + ", ";
     }
     return s;
+}
+
+void Zone::supprimerCase(Case *pCase) {
+    for (int i = 0; i < this->cases.size(); i++) {
+        if (this->cases[i] == pCase) {
+            this->cases.erase(this->cases.begin() + i);
+            return;
+        }
+    }
 }

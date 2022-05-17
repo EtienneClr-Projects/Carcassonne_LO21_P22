@@ -138,23 +138,18 @@ ZONE_TYPE ParametresPartie::toZONE_TYPE(char type) {
  * @param str le string représentant un meeple
  * @return le MEEPLE_TYPE
  */
-MEEPLE_TYPE ParametresPartie::toMEEPLE_TYPE(const std::string& str) {
+MEEPLE_TYPE ParametresPartie::toMEEPLE_TYPE(const std::string &str) {
     if (str == "N") {
         return MEEPLE_TYPE::NORMAL;
-    }
-    else if (str == "G") {
+    } else if (str == "G") {
         return MEEPLE_TYPE::GRAND_MEEPLE;
-    }
-    else if (str=="A") {
+    } else if (str == "A") {
         return MEEPLE_TYPE::ABBE;
-    }
-    else if (str == "C") {
+    } else if (str == "C") {
         return MEEPLE_TYPE::COCHON;
-    }
-    else if (str =="B") {
+    } else if (str == "B") {
         return MEEPLE_TYPE::BATISSEUR;
-    }
-    else {
+    } else {
         throw std::invalid_argument("Meeple type invalide");
     }
 }
@@ -164,7 +159,7 @@ MEEPLE_TYPE ParametresPartie::toMEEPLE_TYPE(const std::string& str) {
  * @param str le string représentant une couleur
  * @return la COULEUR
  */
-COULEUR ParametresPartie::toCOULEUR(const std::string& str) {
+COULEUR ParametresPartie::toCOULEUR(const std::string &str) {
     switch (str[0]) {
         case 'R':
             return COULEUR::ROUGE;
@@ -220,7 +215,7 @@ std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
         case MEEPLE_TYPE::ABBE:
             str = "A";
             break;
-            case MEEPLE_TYPE::COCHON:
+        case MEEPLE_TYPE::COCHON:
             str = "C";
             break;
         case MEEPLE_TYPE::BATISSEUR:
@@ -232,8 +227,9 @@ std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
     }
     return str;
 }
+
 //L'instance singleton de ParametresPartie
-ParametresPartie* ParametresPartie::instance_ = nullptr;
+ParametresPartie *ParametresPartie::instance_ = nullptr;
 
 /**
  * Permet de récupérer l'instance singleton de ParametresPartie
@@ -271,7 +267,7 @@ std::string ParametresPartie::toStringEXTENSION(EXTENSION ext) {
 }
 
 std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
-    switch (type ) {
+    switch (type) {
         case SUPP_TYPE::BLASON:
             return "Bla";
         case SUPP_TYPE::AUBERGE:
@@ -284,5 +280,64 @@ std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
             return "Tis";
         default:
             throw std::invalid_argument("Type de supplement invalide");
+    }
+}
+
+Coord ParametresPartie::toDeplacement(DIRECTION direction) {
+    switch (direction) {
+        case DIRECTION::NORD:
+            return {0, 1};
+        case DIRECTION::SUD:
+            return {0, -1};
+        case DIRECTION::EST:
+            return {1, 0};
+        case DIRECTION::OUEST:
+            return {-1, 0};
+        default:
+            throw std::invalid_argument("Direction invalide");
+    }
+}
+
+std::vector<DIRECTION> ParametresPartie::getCoinsAvecCote(DIRECTION cote) {
+    std::vector<DIRECTION> coins;
+    switch (cote) {
+        case DIRECTION::NORD:
+            coins.push_back(DIRECTION::NORD_OUEST);
+            coins.push_back(DIRECTION::NORD_EST);
+            break;
+        case DIRECTION::SUD:
+            coins.push_back(DIRECTION::SUD_OUEST);
+            coins.push_back(DIRECTION::SUD_EST);
+            break;
+        case DIRECTION::EST:
+            coins.push_back(DIRECTION::NORD_EST);
+            coins.push_back(DIRECTION::SUD_EST);
+            break;
+        case DIRECTION::OUEST:
+            coins.push_back(DIRECTION::NORD_OUEST);
+            coins.push_back(DIRECTION::SUD_OUEST);
+            break;
+        default:
+            throw std::invalid_argument("Direction invalide");
+    }
+    return coins;
+}
+
+DIRECTION ParametresPartie::getDirDeCasePourTuileVoisine(DIRECTION dirTuileActuelle, DIRECTION dirOuRegarder) {
+    switch (dirTuileActuelle) {
+        case DIRECTION::NORD_OUEST:
+            if (dirOuRegarder == DIRECTION::NORD) return DIRECTION::SUD_OUEST;
+            else return DIRECTION::NORD_EST;
+        case DIRECTION::NORD_EST:
+            if (dirOuRegarder == DIRECTION::NORD) return DIRECTION::SUD_EST;
+            else return DIRECTION::NORD_OUEST;
+        case DIRECTION::SUD_OUEST:
+            if (dirOuRegarder == DIRECTION::SUD) return DIRECTION::NORD_OUEST;
+            else return DIRECTION::SUD_EST;
+        case DIRECTION::SUD_EST:
+            if (dirOuRegarder == DIRECTION::SUD) return DIRECTION::NORD_EST;
+            else return DIRECTION::SUD_OUEST;
+        default:
+            throw std::invalid_argument("Direction invalide");
     }
 }

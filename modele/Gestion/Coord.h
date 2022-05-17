@@ -29,6 +29,15 @@ public:
     std::string toString() const {
         return "("+std::to_string(x_) + "," + std::to_string(y_)+")";
     };
+
+    bool operator==(const Coord &c) const {
+        return (this->x_ == c.x_ && this->y_ == c.y_);
+    }
+
+    Coord operator+(const Coord &c) const {
+        return {this->x_ + c.x_, this->y_ + c.y_};
+    }
+
 };
 
 

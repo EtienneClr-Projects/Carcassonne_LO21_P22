@@ -1,7 +1,3 @@
-//
-// Created by etienne on 27/04/2022.
-//
-
 #ifndef CARCASSONNE_LO21_P22_PARAMETRESPARTIE_H
 #define CARCASSONNE_LO21_P22_PARAMETRESPARTIE_H
 #pragma once
@@ -58,6 +54,13 @@ constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRE
                                                      DIRECTION::EST, DIRECTION::MILIEU, DIRECTION::OUEST,
                                                      DIRECTION::SUD_EST, DIRECTION::SUD, DIRECTION::SUD_OUEST};
 
+constexpr static const DIRECTION DIRECTIONS_COTE[] = {
+        DIRECTION::NORD, DIRECTION::OUEST, DIRECTION::SUD, DIRECTION::EST
+};
+constexpr static const DIRECTION DIRECTIONS_COTE_INVERSE[] {
+        DIRECTION::SUD, DIRECTION::EST, DIRECTION::NORD, DIRECTION::OUEST
+};//utilisé pour trouver la case adjacente à une tuile. Cf Plateau::fusionnerZones()
+
 // la source est équivalente au lac
 constexpr static const ZONE_TYPE ALL_ZONES_TYPES[] = {ZONE_TYPE::PRAIRIE, ZONE_TYPE::VILLE, ZONE_TYPE::CHEMIN,
                                                       ZONE_TYPE::AUTRE, ZONE_TYPE::RIVIERE, ZONE_TYPE::FIN_DE_ROUTE,
@@ -71,6 +74,7 @@ constexpr static const MEEPLE_TYPE ALL_MEEPLES_TYPES[] = {MEEPLE_TYPE::ABBE, MEE
 
 
 #include "CasesTuilesEtZones/Case.h"
+#include "Coord.h"
 
 /**
  * Parametres de la partie. Singleton.
@@ -125,6 +129,11 @@ public:
 
     static std::string toStringSUPP_TYPE(SUPP_TYPE type);
 
+    static Coord toDeplacement(DIRECTION direction);
+
+    static std::vector<DIRECTION> getCoinsAvecCote(DIRECTION cote);
+
+    static DIRECTION getDirDeCasePourTuileVoisine(DIRECTION dirTuileActuelle, DIRECTION dirOuRegarder);
 };
 
 
