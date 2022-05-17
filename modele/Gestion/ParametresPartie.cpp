@@ -269,3 +269,20 @@ std::string ParametresPartie::toStringEXTENSION(EXTENSION ext) {
             throw std::invalid_argument("Extension invalide");
     }
 }
+
+std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
+    switch (type ) {
+        case SUPP_TYPE::BLASON:
+            return "Bla";
+        case SUPP_TYPE::AUBERGE:
+            return "Aub";
+        case SUPP_TYPE::BLE:
+            return "Ble";
+        case SUPP_TYPE::TONNEAU:
+            return "Ton";
+        case SUPP_TYPE::TISSU:
+            return "Tis";
+        default:
+            throw std::invalid_argument("Type de supplement invalide");
+    }
+}

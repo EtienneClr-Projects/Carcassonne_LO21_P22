@@ -53,9 +53,22 @@ enum class EXTENSION {
 /**
  * Permet de parcourir toutes les directions
  */
+
 constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRECTION::NORD, DIRECTION::NORD_EST,
                                                      DIRECTION::EST, DIRECTION::MILIEU, DIRECTION::OUEST,
                                                      DIRECTION::SUD_EST, DIRECTION::SUD, DIRECTION::SUD_OUEST};
+
+// la source est équivalente au lac
+constexpr static const ZONE_TYPE ALL_ZONES_TYPES[] = {ZONE_TYPE::PRAIRIE, ZONE_TYPE::VILLE, ZONE_TYPE::CHEMIN,
+                                                      ZONE_TYPE::AUTRE, ZONE_TYPE::RIVIERE, ZONE_TYPE::FIN_DE_ROUTE,
+                                                      ZONE_TYPE::ABBAYE, ZONE_TYPE::JARDIN, ZONE_TYPE::LAC, ZONE_TYPE::CATHEDRALE};
+
+constexpr static const SUPP_TYPE ALL_SUPPS_TYPES[] = {SUPP_TYPE::BLASON, SUPP_TYPE::AUBERGE, SUPP_TYPE::BLE, SUPP_TYPE::TONNEAU,
+                                            SUPP_TYPE::TISSU,};
+
+constexpr static const MEEPLE_TYPE ALL_MEEPLES_TYPES[] = {MEEPLE_TYPE::ABBE, MEEPLE_TYPE::GRAND_MEEPLE, MEEPLE_TYPE::NORMAL,
+                                                          MEEPLE_TYPE::BATISSEUR, MEEPLE_TYPE::COCHON};
+
 
 #include "CasesTuilesEtZones/Case.h"
 
@@ -67,7 +80,7 @@ constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRE
  */
 class ParametresPartie {
 private:
-    int nombreJoueurs;
+    int nombreJoueurs{};
     std::vector<EXTENSION> extensionsChoisies;
 
     //SINGLETON
@@ -109,6 +122,9 @@ public:
     static std::string toStringMEEPLE_TYPE(MEEPLE_TYPE type);
 
     static std::string toStringEXTENSION(EXTENSION ext);
+
+    static std::string toStringSUPP_TYPE(SUPP_TYPE type);
+
 };
 
 
