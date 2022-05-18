@@ -126,7 +126,7 @@ public:
 
     static std::string toStringMEEPLE_TYPE(MEEPLE_TYPE type);
 
-    static std::string toStringEXTENSION(EXTENSION ext);
+    static std::string toStringEXTENSIONS(std::vector<EXTENSION> exts);
 
     static std::string toStringSUPP_TYPE(SUPP_TYPE type);
 

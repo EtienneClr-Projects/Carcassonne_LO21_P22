@@ -9,7 +9,7 @@ ParametresPartie *ParametresPartie::instance_ = nullptr;
  * Permet de récupérer l'instance singleton de ParametresPartie
  * @return l'instance
  */
-ParametresPartie & ParametresPartie::getInstance() {
+ParametresPartie &ParametresPartie::getInstance() {
     if (instance_ == nullptr) {
         instance_ = new ParametresPartie();
     }
@@ -55,33 +55,6 @@ std::string ParametresPartie::toStringDIRECTION(const DIRECTION dir) {
     return str;
 }
 
-/**
- * Renvoie le type de la case en string pour de l'affichage
- * @param _case la case
- * @return le type de la case sous forme de string : "V", "R", "P", et "#" pour autre
- */
-std::string ParametresPartie::toStringZONE_TYPE(const ZONE_TYPE type) {
-
-    std::string str;
-    switch (type) {
-        case ZONE_TYPE::PRAIRIE:
-            str = "P";
-            break;
-        case ZONE_TYPE::VILLE:
-            str = "V";
-            break;
-        case ZONE_TYPE::CHEMIN:
-            str = "C";
-            break;
-        case ZONE_TYPE::AUTRE:
-            str = "#";
-            break;
-        default:
-            str = "?";
-            break;
-    }
-    return str;
-}
 
 /**
  * Renvoie l'extension choisie par l'utilisateur pour cette partie
@@ -142,6 +115,38 @@ ZONE_TYPE ParametresPartie::toZONE_TYPE(char type) {
             return ZONE_TYPE::SOURCE;
         case 'c':
             return ZONE_TYPE::CATHEDRALE;
+        default:
+            throw std::invalid_argument("Type de zone invalide");
+    }
+}
+
+/**
+ * Renvoie le type de la case en string pour de l'affichage
+ * @param _case la case
+ * @return le type de la case sous forme de string : "V", "R", "P", et "#" pour autre
+ */
+std::string ParametresPartie::toStringZONE_TYPE(const ZONE_TYPE type) {
+    switch (type) {
+        case ZONE_TYPE::PRAIRIE:
+            return "P";
+        case ZONE_TYPE::VILLE:
+            return "V";
+        case ZONE_TYPE::CHEMIN:
+            return "C";
+        case ZONE_TYPE::RIVIERE:
+            return "R";
+        case ZONE_TYPE::FIN_DE_ROUTE:
+            return "#";
+        case ZONE_TYPE::ABBAYE:
+            return "A";
+        case ZONE_TYPE::JARDIN:
+            return "J";
+        case ZONE_TYPE::LAC:
+            return "L";
+        case ZONE_TYPE::SOURCE:
+            return "S";
+        case ZONE_TYPE::CATHEDRALE:
+            return "c";
         default:
             throw std::invalid_argument("Type de zone invalide");
     }
@@ -243,26 +248,28 @@ std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
 }
 
 /**
- * Transforme les EXTENSION en string
- * @param ext Extension à transformer
- * @return String correspondant à l'extension
+ * Transforme les EXTENSIONs en string
+ * @param exts Extensions à transformer
+ * @return String correspondant aux extensions fournies
  */
-std::string ParametresPartie::toStringEXTENSION(EXTENSION ext) {
-    switch (ext) {
-        case EXTENSION::NORMAL:
-            return "Normal";
-        case EXTENSION::PAYSANS:
-            return "Paysans";
-        case EXTENSION::ABBE:
-            return "Abbe";
-        case EXTENSION::RIVIERE:
-            return "Riviere";
-        case EXTENSION::AUBERGES_CATHEDRALES:
-            return "Auberges_Cathedrales";
-        case EXTENSION::MARCHANDS_BATISSEURS:
-            return "Marchands_Batisseurs";
-        default:
-            throw std::invalid_argument("Extension invalide");
+std::string ParametresPartie::toStringEXTENSIONS(std::vector<EXTENSION> exts) {
+    for (EXTENSION ext: exts) {
+        switch (ext) {
+            case EXTENSION::NORMAL:
+                return "Normal";
+            case EXTENSION::PAYSANS:
+                return "Paysans";
+            case EXTENSION::ABBE:
+                return "Abbe";
+            case EXTENSION::RIVIERE:
+                return "Riviere";
+            case EXTENSION::AUBERGES_CATHEDRALES:
+                return "Auberges_Cathedrales";
+            case EXTENSION::MARCHANDS_BATISSEURS:
+                return "Marchands_Batisseurs";
+            default:
+                throw std::invalid_argument("Extension invalide");
+        }
     }
 }
 
