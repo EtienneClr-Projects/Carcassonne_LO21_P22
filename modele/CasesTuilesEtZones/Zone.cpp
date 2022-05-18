@@ -1,5 +1,5 @@
 #include "Zone.h"
-#include "/Gestion/Partie.h"
+#include "Gestion/Partie.h"
 
 /**
  * Constructeur principal de la classe Zone.
@@ -12,7 +12,6 @@ Zone::Zone(Case *init_case) {
     this->cases.push_back(init_case);
     this->joueursPartie = Partie::getInstance()->getJoueursPartie();
 
-    //todo @Etienne faire plutot un Partie::getInstance()->getJoueurs(). Il faut que ça soit un singleton.
     for (Joueur *joueur: joueursPartie) {
         this->gagnantsActuels.insert({joueur, 0});
     }

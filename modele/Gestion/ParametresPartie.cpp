@@ -2,6 +2,20 @@
 #include <utility>
 #include "ParametresPartie.h"
 
+//L'instance singleton de ParametresPartie
+ParametresPartie *ParametresPartie::instance_ = nullptr;
+
+/**
+ * Permet de récupérer l'instance singleton de ParametresPartie
+ * @return l'instance
+ */
+ParametresPartie & ParametresPartie::getInstance() {
+    if (instance_ == nullptr) {
+        instance_ = new ParametresPartie();
+    }
+    return *instance_;
+}
+
 /**
  * Permet de transformer un DIRECTION en string pour de l'affichage
  * @param dir la DIRECTION
@@ -226,20 +240,6 @@ std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
             break;
     }
     return str;
-}
-
-//L'instance singleton de ParametresPartie
-ParametresPartie *ParametresPartie::instance_ = nullptr;
-
-/**
- * Permet de récupérer l'instance singleton de ParametresPartie
- * @return l'instance
- */
-ParametresPartie *ParametresPartie::getInstance() {
-    if (instance_ == nullptr) {
-        instance_ = new ParametresPartie();
-    }
-    return instance_;
 }
 
 /**

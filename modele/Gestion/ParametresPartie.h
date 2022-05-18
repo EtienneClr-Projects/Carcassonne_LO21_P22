@@ -75,6 +75,7 @@ constexpr static const MEEPLE_TYPE ALL_MEEPLES_TYPES[] = {MEEPLE_TYPE::ABBE, MEE
 
 #include "CasesTuilesEtZones/Case.h"
 #include "Coord.h"
+#include <vector>
 
 /**
  * Parametres de la partie. Singleton.
@@ -98,7 +99,7 @@ public:
 
     ParametresPartie &operator=(const ParametresPartie &) = delete;
 
-    static ParametresPartie *getInstance();
+    static ParametresPartie & getInstance();
 
     //METHODES DU SINGLETON
     std::vector<EXTENSION> getExtensionsChoisies() const;
