@@ -10,7 +10,7 @@ Zone::Zone(Case *init_case) {
     this->type = init_case->getZoneType();
 
     this->cases.push_back(init_case);
-    this->joueursPartie = Partie::getInstance()->getJoueursPartie();
+    this->joueursPartie = Partie::getInstance().getJoueurs();
 
     for (Joueur *joueur: joueursPartie) {
         this->gagnantsActuels.insert({joueur, 0});

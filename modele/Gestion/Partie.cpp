@@ -14,3 +14,7 @@ Partie &Partie::getInstance() {
     }
     return *instance;
 }
+
+const vector<Joueur *> &Partie::getJoueurs() const {
+    return joueurs;
+}
