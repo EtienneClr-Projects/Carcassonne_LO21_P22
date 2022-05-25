@@ -112,4 +112,16 @@ public:
 };
 
 
+// classe pour gérer les exceptions dans le set
+class CarcassonneException {
+public:
+    explicit CarcassonneException(string i) : info(std::move(i)) {}
+
+    string getInfo() const { return info; }
+
+private:
+    string info;
+};
+
+
 #endif //CARCASSONNE_LO21_P22_PARAMETRESPARTIE_H
