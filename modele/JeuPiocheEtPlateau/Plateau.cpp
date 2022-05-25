@@ -30,6 +30,14 @@ void Plateau::fusionnerZones(Tuile *tuile) {
         zones.push_back(pair.second);
     }
 
+    //on met à jour les ouvertures de chaque zone qui sont sur les cotés de la tuile
+    for (int i = 0; i < sizeof DIRECTIONS_COTE; i++) {
+        // on prend sa zone et on lui ajoute +1 en ouverture
+        tuile->cases[DIRECTIONS_COTE[i]]->getZone()->ouvertures++;
+        //la tuile n'est pas encore vraiment posée, donc toutes les zones sont ouvertes
+    }
+
+
 
     //###################ZONES EXTERNES###################
     //on a besoin de la Coord de cette tuile
@@ -61,7 +69,13 @@ void Plateau::fusionnerZones(Tuile *tuile) {
 
         //on fusionne la zone avec la zone de la tuile voisine
         Case *caseTuileVoisine = tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]];
+        //on met à jour les ouvertures des zones
+        int ttOuvertures = zone->ouvertures + caseTuileVoisine->getZone()->ouvertures;
+        zone->ouvertures = ttOuvertures - 2;
+        caseTuileVoisine->getZone()->ouvertures = ttOuvertures - 2;
+        //puis on fusionne les zones
         fusionZoneCase(zone, caseTuileVoisine);
+
 
         // Si caseCote est Prairie ou chemin ou rivière, alors on peut fusionner aussi les coins
         ZONE_TYPE typeZoneCaseCote = tuile->cases[DIRECTIONS_COTE_INVERSE[i]]->getZoneType();
