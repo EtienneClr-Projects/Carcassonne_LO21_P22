@@ -11,9 +11,14 @@
 
 class Plateau {
 public:
-    std::map<Coord, Tuile*> plateau;
+    std::vector<std::pair<Coord, Tuile*>> plateau;
     void fusionnerZones(Tuile* tuile);
     std::vector<Zone*> zones;
+    void ajouterTuile(Tuile* tuile, Coord coord);
+    std::string toString();
+
+private :
+    void fusionZoneCase(Zone *zone, Case *caseAFusionner);
 };
 
 
