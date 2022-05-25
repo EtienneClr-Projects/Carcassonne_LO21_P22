@@ -47,7 +47,7 @@ Joueur Zone::getGagnant() {
  * @param c la case à ajouter
  */
 void Zone::ajouterCase(Case *c) {
-    if (ouverte && c->getZoneType() == this->type) {
+    if (ouvertures>0 && c->getZoneType() == this->type) {
         this->cases.push_back(c);
     } else {
         throw "Erreur : la case n'appartient pas à la bonne zone";
@@ -67,7 +67,7 @@ std::vector<Case *> Zone::getCases() {
  * @return vrai si la zone est ouverte, faux sinon.
  */
 bool Zone::estOuverte() const {
-    return this->ouverte;
+    return this->ouvertures==0;
 }
 
 std::string Zone::toString() {
