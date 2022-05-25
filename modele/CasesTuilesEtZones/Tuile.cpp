@@ -12,9 +12,12 @@ Tuile::Tuile(std::map<DIRECTION, Case *> cases, std::string cheminImage) {
 }
 
 std::string Tuile::toString() {
-    std::string res= "Tuile: ";
-    for (auto &it : cases) {
-        res += it.second->toString()+" ";
+    std::string res = "Tuile:\n";
+    int i = 1;
+    for (auto &it: cases) {
+        res += it.second->toString() + " ";
+        if (i % 3 == 0) res += "\n";
+        i++;
     }
-    return res+"\t"+cheminImage;
+    return res + "\t" + cheminImage;
 }
