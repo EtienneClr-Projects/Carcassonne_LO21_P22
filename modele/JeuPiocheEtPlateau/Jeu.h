@@ -65,16 +65,11 @@ private:
 
     static Handler handler; // à la fin de l'execution du programme le destructeur de handler est forcément appelé
 
-    bool operator==(const EXTENSION v);
-
-    bool operator==(const EXTENSION &e) const;
-
     ~Jeu();
 
     vector<EXTENSION> extension;
     vector<Tuile *> tuilesRiviere;
     vector<Tuile *> tuiles;
-
 };
 
 
