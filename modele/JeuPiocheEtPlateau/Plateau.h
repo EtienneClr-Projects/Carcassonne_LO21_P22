@@ -13,29 +13,34 @@
 # include <map>
 #include <vector>
 #include <dirent.h>
-#include "Tuile.hpp"
+#include "CasesTuilesEtZones/Tuile.h"
+#include "CasesTuilesEtZones/Case.h"
+#include "JoueurEtRessources/Joueur.h"
+#include "JoueurEtRessources/Meeple.h"
+#include "CasesTuilesEtZones/Zone.h"
+#include "Gestion/Coord.h"
 
 using namespace Carcassonne;
 
-class Coord
-    {
-    public:
-        int x;
-        int y;
-};
 
+bool operator==(Joueur left, const map<Coord, Tuile *> &right);
 
-bool operator==(const map <Coord,Tuile*>& left, const map <Coord,Tuile*>& right);
-bool operator==(const map<DIRECTION,Case*>& left, const map<DIRECTION,Case*>& right);
-bool operator==(const DIRECTION& left, const DIRECTION& right);
+bool operator==(const map<DIRECTION, Case *> &left, const map<DIRECTION, Case *> &right);
 
-class Plateau{
+bool operator==(const DIRECTION &left, const DIRECTION &right);
+
+class Plateau {
 public:
-    void poserTuile(Tuile * t,Coord coord);
-    void poserMeeple(Tuile * t,Case * c);
+    Plateau(const vector<std::pair<Coord, Tuile *>> &plateau);
+
+    static bool checkerTuile(Tuile *t, Coord coord);
+
+    static bool
+    poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *> meeplesPoses, vector<Meeple *> meeplesEnReserve);
 
 private:
-    map<Coord,Tuile*> plateau;
+    static std::vector<std::pair<Coord, Tuile *>> plateau;
+    Zone **zones;
 };
 
 #endif //CARCASSONNE_LO21_P22_PLATEAU_H

@@ -3,12 +3,6 @@
 //
 
 #include "Plateau.h"
-//
-//  Plateau.cpp
-//  Carcassonne
-//
-//  Created by Silvia on 16/05/2022.
-//
 
 #include <stdio.h>
 # include <iostream>
@@ -18,21 +12,63 @@
 # include <map>
 #include <vector>
 #include <dirent.h>
+#include <vector>
 
 
-bool operator==(const map <Coord,Tuile*>& left, const map <Coord,Tuile*>& right);
-bool operator==(const map<DIRECTION,Case*>& left, const map<DIRECTION,Case*>& right);
-bool operator==(const ZONE_TYPE& left, const ZONE_TYPE& right);
+bool Plateau::checkerTuile(Tuile *tuile, Coord coord) {
 
-void Plateau :: poserTuile(Tuile * t,Coord co){
-    Coord voisin_droit=co;
-    voisin_droit.x++;
-    Coord voisin_gauche=co;
-    voisin_gauche.x--;
-    Coord voisin_haut=co;
-    voisin_haut.y++;
-    Coord voisin_bas=co;
-    voisin_bas.y--;
-    Tuile* tui=plateau[voisin_droit];
-    if(*tui[DIRECTION::OUEST]==*t[DIRECTION::EST]);
+    auto voisin_droit = coord;
+    voisin_droit.x_++;
+    auto voisin_gauche = coord;
+    voisin_gauche.x_--;
+    auto voisin_haut = coord;
+    voisin_haut.y_++;
+    auto voisin_bas = coord;
+    voisin_bas.y_--;
+    map<DIRECTION, Case *> t = tuile->getTuile();
+
+    for (std::pair<Coord, Tuile *> pairTuile:plateau) {
+        map<DIRECTION, Case *> pt = pairTuile.second->getTuile();
+        if (voisin_droit == pairTuile.first) {
+            if (t[DIRECTION::EST]->getZoneType() != pt[DIRECTION::OUEST]->getZoneType()) return false;
+        }
+        if (voisin_gauche == pairTuile.first) {
+            if (t[DIRECTION::OUEST]->getZoneType() != pt[DIRECTION::EST]->getZoneType()) return false;
+        }
+        if (voisin_haut == pairTuile.first) {
+            if (t[DIRECTION::NORD]->getZoneType() != pt[DIRECTION::SUD]->getZoneType()) return false;
+        }
+        if (voisin_bas == pairTuile.first) {
+            if (t[DIRECTION::SUD]->getZoneType() != pt[DIRECTION::NORD]->getZoneType()) return false;
+        }
+    }
+    return true;
 }
+
+bool Plateau::poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *> meeplesPoses,
+                          vector<Meeple *> meeplesEnReserve) {
+    Zone zone = c->getZoneParente();
+    if (nullptr == zone.getGagnant()) {// si pas de meeple déjà posé dans la zone
+
+        COULEUR couleur = j->getCouleur();
+        unsigned int i = 0;
+        while ((couleur != meeplesEnReserve[i]->getCouleur() or
+                type != meeplesEnReserve[i]->getType()) and i <= meeplesEnReserve.size()) { i++; }
+
+        //retirer du tableau "meeple en réserve" le meeple
+        if (i > meeplesEnReserve.size()) {
+            throw CarcassonneException("pas de meeple de ce type et de cette couleur disponible");
+        }
+        c->setMeeplePose(meeplesEnReserve[i]);
+        meeplesPoses.push_back(meeplesEnReserve[i]);
+        meeplesEnReserve.erase(meeplesEnReserve.begin() + i);
+        //on met le meeple dans le bon tableau
+        return true;
+
+    } else { return false; }
+
+
+}
+
+Plateau::Plateau(const std::vector<std::pair<Coord, Tuile *>> &plat) : plateau(plat), zones(nullptr) {}
+
