@@ -59,7 +59,7 @@ constexpr static const DIRECTION DIRECTIONS_COTE[] = {
 };
 constexpr static const DIRECTION DIRECTIONS_COTE_INVERSE[] {
         DIRECTION::SUD, DIRECTION::EST, DIRECTION::NORD, DIRECTION::OUEST
-};//utilisé pour trouver la case adjacente à une tuile. Cf Plateau::fusionnerZones()
+};//utilisé pour trouver la case adjacente à une tuile. Cf Plateau::fusionnerZonesAvecPlateau()
 
 // la source est équivalente au lac
 constexpr static const ZONE_TYPE ALL_ZONES_TYPES[] = {ZONE_TYPE::PRAIRIE, ZONE_TYPE::VILLE, ZONE_TYPE::CHEMIN,
@@ -134,7 +134,7 @@ public:
 
     static std::vector<DIRECTION> getCoinsAvecCote(DIRECTION cote);
 
-    static DIRECTION getDirDeCasePourTuileVoisine(DIRECTION dirTuileActuelle, DIRECTION dirOuRegarder);
+    static DIRECTION getDirDeCasePourTuileVoisine(DIRECTION dirCaseActuelle, DIRECTION dirOuRegarder);
 };
 
 

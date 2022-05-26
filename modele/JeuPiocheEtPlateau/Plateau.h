@@ -12,13 +12,24 @@
 class Plateau {
 public:
     std::vector<std::pair<Coord, Tuile*>> plateau;
-    void fusionnerZones(Tuile* tuile);
+    void fusionnerZonesAvecPlateau(Tuile* tuile);
     std::vector<Zone*> zones;
     void ajouterTuile(Tuile* tuile, Coord coord);
     std::string toString();
 
 private :
-    void fusionZoneCase(Zone *zone, Case *caseAFusionner);
+    void fusionZones(Zone *zoneASuppr, Zone *zoneB);
+    static bool fusionPossible(Zone* zone1, Zone* zone2);
+
+    static std::vector<std::pair<int, Zone *>> calcZonesInternes(Tuile *pTuile);
+
+    static void majOuverturesZonesCOTE(Tuile *pTuile);
+
+    Coord findCoordTuile(Tuile *tuile);
+
+    Tuile *findTuileVoisine(Coord coordTuile, int i);
+
+    void fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine);
 };
 
 

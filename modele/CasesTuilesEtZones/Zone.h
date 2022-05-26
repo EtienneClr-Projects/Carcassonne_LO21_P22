@@ -31,6 +31,8 @@ protected:
 //##################################################################################################################
     //Méthodes
 public:
+    int ouvertures = 0;
+
     // Constructeur
     explicit Zone(Case *init_case);
 
@@ -49,8 +51,6 @@ public:
     void ajouterCase(Case *c);
 
     void supprimerCase(Case *pCase);
-
-    int ouvertures = 0;
 };
 
 

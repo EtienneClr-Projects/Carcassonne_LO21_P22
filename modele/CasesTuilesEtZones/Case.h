@@ -18,6 +18,7 @@ class Case {
     SUPP_TYPE suppType;
     int iDConnexion;
     Joueur* joueur;
+    Zone* zone;
 
 public:
     Joueur *getJoueur() const;
@@ -50,7 +51,9 @@ public:
 
     ZONE_TYPE getZoneType();
 
-    Zone *getZone();
+    Zone * getZone();
+
+    void setZone(Zone *pZone);
 };
 
 

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Zone.h"
 #include "Gestion/Partie.h"
 
@@ -47,10 +48,10 @@ Joueur Zone::getGagnant() {
  * @param c la case à ajouter
  */
 void Zone::ajouterCase(Case *c) {
-    if (ouvertures>0 && c->getZoneType() == this->type) {
+    if (c->getZoneType() == this->type) {
         this->cases.push_back(c);
     } else {
-        throw "Erreur : la case n'appartient pas à la bonne zone";
+        throw std::invalid_argument("Erreur : la case n'appartient pas a la bonne zone");
     }
 }
 
@@ -67,14 +68,16 @@ std::vector<Case *> Zone::getCases() {
  * @return vrai si la zone est ouverte, faux sinon.
  */
 bool Zone::estOuverte() const {
-    return this->ouvertures==0;
+    return this->ouvertures == 0;
 }
 
 std::string Zone::toString() {
-    std::string s = "ZONE de type " + ParametresPartie::toStringZONE_TYPE(this->type) + " : \n";
+    std::cout << "ZONE "<<this;
+    std::string s = " de type " + ParametresPartie::toStringZONE_TYPE(this->type) + " : \n";
     for (Case *c: this->cases) {
-        s += c->toString() + ", ";
+        s += c->toString() + std::to_string(c->getIdConnexion()) + ", ";
     }
+    s += "ouvertures = "+std::to_string(ouvertures);
     return s;
 }
 

@@ -6,7 +6,7 @@
 
 
 void Case::setTuileParente(Tuile *tuileParente) {
-
+//todo
 }
 
 std::string Case::toString() {
@@ -14,19 +14,19 @@ std::string Case::toString() {
 }
 
 Tuile *Case::getTuileParente() {
-    return nullptr;
+    return nullptr;//todo
 }
 
 DIRECTION Case::getDirection() {
-    return DIRECTION::NORD;
+    return direction;
 }
 
 ZONE_TYPE Case::getZoneType() {
-    return ZONE_TYPE::CHEMIN;
+    return type;
 }
 
-Zone *Case::getZone() {
-    return nullptr;
+Zone * Case::getZone() {
+    return zone;
 }
 
 int Case::getIdConnexion() const {
@@ -35,4 +35,8 @@ int Case::getIdConnexion() const {
 
 Joueur *Case::getJoueur() const {
     return joueur;
+}
+
+void Case::setZone(Zone *pZone) {
+    zone = pZone;
 }

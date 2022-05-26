@@ -271,6 +271,7 @@ std::string ParametresPartie::toStringEXTENSIONS(std::vector<EXTENSION> exts) {
                 throw std::invalid_argument("Extension invalide");
         }
     }
+    throw std::invalid_argument("Extensions invalides");
 }
 
 std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
@@ -330,8 +331,8 @@ std::vector<DIRECTION> ParametresPartie::getCoinsAvecCote(DIRECTION cote) {
     return coins;
 }
 
-DIRECTION ParametresPartie::getDirDeCasePourTuileVoisine(DIRECTION dirTuileActuelle, DIRECTION dirOuRegarder) {
-    switch (dirTuileActuelle) {
+DIRECTION ParametresPartie::getDirDeCasePourTuileVoisine(DIRECTION dirCaseActuelle, DIRECTION dirOuRegarder) {
+    switch (dirCaseActuelle) {
         case DIRECTION::NORD_OUEST:
             if (dirOuRegarder == DIRECTION::NORD) return DIRECTION::SUD_OUEST;
             else return DIRECTION::NORD_EST;
