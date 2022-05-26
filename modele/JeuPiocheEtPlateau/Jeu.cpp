@@ -170,12 +170,27 @@ string Jeu::getCheminFromExtension(EXTENSION extension) {
 }
 
 Jeu::Jeu(vector<EXTENSION> extensions) {
+    vector<Tuile *> tuilesTemp;
     for (auto &ext: extensions) {
-        if (ext==EXTENSION::RIVIERE) {
+        if (ext == EXTENSION::RIVIERE) {
             getTuilesDesRessources(ext, &tuilesRiviere);
         } else
-            getTuilesDesRessources(ext, &tuiles);
+            getTuilesDesRessources(ext, &tuilesTemp);
     }
+    if (!tuilesRiviere.empty()) {//on ajoute d'abord les tuiles de la rivière
+        for (auto &t: tuilesRiviere) {
+            tuiles.push_back(t);
+        }
+    }
+    //puis on ajoute les tuilesTemp dans un ordre aléatoire
+    for (int i = 0; i < tuilesTemp.size(); i++) {
+        int index = rand() % tuilesTemp.size();
+        Tuile *tuile = tuilesTemp[index];
+        tuilesTemp.erase(tuilesTemp.begin() + index);
+        tuiles.push_back(tuile);
+    }
+
+    //todo faire les Meeples aussi ?
 }
 
 const Tuile &Jeu::getTuile(size_t i) const {

@@ -9,15 +9,13 @@ Pioche::Pioche(std::vector<Tuile *> tuiles) {
     this->nbTuilesRestantes = tuiles.size();
 }
 
+/**
+ * Renvoie la premiere tuile de la pioche et l'enleve de la pioche
+ * @return la tuile au dessus de la pioche
+ */
 Tuile *Pioche::piocher() {
-    //renvoie une tuile au hasard
-    if (nbTuilesRestantes == 0) {
-        return nullptr;
-    }
-    int index = rand() % nbTuilesRestantes;
-    Tuile *tuile = tuiles[index];
-    tuiles.erase(tuiles.begin() + index);
+    Tuile *tuile = tuiles.front();
+    tuiles.erase(tuiles.begin());
     nbTuilesRestantes--;
     return tuile;
 }
-

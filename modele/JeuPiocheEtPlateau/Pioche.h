@@ -16,7 +16,6 @@ private:
 public:
     Pioche(std::vector<Tuile*> tuiles);
     Tuile* piocher();
-
 };
 
 
