@@ -9,22 +9,15 @@
 #include <string>
 
 class Coord {
+public:
     int x_;
     int y_;
 
-public:
     Coord(int x, int y) {
         this->x_ = x;
         this->y_ = y;
     }
 
-    int x() const {
-        return x_;
-    }
-
-    int y() const {
-        return y_;
-    }
 
     std::string toString() const {
         return "("+std::to_string(x_) + "," + std::to_string(y_)+")";
