@@ -4,7 +4,7 @@
 
 #include "CasesTuilesEtZones/Case.h"
 #include "CasesTuilesEtZones/Zone.h"
-#include "Gestion/Partie.hpp"
+#include "Gestion/Partie.h"
 
 
 /**
