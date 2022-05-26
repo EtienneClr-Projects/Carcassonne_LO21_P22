@@ -7,14 +7,16 @@
 
 
 #include "Gestion/ParametresPartie.h"
+#include "Joueur.h"
 
 class Meeple {
     MEEPLE_TYPE type;
     COULEUR couleur;
     std::string cheminImage;
 
-    Joueur *joueur = nullptr;
 public:
+    COULEUR getCouleur(){return  couleur;}
+    MEEPLE_TYPE getType(){return type;}
 
     Meeple(MEEPLE_TYPE type, COULEUR couleur, std::string cheminImage);
 
