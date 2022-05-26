@@ -43,7 +43,7 @@ public:
 
     int getNombreDePoints() const;
 
-    Joueur getGagnant();
+    Joueur *getGagnant();
 
     void ajouterCase(Case c);
 
