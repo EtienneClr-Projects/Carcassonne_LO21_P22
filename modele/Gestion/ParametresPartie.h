@@ -137,5 +137,15 @@ public:
     static DIRECTION getDirDeCasePourTuileVoisine(DIRECTION dirCaseActuelle, DIRECTION dirOuRegarder);
 };
 
+// classe pour gérer les exceptions dans le set
+class CarcassonneException {
+public:
+    explicit CarcassonneException(std::string i) : info(std::move(i)) {}
+
+    std::string getInfo() const { return info; }
+
+private:
+    std::string info;
+};
 
 #endif //CARCASSONNE_LO21_P22_PARAMETRESPARTIE_H

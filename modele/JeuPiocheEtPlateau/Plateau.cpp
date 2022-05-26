@@ -17,10 +17,12 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
     // on ajoute les zones internes à la liste des zones
     for (std::pair<const int, Zone *> pair: zonesInternesTemp) {
         zones.push_back(pair.second);
+        cout << "Ajout de la zone : " << pair.second->toString() << endl;
     }
     //on met à jour les ouvertures de chaque zone qui sont sur les côtés de la tuile
     majOuverturesZonesCOTE(tuile);
 
+    cout << "FIN FUSION INTERNE DE LA TUILE :" << tuile->toString() << endl;
 
 
 //###################ZONES EXTERNES###################
@@ -45,13 +47,13 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
             cout << caseTuileVoisine << " == " << tuile->cases[DIRECTIONS_COTE[i]] << endl;
             throw std::runtime_error("caseTuileVoisine->getZone()==zone");
         }
-        cout << "Fusion de la zone " << zone->toString() << " avec la zone de la case voisine "
-             << caseTuileVoisine->getZone()->toString()
-             << endl;
-        cout << "affichage des zones du plateau :" << endl;
-        for (Zone *zPlateau: zones) {
-            cout << zPlateau->toString() << endl;
-        }
+//        cout << "Fusion de la zone " << zone->toString() << " avec la zone de la case voisine "
+//             << caseTuileVoisine->getZone()->toString()
+//             << endl;
+//        cout << "affichage des zones du plateau :" << endl;
+//        for (Zone *zPlateau: zones) {
+//            cout << zPlateau->toString() << endl;
+//        }
 
 
         //on met à jour les ouvertures des zones
@@ -61,13 +63,13 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
 
         //puis on fusionne les zones
         fusionZones(caseTuileVoisine->getZone(), zone);
-        cout << "resultat sur la case " << tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]]->getZone()->toString()
-             << ", zone: "
-             << tuile->cases[DIRECTIONS_COTE[i]]->getZone()->toString() << "\n\n" << endl;
-        cout << "REaffichage des zones du plateau :" << endl;
-        for (Zone *zPlateau: zones) {
-            cout << zPlateau->toString() << endl;
-        }
+//        cout << "resultat sur la case " << tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]]->getZone()->toString()
+//             << ", zone: "
+//             << tuile->cases[DIRECTIONS_COTE[i]]->getZone()->toString() << "\n\n" << endl;
+//        cout << "REaffichage des zones du plateau :" << endl;
+//        for (Zone *zPlateau: zones) {
+//            cout << zPlateau->toString() << endl;
+//        }
 
         // Si caseCote est Prairie ou chemin ou rivière, alors on peut fusionner aussi les COINS avec la case à côté
         fusionZonesCOINS(tuile, i, tuileVoisine);

@@ -11,7 +11,7 @@
 #include "CasesTuilesEtZones/Tuile.h"
 #include "JoueurEtRessources/Meeple.h"
 
-
+using namespace std;
 typedef std::vector<std::string> stringVec;
 
 /**
@@ -49,10 +49,10 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
             }
             if (iInfo == 2) {// l'info spéciale de la tuile
                 if (c == '1') { //booléen pour le blason
-                    suppType= SUPP_TYPE::BLASON;
+                    suppType = SUPP_TYPE::BLASON;
                 }
                 if (c == '2') { //booléen pour l'auberge
-                    suppType= SUPP_TYPE::AUBERGE;
+                    suppType = SUPP_TYPE::AUBERGE;
                 }
 
             }
@@ -70,7 +70,7 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
         }
         for (int i = 0; i < nbTuilesDeCeType; i++) {
             map<DIRECTION, Case *> casesNew = deepCopyMap(cases); //pour que les adresses des cases soient différentes
-            auto *tuile = new Tuile(casesNew, chemin+cheminImage);
+            auto *tuile = new Tuile(casesNew, chemin + cheminImage);
             for (auto &c: tuile->cases) { //on ajoute la tuile parente à chaque case
                 c.second->setTuileParente(tuile);
             }
@@ -109,7 +109,7 @@ void Jeu::getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples
         COULEUR couleur = ParametresPartie::toCOULEUR(c);
 
         for (int i = 0; i < nbMeeplesDeCeType; i++) {
-            auto *meeple = new Meeple(type, couleur, chemin+cheminImage);
+            auto *meeple = new Meeple(type, couleur, chemin + cheminImage);
             meeples->push_back(meeple);
         }
     }
@@ -167,5 +167,18 @@ string Jeu::getCheminFromExtension(EXTENSION extension) {
             break;
     }
     return chemin;
+}
+
+Jeu::Jeu(vector<EXTENSION> extensions) {
+    for (auto &ext: extensions) {
+        if (ext==EXTENSION::RIVIERE) {
+            getTuilesDesRessources(ext, &tuilesRiviere);
+        } else
+            getTuilesDesRessources(ext, &tuiles);
+    }
+}
+
+const Tuile &Jeu::getTuile(size_t i) const {
+    return *tuiles[i];
 }
 
