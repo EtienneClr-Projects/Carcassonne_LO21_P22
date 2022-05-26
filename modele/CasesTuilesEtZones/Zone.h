@@ -1,14 +1,11 @@
-//
-// Created by etienne on 27/04/2022.
-//
-
-#ifndef CARCASSONNE_LO21_P22_ZONE_H
-#define CARCASSONNE_LO21_P22_ZONE_H
-class Zone;
+#ifndef ZONE_H
+#define ZONE_H
+#pragma once
+class Case;
+#include "JoueurEtRessources/Joueur.h"
 #include <map>
 #include <vector>
-#include "Gestion/ParametresPartie.h"
-#include "JoueurEtRessources/Joueur.h"
+#include"Gestion/ParametresPartie.h"
 
 
 class Zone {
@@ -37,7 +34,7 @@ protected:
     //Méthodes
 public:
     // Constructeur
-    explicit Zone(Case *init_case, const std::vector<Joueur *> &joueursPartie);
+    explicit Zone(Case *init_case);
 
     const ZONE_TYPE &getType();
 
@@ -45,14 +42,17 @@ public:
 
     Joueur getGagnant();
 
-    void ajouterCase(Case c);
-
     bool estOuverte() const;
 
     std::vector<Case *> getCases();
 
     std::string toString();
+
+    void ajouterCase(Case *c);
+
+    void supprimerCase(Case *pCase);
 };
 
-
 #endif //CARCASSONNE_LO21_P22_ZONE_H
+
+
