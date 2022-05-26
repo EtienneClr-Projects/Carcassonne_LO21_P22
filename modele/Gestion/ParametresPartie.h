@@ -115,12 +115,12 @@ public:
 // classe pour gérer les exceptions dans le set
 class CarcassonneException {
 public:
-    explicit CarcassonneException(string i) : info(std::move(i)) {}
+    explicit CarcassonneException(std::string i) : info(std::move(i)) {}
 
-    string getInfo() const { return info; }
+    std::string getInfo() const { return info; }
 
 private:
-    string info;
+    std::string info;
 };
 
 
