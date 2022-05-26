@@ -5,10 +5,12 @@
 //  Created by Silvia on 11/05/2022.
 //
 
-#ifndef Tuile_hpp
-#define Tuile_hpp
-
-#include "Case.hpp"
+#ifndef Tuile_h
+#define Tuile_h
+#pragma once
+class Tuile;
+class Case;
+#include "Gestion/ParametresPartie.h"
 #include <stdio.h>
 # include <iostream>
 # include <string>
@@ -19,23 +21,25 @@
 
 using namespace std;
 
-namespace Carcassonne {
 class Tuile {
     public:
-        map<DIRECTION,Case *> getTuile()const{return tuile;};
+        map<DIRECTION,Case *> getTuile()const{return cases;};
         Case* getCase(DIRECTION d)const;
-        Tuile(map<DIRECTION,Case*> m);
+        explicit Tuile(map<DIRECTION, Case *> m, std::string cheminImage);
         void PivoterTuile(int nbre_rotation);
         // explicitation des opérations générées par défaut
         ~Tuile() = default;
         Tuile(const Tuile&) = default;
         Tuile& operator=(const Tuile&) = default;
     private:
-        map<DIRECTION,Case*> tuile;
+        map<DIRECTION,Case*> cases;
+        std::string cheminImage;
         
     };
 
 
 
-}
-#endif /* Tuile_hpp */
+
+#endif /* Tuile_h */
+
+
