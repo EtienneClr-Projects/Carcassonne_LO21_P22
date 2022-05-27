@@ -1,10 +1,10 @@
-#include "Jeu.h"
-#include "Case.h"
+#include "JeuPiocheEtPlateau/Jeu.h"
+#include "CasesTuilesEtZones/Case.h"
 #include <string>
 #include <vector>
 #include <dirent.h>
-#include "Tuile.h"
-#include "Meeple.h"
+#include "CasesTuilesEtZones/Tuile.h"
+#include "JoueurEtRessources/Meeple.h"
 
 using namespace std;
 typedef std::vector<std::string> stringVec;
