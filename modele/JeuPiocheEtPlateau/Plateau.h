@@ -10,11 +10,11 @@
 #include <vector>
 #include <dirent.h>
 #include "Tuile.h"
-#include "Case.h"
-#include "Joueur.h"
-#include "Meeple.h"
-#include "Zone.h"
-#include "Coord.h"
+#include "CasesTuilesEtZones/Case.h"
+#include "JoueurEtRessources/Joueur.h"
+#include "JoueurEtRessources/Meeple.h"
+#include "CasesTuilesEtZones/Zone.h"
+#include "Gestion/Coord.h"
 
 using namespace std;
 
