@@ -29,11 +29,6 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
     chemin += TUILES; //ici on récupère les _tuiles
     stringVec v;
     lireDossier(chemin, v);
-    //afficher les fichiers du dossier dans la sortie standard
-    for (auto &s: v) {
-        cout << s << endl;
-    }
-
 
     //pour chaque nom de fichier
     for (auto &cheminImage: v) {
