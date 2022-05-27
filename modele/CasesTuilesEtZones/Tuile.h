@@ -3,12 +3,11 @@
 #pragma once
 
 #include <stdio.h>
-# include <iostream>
-# include <string>
-# include <initializer_list>
+#include <iostream>
+#include <string>
+#include <initializer_list>
 #include <map>
-
-# include <cstdlib>
+#include <cstdlib>
 
 class Tuile;
 
@@ -24,7 +23,7 @@ public:
 
     Case *getCase(DIRECTION d) const;
 
-    void PivoterTuile(int nbre_rotation);
+    void pivoterTuileSensTrigo(int nbre_rotation);
 
     std::map<DIRECTION, Case *> getCases() const;
 

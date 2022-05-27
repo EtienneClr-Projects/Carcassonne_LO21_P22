@@ -29,15 +29,24 @@ const string SUPPLEMENTS = "Supplements/";
 
 class Jeu {
     static Jeu *instance;
+
     static void lireDossier(const std::string &chemin, stringVec &vecteurDeStrings);
 
     Jeu() = default;
+
     ~Jeu();
+
     vector<EXTENSION> extension;
     vector<Tuile *> tuilesRiviere;
+
+    string getCheminFromExtension(EXTENSION extension);
+
+    static map<DIRECTION, Case *> deepCopyMap(const map<DIRECTION, Case *> &map1);
+
 public:
 
     vector<Tuile *> tuiles;
+
     //SINGLETON
     void setExtensions(vector<EXTENSION> extensions);
 
@@ -56,22 +65,19 @@ public:
     }
 
     //METHODES
-    static map<DIRECTION, Case *> deepCopyMap(const map<DIRECTION, Case *> &map1);
 
     void getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles);
 
-    void getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples);
+    void getMeeplesDesRessources(EXTENSION _extension, vector<Meeple *> *meeples);
 
-     string getCheminFromExtension(EXTENSION extension);
-
-    const Tuile &getTuile(size_t i) const;
-
-     size_t getNbTuiles() { return tuiles.size(); }
+    size_t getNbTuiles() { return tuiles.size(); }
 
     // désactivation de la duplication (par recopie et affectaion)
     Jeu(const Jeu &j) = delete;
 
     Jeu &operator=(const Jeu &j) = delete;
+
+    vector<Meeple *> meeplesPossibleEnFonctionDesExtensions;
 };
 
 

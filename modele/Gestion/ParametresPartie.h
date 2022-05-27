@@ -137,7 +137,7 @@ public:
 };
 
 // classe pour gérer les exceptions dans le set
-class CarcassonneException {
+class CarcassonneException { //todo utiliser partout cette exception du coup
 public:
     explicit CarcassonneException(std::string i) : info(std::move(i)) {}
 

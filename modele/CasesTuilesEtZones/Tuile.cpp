@@ -1,11 +1,7 @@
 
 #include "CasesTuilesEtZones/Tuile.h"
 
-#include <stdio.h>
-# include <iostream>
 # include <string>
-# include <initializer_list>
-# include <cstdlib>
 # include <map>
 
 
@@ -32,10 +28,11 @@ std::string Tuile::toString() {
     return res + "\t" + cheminImage;
 }
 
-void Tuile::PivoterTuile(int nbre_rotation) {
+void Tuile::pivoterTuileSensTrigo(int nbre_rotation) {
     std::map<DIRECTION, Case *> t2;
-    for (unsigned int i = 0;
-         i < nbre_rotation % 4; i++) {//on decale les cases de 90 degres sans des aiguilles d'une montre
+    //on tourne les cases de 90 degrés dans le sens inverse des aiguilles d'une montre
+
+    for (unsigned int i = 0; i < nbre_rotation % 4; i++) {
         t2[DIRECTION::NORD_OUEST] = cases.find(DIRECTION::SUD_OUEST)->second;
         t2[DIRECTION::NORD] = cases.find(DIRECTION::OUEST)->second;
         t2[DIRECTION::NORD_EST] = cases.find(DIRECTION::NORD_OUEST)->second;

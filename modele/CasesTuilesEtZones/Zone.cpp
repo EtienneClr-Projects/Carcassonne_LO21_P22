@@ -30,7 +30,7 @@ int Zone::getNombreDePoints() const {
 
 /**
  * Renvoie le gagnant actuel de la zone. C'est à dire celui qui a le plus de Meeples dans la zone.
- * @return le gagnat de la zone.
+ * @return le gagnant de la zone. nullptr si tous les joueurs en ont 0.
  */
 Joueur * Zone::getGagnant() {
     // on parcourt la map des gagnants actuels et on prend celui qui a le plus de meeples dans la zone

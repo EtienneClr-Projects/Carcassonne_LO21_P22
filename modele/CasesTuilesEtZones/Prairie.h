@@ -9,13 +9,14 @@
 #include "Zone.h"
 #include "Tuile.h"
 
-class Prairie : public Zone {
+class Prairie : public Zone {//todo en fait on s'en sert pas ?
     std::vector<Zone *> villesAdjacentesFermees;
 
-public:
-    int compterNbVillesAdjacentesFermees();
-
     static std::vector<Case *> getCasesAdjacentes(Tuile *tuile, DIRECTION direction);
+
+public:
+
+    int compterNbVillesAdjacentesFermees();
 };
 
 

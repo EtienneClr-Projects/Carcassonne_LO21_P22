@@ -1,21 +1,15 @@
 #include "JeuPiocheEtPlateau/Plateau.h"
 
-#include <stdio.h>
 # include <iostream>
 # include <string>
-# include <initializer_list>
-# include <cstdlib>
 # include <map>
 #include <vector>
-#include <dirent.h>
-#include <vector>
 
-#include <iostream>
-#include "Plateau.h"
 #include "CasesTuilesEtZones/Tuile.h"
 #include "Gestion/Coord.h"
 
 using namespace std;
+Plateau *Plateau::instance = nullptr;
 
 void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
     cout << "\n\n FUSION DE LA TUILE :" << tuile->toString() << endl;
@@ -130,7 +124,7 @@ void Plateau::fusionZones(Zone *zoneASuppr, Zone *zoneB) {
 
 void Plateau::ajouterTuile(Tuile *tuile, Coord coord) {
     plateau.emplace_back(coord, tuile);
-    fusionnerZonesAvecPlateau(tuile);
+//    fusionnerZonesAvecPlateau(tuile); //todo @Etienne
 }
 
 std::string Plateau::toString() {
@@ -232,6 +226,7 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord coord) {
     voisin_haut.y_++;
     auto voisin_bas = coord;
     voisin_bas.y_--;
+
     map<DIRECTION, Case *> t = tuile->getCases();
 
     for (std::pair<Coord, Tuile *> pairTuile: plateau) {
@@ -259,7 +254,7 @@ bool Plateau::poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *>
 
         COULEUR couleur = j->getCouleur();
         unsigned int i = 0;
-        while ((couleur != meeplesEnReserve[i]->getCouleur() or
+        while ((couleur != meeplesEnReserve[i]->getCouleur() and
                 type != meeplesEnReserve[i]->getType()) and i <= meeplesEnReserve.size()) { i++; }
 
         //retirer du tableau "meeple en réserve" le meeple
@@ -271,8 +266,8 @@ bool Plateau::poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *>
         meeplesEnReserve.erase(meeplesEnReserve.begin() + i);
         //on met le meeple dans le bon tableau
         return true;
-
-    } else { return false; }
+    }
+    return false;
 }
 
 

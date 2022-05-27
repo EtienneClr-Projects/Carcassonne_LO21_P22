@@ -11,18 +11,19 @@ class Partie {
 private:
     //SINGLETON
     static Partie *instance;
-    Partie()=default;
 
+    Partie() = default;
 
-    std::vector<Joueur*> joueurs;
+    std::vector<Joueur *> joueurs;
 public:
     const vector<Joueur *> &getJoueurs() const;
 
-public:
     //SINGLETON
-    Partie(const Partie&) = delete;
-    Partie& operator=(const Partie&) = delete;
-    static Partie& getInstance();
+    Partie(const Partie &) = delete;
+
+    Partie &operator=(const Partie &) = delete;
+
+    static Partie &getInstance();
 
 };
 

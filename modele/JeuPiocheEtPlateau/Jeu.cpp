@@ -79,13 +79,13 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
 
 /**
  * Renvoie un vecteur de meeples contenant tous les meeples déjà initialisés
- * et liées à leurs images de l'extension fournie en paramètre
- * @param extension l'extension dont on veut récupérer les meeples
+ * et liées à leurs images de l'_extension fournie en paramètre
+ * @param _extension l'_extension dont on veut récupérer les meeples
  * @param meeples le vecteur de meeples où seront stockées les meeples
  */
-void Jeu::getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples) {
-    //on récupère le chemin du dossier en fonction de l'extension demandée
-    std::string chemin = "../" + getCheminFromExtension(extension);
+void Jeu::getMeeplesDesRessources(EXTENSION _extension, vector<Meeple *> *meeples) {
+    //on récupère le chemin du dossier en fonction de l'_extension demandée
+    std::string chemin = "../" + getCheminFromExtension(_extension);
     chemin += MEEPLES; //ici on récupère les meeples
 
     stringVec v;
@@ -172,8 +172,10 @@ void Jeu::setExtensions(vector<EXTENSION> extensions) {
     for (auto &ext: extensions) {
         if (ext == EXTENSION::RIVIERE) {
             getTuilesDesRessources(ext, &tuilesRiviere);
-        } else
+        } else {
             getTuilesDesRessources(ext, &tuilesTemp);
+            getMeeplesDesRessources(ext, &meeplesPossibleEnFonctionDesExtensions);
+        }
     }
     if (!tuilesRiviere.empty()) {//on ajoute d'abord les tuiles de la rivière
         for (auto &t: tuilesRiviere) {
@@ -188,9 +190,5 @@ void Jeu::setExtensions(vector<EXTENSION> extensions) {
     }
 
     //todo faire les Meeples aussi ?
-}
-
-const Tuile &Jeu::getTuile(size_t i) const {
-    return *tuiles[i];
 }
 
