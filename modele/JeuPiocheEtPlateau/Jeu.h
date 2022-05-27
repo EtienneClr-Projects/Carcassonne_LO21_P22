@@ -29,47 +29,50 @@ const string SUPPLEMENTS = "Supplements/";
 //  et un chemin vers les meeples paysans s'écrit : RESSOURCES_PAYSANS + MEEPLES c'est à dire : Ressources/Paysans/Meeples/
 
 class Jeu {
-    Jeu(vector<EXTENSION> extensions);
-
+    static Jeu *instance;
     static void lireDossier(const std::string &chemin, stringVec &vecteurDeStrings);
 
+    Jeu() = default;
+    ~Jeu();
+    vector<EXTENSION> extension;
+    vector<Tuile *> tuilesRiviere;
 public:
+
+    vector<Tuile *> tuiles;
+    //SINGLETON
+    void setExtensions(vector<EXTENSION> extensions);
+
+    static Jeu *getInstance() {
+        if (instance == nullptr) {
+            instance = new Jeu();
+        }
+        return instance;
+    }
+
+    static void libererJeu() {
+        if (instance != nullptr) {
+            delete instance;
+            instance = nullptr;
+        }
+    }
+
+    //METHODES
     static map<DIRECTION, Case *> deepCopyMap(const map<DIRECTION, Case *> &map1);
 
-    static void getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles);
+    void getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles);
 
-    static void getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples);
+    void getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples);
 
-    static string getCheminFromExtension(EXTENSION extension);
+     string getCheminFromExtension(EXTENSION extension);
 
     const Tuile &getTuile(size_t i) const;
 
-    static void libererJeu();
-
-    size_t getNbTuiles() const { return 72; }
+     size_t getNbTuiles() { return 72; }//todo suffit pas
 
     // désactivation de la duplication (par recopie et affectaion)
     Jeu(const Jeu &j) = delete;
 
     Jeu &operator=(const Jeu &j) = delete;
-
-private:
-    //static Jeu* instance;
-    struct Handler {
-        Jeu *instance = nullptr;
-
-        Handler() = default;
-
-        ~Handler() { delete instance; }
-    };
-
-    static Handler handler; // à la fin de l'execution du programme le destructeur de handler est forcément appelé
-
-    ~Jeu();
-
-    vector<EXTENSION> extension;
-    vector<Tuile *> tuilesRiviere;
-    vector<Tuile *> tuiles;
 };
 
 

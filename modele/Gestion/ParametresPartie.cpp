@@ -116,7 +116,7 @@ ZONE_TYPE ParametresPartie::toZONE_TYPE(char type) {
         case 'c':
             return ZONE_TYPE::CATHEDRALE;
         default:
-            throw std::invalid_argument("Type de zone invalide");
+            throw std::invalid_argument("Type de zone invalide (toZONE_TYPE) : "+std::string(1,type));
     }
 }
 
@@ -148,7 +148,7 @@ std::string ParametresPartie::toStringZONE_TYPE(const ZONE_TYPE type) {
         case ZONE_TYPE::CATHEDRALE:
             return "c";
         default:
-            throw std::invalid_argument("Type de zone invalide");
+            throw std::invalid_argument("Type de zone invalide (toString Zone)");
     }
 }
 

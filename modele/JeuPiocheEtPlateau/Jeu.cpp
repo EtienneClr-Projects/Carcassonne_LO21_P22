@@ -5,28 +5,35 @@
 
 #include "Jeu.h"
 #include "CasesTuilesEtZones/Case.h"
+#include <random>
 #include <string>
 #include <vector>
 #include <dirent.h>
+#include <algorithm>
 #include "CasesTuilesEtZones/Tuile.h"
 #include "JoueurEtRessources/Meeple.h"
 
 using namespace std;
 typedef std::vector<std::string> stringVec;
+Jeu *Jeu::instance = nullptr;
 
 /**
- * Renvoie un vecteur de tuiles contenant toutes les tuiles déjà initialisées
- * et liées à leurs images de l'extension fournie en paramètre
- * @param extension l'extension dont on veut récupérer les tuiles
- * @param tuiles le vecteur de tuiles où seront stockées les tuiles
+ * Renvoie un vecteur de _tuiles contenant toutes les _tuiles déjà initialisées
+ * et liées à leurs images de l'_extension fournie en paramètre
+ * @param _extension l'_extension dont on veut récupérer les _tuiles
+ * @param _tuiles le vecteur de _tuiles où seront stockées les _tuiles
  */
-void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
-    //on récupère le chemin du dossier en fonction de l'extension demandée
-    std::string chemin = "../" + getCheminFromExtension(extension);
-    chemin += TUILES; //ici on récupère les tuiles
-
+void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles) {
+    //on récupère le chemin du dossier en fonction de l'_extension demandée
+    std::string chemin = "../" + getCheminFromExtension(_extension);
+    chemin += TUILES; //ici on récupère les _tuiles
     stringVec v;
     lireDossier(chemin, v);
+    //afficher les fichiers du dossier dans la sortie standard
+    for (auto &s: v) {
+        cout << s << endl;
+    }
+
 
     //pour chaque nom de fichier
     for (auto &cheminImage: v) {
@@ -74,7 +81,7 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
             for (auto &c: tuile->cases) { //on ajoute la tuile parente à chaque case
                 c.second->setTuileParente(tuile);
             }
-            tuiles->push_back(tuile);
+            _tuiles->push_back(tuile);
         }
     }
 }
@@ -169,7 +176,7 @@ string Jeu::getCheminFromExtension(EXTENSION extension) {
     return chemin;
 }
 
-Jeu::Jeu(vector<EXTENSION> extensions) {
+void Jeu::setExtensions(vector<EXTENSION> extensions) {
     vector<Tuile *> tuilesTemp;
     for (auto &ext: extensions) {
         if (ext == EXTENSION::RIVIERE) {
@@ -182,12 +189,11 @@ Jeu::Jeu(vector<EXTENSION> extensions) {
             tuiles.push_back(t);
         }
     }
-    //puis on ajoute les tuilesTemp dans un ordre aléatoire
-    for (int i = 0; i < tuilesTemp.size(); i++) {
-        int index = rand() % tuilesTemp.size();
-        Tuile *tuile = tuilesTemp[index];
-        tuilesTemp.erase(tuilesTemp.begin() + index);
-        tuiles.push_back(tuile);
+
+    //puis on ajoute les autres tuiles dans le désordre
+    shuffle(tuilesTemp.begin(), tuilesTemp.end(), std::mt19937(std::random_device()()));
+    for (auto &t: tuilesTemp) {
+        tuiles.push_back(t);
     }
 
     //todo faire les Meeples aussi ?
