@@ -1,9 +1,4 @@
-//
-// Created by etienne on 27/04/2022.
-//
-
-
-#include "Jeu.h"
+#include "JeuPiocheEtPlateau/Jeu.h"
 #include "CasesTuilesEtZones/Case.h"
 #include <random>
 #include <string>
@@ -23,6 +18,7 @@ Jeu *Jeu::instance = nullptr;
  * @param _extension l'_extension dont on veut récupérer les _tuiles
  * @param _tuiles le vecteur de _tuiles où seront stockées les _tuiles
  */
+
 void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles) {
     //on récupère le chemin du dossier en fonction de l'_extension demandée
     std::string chemin = "../" + getCheminFromExtension(_extension);

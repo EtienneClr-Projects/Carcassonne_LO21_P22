@@ -1,12 +1,17 @@
 #include <iostream>
-#include "Zone.h"
+#include "CasesTuilesEtZones/Case.h"
+#include "CasesTuilesEtZones/Zone.h"
 #include "Gestion/Partie.h"
+
 
 /**
  * Constructeur principal de la classe Zone.
  * @param type le type de la zone
  * @param init_case la case avec laquelle la zone est initialisée. C'est à dire la première case de la zone.
  */
+
+ZONE_TYPE Case :: getZoneType() const { return zone_type; }
+
 Zone::Zone(Case *init_case) {
     this->type = init_case->getZoneType();
 
@@ -90,3 +95,5 @@ void Zone::supprimerCase(Case *pCase) {
         }
     }
 }
+
+

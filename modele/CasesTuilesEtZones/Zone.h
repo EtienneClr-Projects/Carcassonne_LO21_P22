@@ -1,10 +1,11 @@
-#ifndef CARCASSONNE_LO21_P22_ZONE_H
-#define CARCASSONNE_LO21_P22_ZONE_H
-class Zone;
+#ifndef ZONE_H
+#define ZONE_H
+#pragma once
+class Case;
+#include "JoueurEtRessources/Joueur.h"
 #include <map>
 #include <vector>
-#include "Gestion/ParametresPartie.h"
-#include "JoueurEtRessources/Joueur.h"
+#include"Gestion/ParametresPartie.h"
 
 
 class Zone {
@@ -53,5 +54,6 @@ public:
     void supprimerCase(Case *pCase);
 };
 
-
 #endif //CARCASSONNE_LO21_P22_ZONE_H
+
+
