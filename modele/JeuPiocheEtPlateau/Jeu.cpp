@@ -1,17 +1,12 @@
-//
-// Created by etienne on 27/04/2022.
-//
-
-
 #include "Jeu.h"
-#include "CasesTuilesEtZones/Case.h"
+#include "Case.h"
 #include <string>
 #include <vector>
 #include <dirent.h>
-#include "CasesTuilesEtZones/Tuile.h"
-#include "JoueurEtRessources/Meeple.h"
+#include "Tuile.h"
+#include "Meeple.h"
 
-
+using namespace std;
 typedef std::vector<std::string> stringVec;
 
 /**
@@ -19,7 +14,9 @@ typedef std::vector<std::string> stringVec;
  * et liées à leurs images de l'extension fournie en paramètre
  * @param extension l'extension dont on veut récupérer les tuiles
  * @param tuiles le vecteur de tuiles où seront stockées les tuiles
+ *
  */
+
 void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
     //on récupère le chemin du dossier en fonction de l'extension demandée
     std::string chemin = "../" + getCheminFromExtension(extension);
@@ -49,10 +46,10 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
             }
             if (iInfo == 2) {// l'info spéciale de la tuile
                 if (c == '1') { //booléen pour le blason
-                    suppType= SUPP_TYPE::BLASON;
+                    suppType = SUPP_TYPE::BLASON;
                 }
                 if (c == '2') { //booléen pour l'auberge
-                    suppType= SUPP_TYPE::AUBERGE;
+                    suppType = SUPP_TYPE::AUBERGE;
                 }
 
             }
@@ -70,7 +67,7 @@ void Jeu::getTuilesDesRessources(EXTENSION extension, vector<Tuile *> *tuiles) {
         }
         for (int i = 0; i < nbTuilesDeCeType; i++) {
             map<DIRECTION, Case *> casesNew = deepCopyMap(cases); //pour que les adresses des cases soient différentes
-            auto *tuile = new Tuile(casesNew, chemin+cheminImage);
+            auto *tuile = new Tuile(casesNew, chemin + cheminImage);
             for (auto &c: tuile->cases) { //on ajoute la tuile parente à chaque case
                 c.second->setTuileParente(tuile);
             }
@@ -109,7 +106,7 @@ void Jeu::getMeeplesDesRessources(EXTENSION extension, vector<Meeple *> *meeples
         COULEUR couleur = ParametresPartie::toCOULEUR(c);
 
         for (int i = 0; i < nbMeeplesDeCeType; i++) {
-            auto *meeple = new Meeple(type, couleur, chemin+cheminImage);
+            auto *meeple = new Meeple(type, couleur, chemin + cheminImage);
             meeples->push_back(meeple);
         }
     }
@@ -169,3 +166,30 @@ string Jeu::getCheminFromExtension(EXTENSION extension) {
     return chemin;
 }
 
+Jeu::Jeu(vector<EXTENSION> extensions) {
+    vector<Tuile *> tuilesTemp;
+    for (auto &ext: extensions) {
+        if (ext == EXTENSION::RIVIERE) {
+            getTuilesDesRessources(ext, &tuilesRiviere);
+        } else
+            getTuilesDesRessources(ext, &tuilesTemp);
+    }
+    if (!tuilesRiviere.empty()) {//on ajoute d'abord les tuiles de la rivière
+        for (auto &t: tuilesRiviere) {
+            tuiles.push_back(t);
+        }
+    }
+    //puis on ajoute les tuilesTemp dans un ordre aléatoire
+    for (int i = 0; i < tuilesTemp.size(); i++) {
+        int index = rand() % tuilesTemp.size();
+        Tuile *tuile = tuilesTemp[index];
+        tuilesTemp.erase(tuilesTemp.begin() + index);
+        tuiles.push_back(tuile);
+    }
+
+    //todo faire les Meeples aussi ?
+}
+
+const Tuile &Jeu::getTuile(size_t i) const {
+    return *tuiles[i];
+}
