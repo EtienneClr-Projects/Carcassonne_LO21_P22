@@ -3,11 +3,11 @@
 #pragma once
 class Meeple;
 class Case;
-#include "ParametresPartie.h"
-#include "Joueur.h"
-#include "Tuile.h"
-#include "Zone.h"
-#include "Meeple.h"
+#include "Gestion/ParametresPartie.h"
+#include "JoueurEtRessources/Joueur.h"
+#include "CasesTuilesEtZones/Tuile.h"
+#include "CasesTuilesEtZones/Zone.h"
+#include "JoueurEtRessources/Meeple.h"
 
 class Case {
     ZONE_TYPE zone_type;
