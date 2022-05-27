@@ -9,7 +9,7 @@
 # include <map>
 #include <vector>
 #include <dirent.h>
-#include "Tuile.h"
+#include "CasesTuilesEtZones/Tuile.h"
 #include "CasesTuilesEtZones/Case.h"
 #include "JoueurEtRessources/Joueur.h"
 #include "JoueurEtRessources/Meeple.h"
