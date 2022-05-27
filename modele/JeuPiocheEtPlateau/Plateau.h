@@ -1,14 +1,48 @@
-//
-// Created by etienne on 27/04/2022.
-//
+#ifndef PLATEAU_H
+#define PLATEAU_H
 
-#ifndef CARCASSONNE_LO21_P22_PLATEAU_H
-#define CARCASSONNE_LO21_P22_PLATEAU_H
+#include <stdio.h>
+# include <iostream>
+# include <string>
+# include <initializer_list>
+# include <cstdlib>
+# include <map>
+#include <vector>
+#include <dirent.h>
+#include "Tuile.h"
+#include "Case.h"
+#include "Joueur.h"
+#include "Meeple.h"
+#include "Zone.h"
+#include "Coord.h"
+
+using namespace std;
 
 
-class Plateau {
-
+class Plateau{
+public:
+    void retirerMeeple(vector<Meeple *>& meeplesPoses, vector<Meeple *>& meeplesEnReserve);
+    bool checkerTuile(Tuile * t,Coord coord);
+    static bool poserMeeple(Joueur *j, Case * c, MEEPLE_TYPE  type, vector<Meeple*>meeplesPoses, vector<Meeple*> meeplesEnReserve);
+    static Plateau *getInstance(const vector<std::pair<Coord, Tuile *>> &plateau){
+        if(instance==nullptr){
+            instance=new Plateau(plateau);
+        }
+        return instance;
+    }
+    static void libererInstance(){
+        if (instance!=nullptr){
+            delete instance;
+            instance=nullptr;
+        }
+    }
+    
+private:
+    static Plateau * instance;
+    std::vector<std::pair<Coord,Tuile*>> plateau;
+    Plateau(const vector<std::pair<Coord, Tuile *>> &p):plateau(p){};
+    ~Plateau() = default;
+    vector<Zone*> zones;
 };
-
 
 #endif //CARCASSONNE_LO21_P22_PLATEAU_H
