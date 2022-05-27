@@ -3,7 +3,7 @@
 #pragma once
 class Tuile;
 class Case;
-#include "ParametresPartie.h"
+#include "Gestion/ParametresPartie.h"
 #include <stdio.h>
 # include <iostream>
 # include <string>
