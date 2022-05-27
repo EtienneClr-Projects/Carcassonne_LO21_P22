@@ -1,11 +1,14 @@
-#ifndef ZONE_H
-#define ZONE_H
+#ifndef CARCASSONNE_LO21_P22_ZONE_H
+#define CARCASSONNE_LO21_P22_ZONE_H
 #pragma once
-class Case;
+
+class Zone;
+
+#include "Case.h"
 #include "JoueurEtRessources/Joueur.h"
 #include <map>
 #include <vector>
-#include"Gestion/ParametresPartie.h"
+#include "Gestion/ParametresPartie.h"
 
 
 class Zone {
@@ -34,14 +37,11 @@ protected:
 public:
     int ouvertures = 0;
 
-    // Constructeur
-    explicit Zone(Case *init_case);
-
     const ZONE_TYPE &getType();
 
     int getNombreDePoints() const;
 
-    Joueur getGagnant();
+    Joueur * getGagnant();
 
     bool estOuverte() const;
 
@@ -52,6 +52,8 @@ public:
     void ajouterCase(Case *c);
 
     void supprimerCase(Case *pCase);
+
+    Zone(Case *init_case);
 };
 
 #endif //CARCASSONNE_LO21_P22_ZONE_H

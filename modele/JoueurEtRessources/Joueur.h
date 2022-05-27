@@ -6,9 +6,16 @@
 #define CARCASSONNE_LO21_P22_JOUEUR_H
 
 
+#include "Gestion/ParametresPartie.h"
+
 class Joueur {
 private:
     Joueur() = default;
+
+    COULEUR couleur;
+public:
+
+    COULEUR getCouleur();
 };
 
 

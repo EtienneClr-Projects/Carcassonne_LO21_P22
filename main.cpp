@@ -11,8 +11,8 @@ using namespace std;
 int main() {
     cout << "Hello, Carcassonne !" << endl;
     vector<EXTENSION> extensionsChoisies;
-//    extensionsChoisies.push_back(EXTENSION::NORMAL);
-    extensionsChoisies.push_back(EXTENSION::RIVIERE);
+    extensionsChoisies.push_back(EXTENSION::NORMAL);
+//    extensionsChoisies.push_back(EXTENSION::ABBE);
 
     Jeu *jeu = Jeu::getInstance();
     jeu->setExtensions(extensionsChoisies);
@@ -22,7 +22,9 @@ int main() {
 //    }
 
     auto * pioche = new Pioche(jeu->tuiles);
+    cout << pioche->nbTuilesRestantes<< endl;
     Tuile* t = pioche->piocher();
+    cout << pioche->nbTuilesRestantes<< endl;
     cout << t->toString() << endl;
 
     return 0;

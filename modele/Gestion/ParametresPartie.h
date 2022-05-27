@@ -73,7 +73,6 @@ constexpr static const MEEPLE_TYPE ALL_MEEPLES_TYPES[] = {MEEPLE_TYPE::ABBE, MEE
                                                           MEEPLE_TYPE::BATISSEUR, MEEPLE_TYPE::COCHON};
 
 
-#include "CasesTuilesEtZones/Case.h"
 #include "Coord.h"
 #include <vector>
 

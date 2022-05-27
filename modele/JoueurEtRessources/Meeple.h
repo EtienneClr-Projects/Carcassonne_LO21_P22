@@ -1,7 +1,3 @@
-//
-// Created by etienne on 08/05/2022.
-//
-
 #ifndef CARCASSONNE_LO21_P22_MEEPLE_H
 #define CARCASSONNE_LO21_P22_MEEPLE_H
 

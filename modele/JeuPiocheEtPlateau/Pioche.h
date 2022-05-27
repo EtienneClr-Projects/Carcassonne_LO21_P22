@@ -12,10 +12,11 @@ using namespace std;
 class Pioche {
 private:
     std::vector<Tuile *> tuiles;
-    int nbTuilesRestantes;
 public:
     Pioche(std::vector<Tuile*> tuiles);
     Tuile* piocher();
+
+    int nbTuilesRestantes;
 };
 
 

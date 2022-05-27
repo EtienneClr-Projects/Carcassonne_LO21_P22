@@ -1,5 +1,4 @@
 #include <iostream>
-#include "CasesTuilesEtZones/Case.h"
 #include "CasesTuilesEtZones/Zone.h"
 #include "Gestion/Partie.h"
 
@@ -9,8 +8,6 @@
  * @param type le type de la zone
  * @param init_case la case avec laquelle la zone est initialisée. C'est à dire la première case de la zone.
  */
-
-ZONE_TYPE Case :: getZoneType() const { return zone_type; }
 
 Zone::Zone(Case *init_case) {
     this->type = init_case->getZoneType();
@@ -35,7 +32,7 @@ int Zone::getNombreDePoints() const {
  * Renvoie le gagnant actuel de la zone. C'est à dire celui qui a le plus de Meeples dans la zone.
  * @return le gagnat de la zone.
  */
-Joueur Zone::getGagnant() {
+Joueur * Zone::getGagnant() {
     // on parcourt la map des gagnants actuels et on prend celui qui a le plus de meeples dans la zone
     int nbMaxMeeples = 0;
     Joueur *gagnant = nullptr;
@@ -45,7 +42,7 @@ Joueur Zone::getGagnant() {
             gagnant = gagnantsActuel.first;
         }
     }
-    return *gagnant;
+    return gagnant;
 }
 
 /**

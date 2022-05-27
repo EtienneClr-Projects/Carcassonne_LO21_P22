@@ -40,7 +40,7 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
     //pour chaque case sur une ParametresPartie::DIRECTION_COTE de la tuile
     for (int i = 0; i < 4; i++) {
         // on prend sa zone
-        Zone *zone = tuile->cases[DIRECTIONS_COTE[i]]->getZone();
+        Zone *zone = tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente();
 
         //on cherche son voisin dans la liste plateau dans la bonne direction.
         //Par exemple si la case est au NORD, on cherche une tuile au NORD de la case actuelle
@@ -51,12 +51,12 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
         Case *caseTuileVoisine = tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]];
 
 
-        if (caseTuileVoisine->getZone() == zone) {
+        if (caseTuileVoisine->getZoneParente() == zone) {
             cout << caseTuileVoisine << " == " << tuile->cases[DIRECTIONS_COTE[i]] << endl;
-            throw std::runtime_error("caseTuileVoisine->getZone()==zone");
+            throw std::runtime_error("caseTuileVoisine->getZoneParente()==zone");
         }
 //        cout << "Fusion de la zone " << zone->toString() << " avec la zone de la case voisine "
-//             << caseTuileVoisine->getZone()->toString()
+//             << caseTuileVoisine->getZoneParente()->toString()
 //             << endl;
 //        cout << "affichage des zones du plateau :" << endl;
 //        for (Zone *zPlateau: zones) {
@@ -65,15 +65,15 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
 
 
         //on met à jour les ouvertures des zones
-        int ttOuvertures = zone->ouvertures + caseTuileVoisine->getZone()->ouvertures;
+        int ttOuvertures = zone->ouvertures + caseTuileVoisine->getZoneParente()->ouvertures;
         zone->ouvertures = ttOuvertures - 2;
-        caseTuileVoisine->getZone()->ouvertures = ttOuvertures - 2;//todo vérifier après
+        caseTuileVoisine->getZoneParente()->ouvertures = ttOuvertures - 2;//todo vérifier après
 
         //puis on fusionne les zones
-        fusionZones(caseTuileVoisine->getZone(), zone);
-//        cout << "resultat sur la case " << tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]]->getZone()->toString()
+        fusionZones(caseTuileVoisine->getZoneParente(), zone);
+//        cout << "resultat sur la case " << tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]]->getZoneParente()->toString()
 //             << ", zone: "
-//             << tuile->cases[DIRECTIONS_COTE[i]]->getZone()->toString() << "\n\n" << endl;
+//             << tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente()->toString() << "\n\n" << endl;
 //        cout << "REaffichage des zones du plateau :" << endl;
 //        for (Zone *zPlateau: zones) {
 //            cout << zPlateau->toString() << endl;
@@ -105,9 +105,9 @@ bool Plateau::fusionPossible(Zone *zone1, Zone *zone2) {
 void Plateau::fusionZones(Zone *zoneASuppr, Zone *zoneB) {
     // on ajoute toutes les cases de la zoneASuppr à la zoneB
     for (Case *_case: zoneASuppr->getCases()) {
-        _case->setZone(zoneB);
+        _case->setZoneParente(zoneB);
         zoneB->ajouterCase(_case);
-//        cout << "\t" <<_case->getZone()->toString() << " ajoute la case " << endl;
+//        cout << "\t" <<_case->getZoneParente()->toString() << " ajoute la case " << endl;
     }
 
     if (zoneASuppr == zoneB) //si ce sont les mêmes adresses on supprime pas
@@ -118,8 +118,8 @@ void Plateau::fusionZones(Zone *zoneASuppr, Zone *zoneB) {
     for (Zone *z: zones) {
         if (z == zoneASuppr) {
 //            cout << "suppression de la zone " << zoneASuppr->toString() << endl;
-//            for (Case *_case: zoneASuppr->getCases()) {
-//                cout << "\t"<<_case->getZone()->toString() << endl;
+//            for (Case *_case: zoneASuppr->getCase()) {
+//                cout << "\t"<<_case->getZoneParente()->toString() << endl;
 //            }
             zones.erase(zones.begin() + i);
             break;
@@ -153,7 +153,7 @@ std::vector<pair<int, Zone *>> Plateau::calcZonesInternes(Tuile *tuile) {
                 //si l'id est déjà dedans et c'est le même type,
                 // donc c'est que l'on a déjà créé la zone donc on ajoute cette case à la zone
                 pair.second->ajouterCase(_caseTuile.second);
-                _caseTuile.second->setZone(pair.second);
+                _caseTuile.second->setZoneParente(pair.second);
                 trouveDansZoneExistante = true;
                 break;
             }
@@ -161,7 +161,7 @@ std::vector<pair<int, Zone *>> Plateau::calcZonesInternes(Tuile *tuile) {
         if (!trouveDansZoneExistante) {
             //sinon on crée une nouvelle zone et on l'ajoute à la liste
             Zone *zone = new Zone(_caseTuile.second);
-            _caseTuile.second->setZone(zone);
+            _caseTuile.second->setZoneParente(zone);
             zonesInternesTemp.emplace_back(_caseTuile.second->getIdConnexion(), zone);
         }
     }
@@ -173,11 +173,11 @@ void Plateau::majOuverturesZonesCOTE(Tuile *tuile) {
         std::cout << "I" + std::to_string(i) << " ";
         // on prend sa zone et on lui ajoute +1 en ouverture
         Case *caseCote = tuile->cases[DIRECTIONS_COTE[i]];
-        Zone *zoneCote = caseCote->getZone();
-        tuile->cases[DIRECTIONS_COTE[i]]->getZone()->ouvertures++;
+        Zone *zoneCote = caseCote->getZoneParente();
+        tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente()->ouvertures++;
 //        std::cout << zoneCote->toString() << "ouvertures = " << zoneCote->ouvertures << std::endl;
         //la tuile n'est pas encore vraiment posée, donc toutes les zones sont ouvertes, donc on les incrémente toutes
-    }
+    } // todo
 }
 
 Coord Plateau::findCoordTuile(Tuile *tuile) {
@@ -215,85 +215,78 @@ void Plateau::fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine) {
             Case *caseAFusionner = tuileVoisine->cases[ParametresPartie::getDirDeCasePourTuileVoisine(deuxCoin,
                                                                                                       DIRECTIONS_COTE[i])];
             //on fusionne les zones si même type de zone et si les zones ne sont déjà pas fusionnées
-            if (fusionPossible(caseAFusionner->getZone(), tuile->cases[deuxCoin]->getZone())) {
-                fusionZones(caseAFusionner->getZone(), tuile->cases[deuxCoin]->getZone());
+            if (fusionPossible(caseAFusionner->getZoneParente(), tuile->cases[deuxCoin]->getZoneParente())) {
+                fusionZones(caseAFusionner->getZoneParente(), tuile->cases[deuxCoin]->getZoneParente());
             }
         }
     }
 }
 
 
-bool Plateau :: checkerTuile(Tuile * tuile,Coord coord){
-
-    auto voisin_droit=coord;
+bool Plateau::checkerTuile(Tuile *tuile, Coord coord) {
+    auto voisin_droit = coord;
     voisin_droit.x_++;
-    auto voisin_gauche=coord;
+    auto voisin_gauche = coord;
     voisin_gauche.x_--;
-    auto voisin_haut=coord;
+    auto voisin_haut = coord;
     voisin_haut.y_++;
-    auto voisin_bas=coord;
+    auto voisin_bas = coord;
     voisin_bas.y_--;
-    map<DIRECTION,Case*> t=tuile->getTuile();
+    map<DIRECTION, Case *> t = tuile->getCases();
 
-    for(std::pair<Coord,Tuile*> pairTuile:plateau){
-        map<DIRECTION,Case*> pt=pairTuile.second->getTuile();
-        if(voisin_droit == pairTuile.first){
+    for (std::pair<Coord, Tuile *> pairTuile: plateau) {
+        map<DIRECTION, Case *> pt = pairTuile.second->getCases();
+        if (voisin_droit == pairTuile.first) {
             if (t[DIRECTION::EST]->getZoneType() != pt[DIRECTION::OUEST]->getZoneType()) return false;
         }
-        if(voisin_gauche == pairTuile.first){
+        if (voisin_gauche == pairTuile.first) {
             if (t[DIRECTION::OUEST]->getZoneType() != pt[DIRECTION::EST]->getZoneType()) return false;
         }
-        if(voisin_haut == pairTuile.first){
+        if (voisin_haut == pairTuile.first) {
             if (t[DIRECTION::NORD]->getZoneType() != pt[DIRECTION::SUD]->getZoneType()) return false;
         }
-        if(voisin_bas == pairTuile.first){
+        if (voisin_bas == pairTuile.first) {
             if (t[DIRECTION::SUD]->getZoneType() != pt[DIRECTION::NORD]->getZoneType()) return false;
         }
     }
     return true;
-
-
-
-
 }
 
-bool Plateau::poserMeeple(Joueur *j, Case * c, MEEPLE_TYPE type,vector<Meeple*>meeplesPoses, vector<Meeple*> meeplesEnReserve){
-    Zone *zone=c->getZoneParente();
-    if (nullptr == zone->getGagnant()){// si pas de meeple déjà posé dans la zone
+bool Plateau::poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *> meeplesPoses,
+                          vector<Meeple *> meeplesEnReserve) {
+    Zone *zone = c->getZoneParente();
+    if (nullptr == zone->getGagnant()) {// si pas de meeple déjà posé dans la zone
 
-        COULEUR couleur=j->getCouleur();
-        unsigned int i=0;
-        while ((couleur!= meeplesEnReserve[i]->getCouleur() or
-                type != meeplesEnReserve[i]->getType()) and i <= meeplesEnReserve.size()){i++;}
+        COULEUR couleur = j->getCouleur();
+        unsigned int i = 0;
+        while ((couleur != meeplesEnReserve[i]->getCouleur() or
+                type != meeplesEnReserve[i]->getType()) and i <= meeplesEnReserve.size()) { i++; }
 
         //retirer du tableau "meeple en réserve" le meeple
-        if (i>meeplesEnReserve.size())
-        {
+        if (i > meeplesEnReserve.size()) {
             throw CarcassonneException("pas de meeple de ce type et de cette couleur disponible");
         }
         c->setMeeple(meeplesEnReserve[i]);
         meeplesPoses.push_back(meeplesEnReserve[i]);
-        meeplesEnReserve.erase(meeplesEnReserve.begin()+i);
+        meeplesEnReserve.erase(meeplesEnReserve.begin() + i);
         //on met le meeple dans le bon tableau
         return true;
 
-    }
-    else {return false;}
+    } else { return false; }
 }
 
 
-
-void Plateau:: retirerMeeple(vector<Meeple *>& meeplesPoses, vector<Meeple *>& meeplesEnReserve) {
-    for (auto zone : zones){
-        if (!(zone->estOuverte())){
-            for (auto c : zone->getCases()){
-                if(c->getMeeplePose() != nullptr){
+void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
+    for (auto zone: zones) {
+        if (!(zone->estOuverte())) {
+            for (auto c: zone->getCases()) {
+                if (c->getMeeplePose() != nullptr) {
                     meeplesEnReserve.push_back(c->getMeeplePose());
-                    int i=0;
-                    for (auto meeple : meeplesPoses){
-                        if (meeple==c->getMeeplePose())
+                    int i = 0;
+                    for (auto meeple: meeplesPoses) {
+                        if (meeple == c->getMeeplePose())
                             meeplesPoses.erase(meeplesPoses.begin() + i);
-                            i++;
+                        i++;
                     }
                     c->retirerMeeplePose();
 

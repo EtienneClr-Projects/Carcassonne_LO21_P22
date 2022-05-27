@@ -20,7 +20,7 @@ int Prairie::compterNbVillesAdjacentesFermees() {
 
         //puis pour chaque voisin, on regarde si c'est une ville fermée
         for (auto &C: voisins) {
-            if (C->getZoneType() == ZONE_TYPE::VILLE && !C->getZone()->estOuverte()) {
+            if (C->getZoneType() == ZONE_TYPE::VILLE && !C->getZoneParente()->estOuverte()) {
                 nbVillesAdjacentesFermees++;
             }
         }

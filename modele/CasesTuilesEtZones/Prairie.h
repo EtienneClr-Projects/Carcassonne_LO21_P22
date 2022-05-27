@@ -7,6 +7,7 @@
 
 #pragma once
 #include "Zone.h"
+#include "Tuile.h"
 
 class Prairie : public Zone {
     std::vector<Zone *> villesAdjacentesFermees;

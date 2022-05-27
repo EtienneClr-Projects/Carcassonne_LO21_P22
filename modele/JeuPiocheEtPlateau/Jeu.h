@@ -1,4 +1,3 @@
-
 #ifndef CARCASSONNE_LO21_P22_JEU_H
 #define CARCASSONNE_LO21_P22_JEU_H
 
@@ -67,7 +66,7 @@ public:
 
     const Tuile &getTuile(size_t i) const;
 
-     size_t getNbTuiles() { return 72; }//todo suffit pas
+     size_t getNbTuiles() { return tuiles.size(); }
 
     // désactivation de la duplication (par recopie et affectaion)
     Jeu(const Jeu &j) = delete;
