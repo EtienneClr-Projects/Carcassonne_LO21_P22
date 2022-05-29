@@ -220,24 +220,21 @@ int main() {
             if (choixPoserMeeple == 1) {
                 //le joueur doit choisir la DIRECTION où il pose son meeple
                 cout << "Entrez la direction ou vous voulez poser votre meeple : " << endl;
-                cout << "1 : NORD_OUEST" << endl;
-                cout << "2 : NORD" << endl;
-                cout << "3 : NORD_EST" << endl;
-                cout << "4 : OUEST" << endl;
-                cout << "5 : MILIEU " << endl;
-                cout << "6 : EST" << endl;
-                cout << "7 : SUD_OUEST" << endl;
-                cout << "8 : SUD" << endl;
-                cout << "9 : SUD_EST" << endl;
+                cout << "1 : NORD_OUEST\t2 : NORD\t3 : NORD_EST\n"
+                     << "4 : EST\t\t5 : MILIEU\t6 : OUEST\n"
+                     << "7 : SUD_OUEST\t8 : SUD\t\t9:SUD_EST" << endl;
+
                 int choixDir;
                 cin >> choixDir;
                 while (choixDir < 1 || choixDir > 9) {
                     cout << "Choix invalide :" << endl;
                     cin >> choixDir;
                 }
-                DIRECTION dir = DIRECTIONS_ORDERED[choix - 1];
+                DIRECTION dir = DIRECTIONS_ORDERED[choixDir - 1];
                 auto *meeple = new Meeple(MEEPLE_TYPE::NORMAL, COULEUR::BLEU, "");//todo uniquement pour les tests
                 t->getCase(dir)->setMeeple(meeple);
+                cout << "\naffichage du plateau de jeu : " << endl;
+                plateau->afficherConsole();
             }
 
 

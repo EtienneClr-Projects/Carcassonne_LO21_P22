@@ -6,7 +6,14 @@ Case::Case(ZONE_TYPE zt, DIRECTION d, SUPP_TYPE s, int i) : zone_type(zt), direc
                                                             meeple_pose(nullptr) {}
 
 std::string Case::toString() {
-    return ParametresPartie::toStringZONE_TYPE(zone_type);
+    std::string res;
+    res += ParametresPartie::toStringZONE_TYPE(zone_type);
+    if (meeple_pose != nullptr) {
+        res += "m";//on signale la présence d'un meeple par un petit m
+    } else {
+        res += std::to_string(id_connexion);
+    }
+    return res;
 }
 
 void Case::setZoneParente(Zone *z) { zone_parente = z; }

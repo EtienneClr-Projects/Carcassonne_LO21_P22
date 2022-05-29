@@ -21,8 +21,7 @@ std::string Tuile::toString() {
     std::string res = "Tuile:\n";
     int i = 1;
     for (int i = 1; i < 10; i++) {
-        res += getCase(DIRECTIONS_ORDERED[i - 1])->toString();
-        res += std::to_string((int) getCase(DIRECTIONS_ORDERED[i - 1])->getIdConnexion()) + " ";
+        res += getCase(DIRECTIONS_ORDERED[i - 1])->toString() + " ";
 //        res += it.second->toString() + std::to_string(it.second->getIdConnexion()) +
 //               " ";// +ParametresPartie::toStringDIRECTION(it.second->getDirection())+ " ";
         if (i % 3 == 0) res += "\n";

@@ -315,10 +315,7 @@ void Plateau::afficherConsole() {
                     bool found = false;
                     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
                         if (pairTuile.first->x_ == x and pairTuile.first->y_ == y) {
-                            cout << ParametresPartie::toStringZONE_TYPE(
-                                    pairTuile.second->cases[ALL_DIRECTIONS[iYCase * 3 + iXCase]]->getZoneType())
-                                 << pairTuile.second->cases[ALL_DIRECTIONS[iYCase * 3 + iXCase]]->getIdConnexion()
-                                 << " ";
+                            cout << pairTuile.second->cases[ALL_DIRECTIONS[iYCase * 3 + iXCase]]->toString() << " ";
                             found = true;
                         }
                     }
