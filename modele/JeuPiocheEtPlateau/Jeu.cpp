@@ -57,7 +57,7 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
             iInfo++;
 
             if (c == '_') {//fin de la description de la case
-                cases[ALL_DIRECTIONS[iCase]] = new Case(type, ALL_DIRECTIONS[iCase], suppType, idConnexion);
+                cases[ALL_DIRECTIONS[iCase]] = new Case(type, DIRECTIONS_ORDERED[iCase], suppType, idConnexion);
                 iCase++;
                 iInfo = 0;
                 if (iCase == 9) {//fin de la description de la tuile

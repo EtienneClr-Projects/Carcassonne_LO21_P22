@@ -123,9 +123,7 @@ void Plateau::fusionZones(Zone *zoneASuppr, Zone *zoneB) {
 }
 
 void Plateau::ajouterTuile(Tuile *tuile, Coord *coord) {
-    cout << "en train d'ajouter" << endl;
     plateau.emplace_back(coord, tuile);
-    cout << "ajoutée" << endl;
 //    fusionnerZonesAvecPlateau(tuile); //todo @Etienne
 }
 
@@ -300,25 +298,32 @@ void Plateau::afficherConsole() {
     Coord *coinHautGauche = getCoinHautGauche();
     Coord *coinBasDroite = getCoinBasDroite();
     cout << "coins :" << coinHautGauche->toString() << " " << coinBasDroite->toString() << endl;
-    for (int y = coinHautGauche->y_; y <= coinHautGauche->y_ + coinBasDroite->y_; y++) {
-        for (int iRangeeCase = 0; iRangeeCase < 3; iRangeeCase++) {//permet de passer sur les 3 hauteurs de cases
-            for (int x = coinHautGauche->x_; x <= coinHautGauche->x_ + coinBasDroite->y_; x++) {
-                for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
-                    cout << pairTuile.second->toString() << pairTuile.first->toString() << endl;
-                    for (int iColonneCase = 0; iColonneCase < 3; iColonneCase++) {
+    for (int y = coinHautGauche->y_; y <= coinBasDroite->y_; y++) {
+        for (int iYCase = 0; iYCase < 3; iYCase++) {//permet de passer sur les 3 hauteurs de cases
+            for (int x = coinHautGauche->x_; x <= coinBasDroite->y_; x++) {
+                for (int iXCase = 0; iXCase < 3; iXCase++) {//permet de passer sur les 3 hauteurs de cases
+                    bool found = false;
+                    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
                         if (pairTuile.first->x_ == x and pairTuile.first->y_ == y) {
                             cout << ParametresPartie::toStringZONE_TYPE(
-                                    pairTuile.second->cases[ALL_DIRECTIONS[iRangeeCase + iColonneCase]]->getZoneType())
-                                 << pairTuile.second->cases[ALL_DIRECTIONS[iRangeeCase +
-                                                                           iColonneCase]]->getIdConnexion()
+                                    pairTuile.second->cases[ALL_DIRECTIONS[iYCase * 3 + iXCase]]->getZoneType())
+                                 << pairTuile.second->cases[ALL_DIRECTIONS[iYCase * 3 + iXCase]]->getIdConnexion()
                                  << " ";
+                            found = true;
                         }
                     }
-                    cout << " ";
+                    if (!found)
+                        cout << "   ";
                 }
-                cout << endl;
+                //affichage de la ligne de separation verticale
+                cout << "|";
             }
+            cout << endl;
         }
+        //affichage de la ligne de separation horizontale
+        for (int iSep = 0; iSep <= coinBasDroite->x_ - coinHautGauche->x_; iSep++)
+            cout << "----------";
+        cout << endl;
     }
 }
 
