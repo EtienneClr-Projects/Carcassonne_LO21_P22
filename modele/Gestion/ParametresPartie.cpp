@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <utility>
+#include <iostream>
 #include "ParametresPartie.h"
 
 //L'instance singleton de ParametresPartie
@@ -116,7 +117,7 @@ ZONE_TYPE ParametresPartie::toZONE_TYPE(char type) {
         case 'c':
             return ZONE_TYPE::CATHEDRALE;
         default:
-            throw std::invalid_argument("Type de zone invalide (toZONE_TYPE) : "+std::string(1,type));
+            throw std::invalid_argument("Type de zone invalide (toZONE_TYPE) : " + std::string(1, type));
     }
 }
 
@@ -253,25 +254,11 @@ std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
  * @return String correspondant aux extensions fournies
  */
 std::string ParametresPartie::toStringEXTENSIONS(std::vector<EXTENSION> exts) {
+    std::string str;
     for (EXTENSION ext: exts) {
-        switch (ext) {
-            case EXTENSION::NORMAL:
-                return "Normal";
-            case EXTENSION::PAYSANS:
-                return "Paysans";
-            case EXTENSION::ABBE:
-                return "Abbe";
-            case EXTENSION::RIVIERE:
-                return "Riviere";
-            case EXTENSION::AUBERGES_CATHEDRALES:
-                return "Auberges_Cathedrales";
-            case EXTENSION::MARCHANDS_BATISSEURS:
-                return "Marchands_Batisseurs";
-            default:
-                throw std::invalid_argument("Extension invalide");
-        }
+        str += toStringEXTENSION(ext) + ", ";
     }
-    throw std::invalid_argument("Extensions invalides");
+    return str;
 }
 
 std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
@@ -347,5 +334,24 @@ DIRECTION ParametresPartie::getDirDeCasePourTuileVoisine(DIRECTION dirCaseActuel
             else return DIRECTION::SUD_OUEST;
         default:
             throw std::invalid_argument("Direction invalide");
+    }
+}
+
+std::string ParametresPartie::toStringEXTENSION(EXTENSION ext) {
+    switch (ext) {
+        case EXTENSION::NORMAL:
+            return "Normal";
+        case EXTENSION::ABBE:
+            return "Abbe";
+        case EXTENSION::RIVIERE:
+            return "Riviere";
+        case EXTENSION::AUBERGES_CATHEDRALES:
+            return "Auberges & Cathedrales";
+        case EXTENSION::MARCHANDS_BATISSEURS:
+            return "Marchands & Batisseurs";
+        case EXTENSION::PAYSANS:
+            return "Paysans";
+        default:
+            throw std::invalid_argument("Extension invalide");
     }
 }

@@ -132,11 +132,13 @@ public:
 
     static std::string toStringSUPP_TYPE(SUPP_TYPE type);
 
-    static Coord * toDeplacement(DIRECTION direction);
+    static Coord *toDeplacement(DIRECTION direction);
 
     static std::vector<DIRECTION> getCoinsAvecCote(DIRECTION cote);
 
     static DIRECTION getDirDeCasePourTuileVoisine(DIRECTION dirCaseActuelle, DIRECTION dirOuRegarder);
+
+    static std::string toStringEXTENSION(EXTENSION extension);
 };
 
 // classe pour gérer les exceptions dans le set
