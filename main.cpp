@@ -119,6 +119,7 @@ int main() {
     cout << "3 : Marchands Batisseurs" << endl;
     cout << "4 : Riviere" << endl;
     cout << "5 : Tous" << endl;
+    cout << "6 : Aucune" << endl;
 
     int choix;
     while (true) {
@@ -143,12 +144,14 @@ int main() {
                 extensionsChoisies.push_back(EXTENSION::MARCHANDS_BATISSEURS);
                 extensionsChoisies.push_back(EXTENSION::RIVIERE);
                 break;
+            case 6:
+                break;
             default:
                 cout << "Choix invalide" << endl;
                 break;
         }
-        if (choix != 7) {
-            cout << "Voulez-vous ajouter une extension ? " << endl;
+        if (choix != 6 && choix != 5) {
+            cout << "Voulez-vous ajouter une autre extension ? " << endl;
             cout << "1 : Oui" << endl;
             cout << "2 : Non" << endl;
             cin >> choix;
@@ -174,11 +177,28 @@ int main() {
     while (1) {
         for (string joueur: nomsJoueurs) {
             Tuile *t = pioche->piocher();
-            cout << "Joueur" << joueur << " vous avez pioche la " << t->toString() << endl;
-            cout << "Position de la tuile :";
+            cout << "Joueur " << joueur << " vous avez pioche la " << t->toString() << endl;
+            //le joueur peut soit tourner la tuile, soit la poser
+            int choixPoserTourner = 0;
+            while (choixPoserTourner != 1) {
+                cout << "Voulez-vous poser ou tourner la tuile ? " << endl;
+                cout << "1 : poser" << endl;
+                cout << "2 : tourner" << endl;
+                cin >> choixPoserTourner;
+
+                if (choixPoserTourner == 2) {
+                    cout << "Entrez le nombre de rotations (sens trigo) : ";
+                    int nbRotations;
+                    cin >> nbRotations;
+                    t->pivoterTuileSensTrigo(nbRotations);
+                    cout << "La tuile est maintenant : " << t->toString() << endl;
+                }
+            }
+
+            cout << "Entrez la position de la tuile :";
             int x, y;
             cin >> x >> y;
-            while (plateau->checkerTuile(t, new Coord(x, y))) {
+            while (!plateau->checkerTuile(t, new Coord(x, y))) {
                 cout << "Placement non valide, veuillez recommencer" << endl;
                 cout << "Position de la tuile :";
                 cin >> x >> y;
@@ -186,9 +206,44 @@ int main() {
             plateau->ajouterTuile(t, new Coord(x, y));
             cout << "\naffichage du plateau de jeu : " << endl;
             plateau->afficherConsole();
+
+            //le joueur peut choisir de poser un Meeple sur une case de la tuile posée
+            cout << "Voulez-vous poser un meeple sur la tuile ? " << endl;
+            cout << "1 : oui" << endl;
+            cout << "2 : non" << endl;
+            int choixPoserMeeple;
+            cin >> choixPoserMeeple;
+            while (choixPoserMeeple != 1 && choixPoserMeeple != 2) {
+                cout << "Choix invalide :" << endl;
+                cin >> choixPoserMeeple;
+            }
+            if (choixPoserMeeple == 1) {
+                //le joueur doit choisir la DIRECTION où il pose son meeple
+                cout << "Entrez la direction ou vous voulez poser votre meeple : " << endl;
+                cout << "1 : NORD_OUEST" << endl;
+                cout << "2 : NORD" << endl;
+                cout << "3 : NORD_EST" << endl;
+                cout << "4 : OUEST" << endl;
+                cout << "5 : MILIEU " << endl;
+                cout << "6 : EST" << endl;
+                cout << "7 : SUD_OUEST" << endl;
+                cout << "8 : SUD" << endl;
+                cout << "9 : SUD_EST" << endl;
+                int choixDir;
+                cin >> choixDir;
+                while (choixDir < 1 || choixDir > 9) {
+                    cout << "Choix invalide :" << endl;
+                    cin >> choixDir;
+                }
+                DIRECTION dir = DIRECTIONS_ORDERED[choix - 1];
+                auto *meeple = new Meeple(MEEPLE_TYPE::NORMAL, COULEUR::BLEU, "");//todo uniquement pour les tests
+                t->getCase(dir)->setMeeple(meeple);
+            }
+
+
             cout << "\n" << endl;
         }
     }
-    test_ajout_user_Tuiles();
+
     return 0;
 }

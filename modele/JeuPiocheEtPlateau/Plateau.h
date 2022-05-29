@@ -60,7 +60,7 @@ public:
 
     void retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve);
 
-    bool checkerTuile(Tuile *t, Coord *coord);
+    bool checkerTuile(Tuile *tuile, Coord *coord);
 
     static bool
     poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *> meeplesPoses, vector<Meeple *> meeplesEnReserve);

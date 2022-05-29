@@ -218,34 +218,44 @@ void Plateau::fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine) {
 }
 
 
-bool Plateau::checkerTuile(Tuile *t, Coord *coord) {
-    auto voisin_droit = coord;
-    voisin_droit->x_++;
-    auto voisin_gauche = coord;
-    voisin_gauche->x_--;
-    auto voisin_haut = coord;
-    voisin_haut->y_++;
-    auto voisin_bas = coord;
-    voisin_bas->y_--;
+bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
+    //on prend les voisins de la tuile
+    auto voisin_droit = new Coord(coord->x_ + 1, coord->y_);
+    auto voisin_gauche = new Coord(coord->x_ - 1, coord->y_);
+    auto voisin_haut = new Coord(coord->x_, coord->y_ + 1);
+    auto voisin_bas = new Coord(coord->x_, coord->y_ - 1);
 
-    map<DIRECTION, Case *> cases = t->getCases();
+    map<DIRECTION, Case *> t = tuile->getCases();
+    bool a_un_voisin = false;//vérifier que la tuile a bien un voisin
 
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
+
         map<DIRECTION, Case *> pt = pairTuile.second->getCases();
-        if (voisin_droit == pairTuile.first) {
-            if (cases[DIRECTION::EST]->getZoneType() != pt[DIRECTION::OUEST]->getZoneType()) return false;
+        if (coord == pairTuile.first) {
+            return false;//vérifie que l'utilisateur n'a pas cliqué sur une tuile existante
         }
-        if (voisin_gauche == pairTuile.first) {
-            if (cases[DIRECTION::OUEST]->getZoneType() != pt[DIRECTION::EST]->getZoneType()) return false;
+
+        //verifie que pour chaque tuile, la zone adjacente est la même
+        if (pairTuile.first->x_ == voisin_droit->x_ && pairTuile.first->y_ == voisin_droit->y_) {
+            a_un_voisin = true;
+            if (t[DIRECTION::OUEST]->getZoneType() != pt[DIRECTION::EST]->getZoneType()) return false;
         }
-        if (voisin_haut == pairTuile.first) {
-            if (cases[DIRECTION::NORD]->getZoneType() != pt[DIRECTION::SUD]->getZoneType()) return false;
+        if (pairTuile.first->x_ == voisin_gauche->x_ && pairTuile.first->y_ == voisin_gauche->y_) {
+            a_un_voisin = true;
+            if (t[DIRECTION::EST]->getZoneType() != pt[DIRECTION::OUEST]->getZoneType()) return false;
         }
-        if (voisin_bas == pairTuile.first) {
-            if (cases[DIRECTION::SUD]->getZoneType() != pt[DIRECTION::NORD]->getZoneType()) return false;
+        if (pairTuile.first->x_ == voisin_haut->x_ && pairTuile.first->y_ == voisin_haut->y_) {
+            a_un_voisin = true;
+            if (t[DIRECTION::SUD]->getZoneType() != pt[DIRECTION::NORD]->getZoneType()) return false;
+        }
+        if (pairTuile.first->x_ == voisin_bas->x_ && pairTuile.first->y_ == voisin_bas->y_) {
+            a_un_voisin = true;
+            if (t[DIRECTION::NORD]->getZoneType() != pt[DIRECTION::SUD]->getZoneType()) return false;
         }
     }
-    return true;
+    return a_un_voisin || plateau.empty(); //si il y a un voisin ou si c'est la premiere tuile placée on peut la poser
+
+    //todo @daphne ajouter règle rivière
 }
 
 bool Plateau::poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *> meeplesPoses,
@@ -273,18 +283,18 @@ bool Plateau::poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *>
 
 
 void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
-    for (auto zone: zones) {
-        if (!(zone->estOuverte())) {
-            for (auto c: zone->getCases()) {
-                if (c->getMeeplePose() != nullptr) {
-                    meeplesEnReserve.push_back(c->getMeeplePose());
+    for (auto zone: zones) {//on regarde toutes les zones
+        if (!(zone->estOuverte())) { // si la zone est fermée
+            for (auto c: zone->getCases()) {//pour toute les cases de cette zone
+                if (c->getMeeplePose() != nullptr) {//si il y a un meeple
+                    meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
                     int i = 0;
                     for (auto meeple: meeplesPoses) {
                         if (meeple == c->getMeeplePose())
-                            meeplesPoses.erase(meeplesPoses.begin() + i);
+                            meeplesPoses.erase(meeplesPoses.begin() + i);//et on le retire du tableau des meeple poses
                         i++;
                     }
-                    c->retirerMeeplePose();
+                    c->retirerMeeplePose(); // on retire le meeple de la case
 
                 }
             }
@@ -297,10 +307,10 @@ void Plateau::afficherConsole() {
 //puis on affiche toutes les tuiles une par une
     Coord *coinHautGauche = getCoinHautGauche();
     Coord *coinBasDroite = getCoinBasDroite();
-    cout << "coins :" << coinHautGauche->toString() << " " << coinBasDroite->toString() << endl;
+//    cout << "coins :" << coinHautGauche->toString() << " " << coinBasDroite->toString() << endl;
     for (int y = coinHautGauche->y_; y <= coinBasDroite->y_; y++) {
         for (int iYCase = 0; iYCase < 3; iYCase++) {//permet de passer sur les 3 hauteurs de cases
-            for (int x = coinHautGauche->x_; x <= coinBasDroite->y_; x++) {
+            for (int x = coinHautGauche->x_; x <= coinBasDroite->x_; x++) {
                 for (int iXCase = 0; iXCase < 3; iXCase++) {//permet de passer sur les 3 hauteurs de cases
                     bool found = false;
                     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {

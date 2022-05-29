@@ -56,23 +56,28 @@ constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRE
 constexpr static const DIRECTION DIRECTIONS_ORDERED[]{DIRECTION::NORD_OUEST, DIRECTION::NORD, DIRECTION::NORD_EST,
                                                       DIRECTION::OUEST, DIRECTION::MILIEU, DIRECTION::EST,
                                                       DIRECTION::SUD_OUEST, DIRECTION::SUD, DIRECTION::SUD_EST};
+constexpr static const DIRECTION DIRECTIONS_COTE_COINS[]{DIRECTION::NORD_OUEST, DIRECTION::NORD, DIRECTION::NORD_EST,
+                                                         DIRECTION::EST, DIRECTION::SUD_EST, DIRECTION::SUD,
+                                                         DIRECTION::SUD_OUEST, DIRECTION::OUEST};
 constexpr static const DIRECTION DIRECTIONS_COTE[] = {
         DIRECTION::NORD, DIRECTION::OUEST, DIRECTION::SUD, DIRECTION::EST
 };
-constexpr static const DIRECTION DIRECTIONS_COTE_INVERSE[] {
+constexpr static const DIRECTION DIRECTIONS_COTE_INVERSE[]{
         DIRECTION::SUD, DIRECTION::EST, DIRECTION::NORD, DIRECTION::OUEST
 };//utilisé pour trouver la case adjacente à une tuile. Cf Plateau::fusionnerZonesAvecPlateau()
 
 // la source est équivalente au lac
 constexpr static const ZONE_TYPE ALL_ZONES_TYPES[] = {ZONE_TYPE::PRAIRIE, ZONE_TYPE::VILLE, ZONE_TYPE::CHEMIN,
                                                       ZONE_TYPE::AUTRE, ZONE_TYPE::RIVIERE, ZONE_TYPE::FIN_DE_ROUTE,
-                                                      ZONE_TYPE::ABBAYE, ZONE_TYPE::JARDIN, ZONE_TYPE::LAC, ZONE_TYPE::CATHEDRALE};
+                                                      ZONE_TYPE::ABBAYE, ZONE_TYPE::JARDIN, ZONE_TYPE::LAC,
+                                                      ZONE_TYPE::CATHEDRALE};
 
 constexpr static const SUPP_TYPE ALL_SUPPS_TYPES[] = {SUPP_TYPE::BLASON, SUPP_TYPE::AUBERGE, SUPP_TYPE::BLE,
                                                       SUPP_TYPE::TONNEAU,
                                                       SUPP_TYPE::TISSU,};
 
-constexpr static const MEEPLE_TYPE ALL_MEEPLES_TYPES[] = {MEEPLE_TYPE::ABBE, MEEPLE_TYPE::GRAND_MEEPLE, MEEPLE_TYPE::NORMAL,
+constexpr static const MEEPLE_TYPE ALL_MEEPLES_TYPES[] = {MEEPLE_TYPE::ABBE, MEEPLE_TYPE::GRAND_MEEPLE,
+                                                          MEEPLE_TYPE::NORMAL,
                                                           MEEPLE_TYPE::BATISSEUR, MEEPLE_TYPE::COCHON};
 
 
@@ -101,7 +106,7 @@ public:
 
     ParametresPartie &operator=(const ParametresPartie &) = delete;
 
-    static ParametresPartie & getInstance();
+    static ParametresPartie &getInstance();
 
     //METHODES DU SINGLETON
     std::vector<EXTENSION> getExtensionsChoisies() const;
