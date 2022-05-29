@@ -25,9 +25,13 @@ using namespace std;
 class Plateau {
 private :
     static Plateau *instance;
-    std::vector<std::pair<Coord, Tuile *>> plateau;
+    std::vector<std::pair<Coord *, Tuile *>> plateau;
 
-    Plateau(const vector<std::pair<Coord, Tuile *>> &p) : plateau(p) {};
+    Plateau(const vector<std::pair<Coord *, Tuile *>> &p) : plateau(p) {};
+
+    Plateau() {
+        plateau = {};
+    };
 
     ~Plateau() = default;
 
@@ -41,29 +45,36 @@ private :
 
     static void majOuverturesZonesCOTE(Tuile *pTuile);
 
-    Coord findCoordTuile(Tuile *tuile);
+    Coord * findCoordTuile(Tuile *tuile);
 
-    Tuile *findTuileVoisine(Coord coordTuile, int i);
+    Tuile *findTuileVoisine(Coord *coordTuile, int i);
 
     void fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine);
 
 public:
     void fusionnerZonesAvecPlateau(Tuile *tuile);
 
-    void ajouterTuile(Tuile *tuile, Coord coord);
+    void ajouterTuile(Tuile *tuile, Coord *coord);
 
     std::string toString();
 
     void retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve);
 
-    bool checkerTuile(Tuile *t, Coord coord);
+    bool checkerTuile(Tuile *t, Coord *coord);
 
     static bool
     poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *> meeplesPoses, vector<Meeple *> meeplesEnReserve);
 
-    static Plateau *getInstance(const vector<std::pair<Coord, Tuile *>> &plateau) {
+    static Plateau *getInstance(const vector<std::pair<Coord *, Tuile *>> &plateau) {
         if (instance == nullptr) {
             instance = new Plateau(plateau);
+        }
+        return instance;
+    }
+
+    static Plateau *getInstance() {
+        if (instance == nullptr) {
+            instance = new Plateau();
         }
         return instance;
     }
@@ -75,6 +86,11 @@ public:
         }
     }
 
+    void afficherConsole();
+
+    Coord *getCoinHautGauche();
+
+    Coord *getCoinBasDroite();
 };
 
 #endif //CARCASSONNE_LO21_P22_PLATEAU_H

@@ -66,8 +66,9 @@ constexpr static const ZONE_TYPE ALL_ZONES_TYPES[] = {ZONE_TYPE::PRAIRIE, ZONE_T
                                                       ZONE_TYPE::AUTRE, ZONE_TYPE::RIVIERE, ZONE_TYPE::FIN_DE_ROUTE,
                                                       ZONE_TYPE::ABBAYE, ZONE_TYPE::JARDIN, ZONE_TYPE::LAC, ZONE_TYPE::CATHEDRALE};
 
-constexpr static const SUPP_TYPE ALL_SUPPS_TYPES[] = {SUPP_TYPE::BLASON, SUPP_TYPE::AUBERGE, SUPP_TYPE::BLE, SUPP_TYPE::TONNEAU,
-                                            SUPP_TYPE::TISSU,};
+constexpr static const SUPP_TYPE ALL_SUPPS_TYPES[] = {SUPP_TYPE::BLASON, SUPP_TYPE::AUBERGE, SUPP_TYPE::BLE,
+                                                      SUPP_TYPE::TONNEAU,
+                                                      SUPP_TYPE::TISSU,};
 
 constexpr static const MEEPLE_TYPE ALL_MEEPLES_TYPES[] = {MEEPLE_TYPE::ABBE, MEEPLE_TYPE::GRAND_MEEPLE, MEEPLE_TYPE::NORMAL,
                                                           MEEPLE_TYPE::BATISSEUR, MEEPLE_TYPE::COCHON};
@@ -129,7 +130,7 @@ public:
 
     static std::string toStringSUPP_TYPE(SUPP_TYPE type);
 
-    static Coord toDeplacement(DIRECTION direction);
+    static Coord * toDeplacement(DIRECTION direction);
 
     static std::vector<DIRECTION> getCoinsAvecCote(DIRECTION cote);
 
@@ -137,7 +138,7 @@ public:
 };
 
 // classe pour gérer les exceptions dans le set
-class CarcassonneException { //todo utiliser partout cette exception du coup
+class CarcassonneException : public std::exception { //todo utiliser partout cette exception du coup
 public:
     explicit CarcassonneException(std::string i) : info(std::move(i)) {}
 

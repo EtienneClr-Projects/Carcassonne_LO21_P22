@@ -291,16 +291,16 @@ std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
     }
 }
 
-Coord ParametresPartie::toDeplacement(DIRECTION direction) {
+Coord *ParametresPartie::toDeplacement(DIRECTION direction) {
     switch (direction) {
         case DIRECTION::NORD:
-            return {0, 1};
+            return new Coord(0, 1);
         case DIRECTION::SUD:
-            return {0, -1};
+            return new Coord(0, -1);
         case DIRECTION::EST:
-            return {1, 0};
+            return new Coord(1, 0);
         case DIRECTION::OUEST:
-            return {-1, 0};
+            return new Coord(-1, 0);
         default:
             throw std::invalid_argument("Direction invalide");
     }

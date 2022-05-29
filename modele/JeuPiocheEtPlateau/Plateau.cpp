@@ -29,7 +29,7 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
 
 //###################ZONES EXTERNES###################
     //on a besoin de la Coord de cette tuile
-    Coord coordTuile = findCoordTuile(tuile);
+    Coord *coordTuile = findCoordTuile(tuile);
 
     //pour chaque case sur une ParametresPartie::DIRECTION_COTE de la tuile
     for (int i = 0; i < 4; i++) {
@@ -122,15 +122,18 @@ void Plateau::fusionZones(Zone *zoneASuppr, Zone *zoneB) {
     }
 }
 
-void Plateau::ajouterTuile(Tuile *tuile, Coord coord) {
+void Plateau::ajouterTuile(Tuile *tuile, Coord *coord) {
+    cout << "en train d'ajouter" << endl;
     plateau.emplace_back(coord, tuile);
+    cout << "ajoutée" << endl;
 //    fusionnerZonesAvecPlateau(tuile); //todo @Etienne
 }
 
 std::string Plateau::toString() {
+    cout << "affichage des tuiles du plateau" << endl;
     //affiche toutes les tuiles du plateau
     std::string str;
-    for (std::pair<Coord, Tuile *> pairTuile: plateau) {
+    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
         str += pairTuile.second->toString();
     }
     return str;
@@ -174,8 +177,8 @@ void Plateau::majOuverturesZonesCOTE(Tuile *tuile) {
     } // todo
 }
 
-Coord Plateau::findCoordTuile(Tuile *tuile) {
-    for (std::pair<Coord, Tuile *> pairTuile: plateau) {
+Coord *Plateau::findCoordTuile(Tuile *tuile) {
+    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
         if (pairTuile.second == tuile) {
             return pairTuile.first;
         }
@@ -183,13 +186,13 @@ Coord Plateau::findCoordTuile(Tuile *tuile) {
     throw std::invalid_argument("tuile non trouvée");
 }
 
-Tuile *Plateau::findTuileVoisine(Coord coordTuile, int i) {
-    Coord deplacement = ParametresPartie::toDeplacement(DIRECTIONS_COTE[i]);
-    Coord coordTuileVoisine = coordTuile + deplacement;
+Tuile *Plateau::findTuileVoisine(Coord *coordTuile, int i) {
+    Coord *deplacement = ParametresPartie::toDeplacement(DIRECTIONS_COTE[i]);
+    auto *coordTuileVoisine = new Coord(coordTuile->x_ + deplacement->x_, coordTuile->y_ + deplacement->y_);
     cout << "CALC DEPLACEMENT Tuile trouvee au : " << ParametresPartie::toStringDIRECTION(DIRECTIONS_COTE[i]) << " "
-         << coordTuileVoisine.toString() << "?" << endl;
+         << coordTuileVoisine->toString() << "?" << endl;
     //on a sa coordonnée, maintenant on cherche la bonne tuile dans la liste
-    for (std::pair<Coord, Tuile *> pairTuile: plateau) {
+    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
         if (pairTuile.first == coordTuileVoisine) {
             // on a trouvé la bonne tuile dans la liste
             return pairTuile.second;
@@ -217,31 +220,31 @@ void Plateau::fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine) {
 }
 
 
-bool Plateau::checkerTuile(Tuile *tuile, Coord coord) {
+bool Plateau::checkerTuile(Tuile *t, Coord *coord) {
     auto voisin_droit = coord;
-    voisin_droit.x_++;
+    voisin_droit->x_++;
     auto voisin_gauche = coord;
-    voisin_gauche.x_--;
+    voisin_gauche->x_--;
     auto voisin_haut = coord;
-    voisin_haut.y_++;
+    voisin_haut->y_++;
     auto voisin_bas = coord;
-    voisin_bas.y_--;
+    voisin_bas->y_--;
 
-    map<DIRECTION, Case *> t = tuile->getCases();
+    map<DIRECTION, Case *> cases = t->getCases();
 
-    for (std::pair<Coord, Tuile *> pairTuile: plateau) {
+    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
         map<DIRECTION, Case *> pt = pairTuile.second->getCases();
         if (voisin_droit == pairTuile.first) {
-            if (t[DIRECTION::EST]->getZoneType() != pt[DIRECTION::OUEST]->getZoneType()) return false;
+            if (cases[DIRECTION::EST]->getZoneType() != pt[DIRECTION::OUEST]->getZoneType()) return false;
         }
         if (voisin_gauche == pairTuile.first) {
-            if (t[DIRECTION::OUEST]->getZoneType() != pt[DIRECTION::EST]->getZoneType()) return false;
+            if (cases[DIRECTION::OUEST]->getZoneType() != pt[DIRECTION::EST]->getZoneType()) return false;
         }
         if (voisin_haut == pairTuile.first) {
-            if (t[DIRECTION::NORD]->getZoneType() != pt[DIRECTION::SUD]->getZoneType()) return false;
+            if (cases[DIRECTION::NORD]->getZoneType() != pt[DIRECTION::SUD]->getZoneType()) return false;
         }
         if (voisin_bas == pairTuile.first) {
-            if (t[DIRECTION::SUD]->getZoneType() != pt[DIRECTION::NORD]->getZoneType()) return false;
+            if (cases[DIRECTION::SUD]->getZoneType() != pt[DIRECTION::NORD]->getZoneType()) return false;
         }
     }
     return true;
@@ -289,4 +292,65 @@ void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &me
             }
         }
     }
+}
+
+void Plateau::afficherConsole() {
+//on trouve le coin en haut à gauche du plateau par rapport aux coordonnées (x,y) des tuiles
+//puis on affiche toutes les tuiles une par une
+    Coord *coinHautGauche = getCoinHautGauche();
+    Coord *coinBasDroite = getCoinBasDroite();
+    cout << "coins :" << coinHautGauche->toString() << " " << coinBasDroite->toString() << endl;
+    for (int y = coinHautGauche->y_; y <= coinHautGauche->y_ + coinBasDroite->y_; y++) {
+        for (int iRangeeCase = 0; iRangeeCase < 3; iRangeeCase++) {//permet de passer sur les 3 hauteurs de cases
+            for (int x = coinHautGauche->x_; x <= coinHautGauche->x_ + coinBasDroite->y_; x++) {
+                for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
+                    cout << pairTuile.second->toString() << pairTuile.first->toString() << endl;
+                    for (int iColonneCase = 0; iColonneCase < 3; iColonneCase++) {
+                        if (pairTuile.first->x_ == x and pairTuile.first->y_ == y) {
+                            cout << ParametresPartie::toStringZONE_TYPE(
+                                    pairTuile.second->cases[ALL_DIRECTIONS[iRangeeCase + iColonneCase]]->getZoneType())
+                                 << pairTuile.second->cases[ALL_DIRECTIONS[iRangeeCase +
+                                                                           iColonneCase]]->getIdConnexion()
+                                 << " ";
+                        }
+                    }
+                    cout << " ";
+                }
+                cout << endl;
+            }
+        }
+    }
+}
+
+Coord *Plateau::getCoinHautGauche() {
+    auto *coinHautGauche = new Coord(200, 200); //todo @etienne améliorer le 200
+    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
+        if (pairTuile.first->x_ < coinHautGauche->x_) {
+            coinHautGauche->x_ = pairTuile.first->x_;
+        }
+        if (pairTuile.first->y_ < coinHautGauche->y_) {
+            coinHautGauche->y_ = pairTuile.first->y_;
+        }
+    }
+    if (coinHautGauche->x_ == 200 || coinHautGauche->y_ == 200) {
+        throw CarcassonneException("erreur dans le calcul du coin haut gauche");
+    }
+    return coinHautGauche;
+}
+
+Coord *Plateau::getCoinBasDroite() {
+    auto *coinBasDroite = new Coord(-200, -200);
+    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
+        if (pairTuile.first->x_ > coinBasDroite->x_) {
+            coinBasDroite->x_ = pairTuile.first->x_;
+        }
+        if (pairTuile.first->y_ > coinBasDroite->y_) {
+            coinBasDroite->y_ = pairTuile.first->y_;
+        }
+    }
+    if (coinBasDroite->x_ == -200 || coinBasDroite->y_ == -200) {
+        cout << "erreur dans le calcul du coin bas droite" << endl;
+        throw CarcassonneException("erreur dans le calcul du coin bas droite");
+    }
+    return coinBasDroite;
 }
