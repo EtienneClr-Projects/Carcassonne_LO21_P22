@@ -232,33 +232,27 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
 
         map<DIRECTION, Case *> casesVoisines = pairTuile.second->getCases();
         if (coord == pairTuile.first) {
-            cout << "positions identiques" << endl;
             return false;//vérifie que l'utilisateur n'a pas cliqué sur une tuile existante
         }
 
         //verifie que pour chaque tuile, la zone adjacente est la même
         if (pairTuile.first->x_ == voisin_droit->x_ && pairTuile.first->y_ == voisin_droit->y_) {
-            cout << "voisin droit" << endl;
             a_un_voisin = true;
             if (cases[DIRECTION::EST]->getZoneType() != casesVoisines[DIRECTION::OUEST]->getZoneType()) return false;
         }
         if (pairTuile.first->x_ == voisin_gauche->x_ && pairTuile.first->y_ == voisin_gauche->y_) {
-            cout << "voisin gauche" << endl;
             a_un_voisin = true;
             if (cases[DIRECTION::OUEST]->getZoneType() != casesVoisines[DIRECTION::EST]->getZoneType()) return false;
         }
         if (pairTuile.first->x_ == voisin_haut->x_ && pairTuile.first->y_ == voisin_haut->y_) {
-            cout << "voisin haut" << endl;
             a_un_voisin = true;
             if (cases[DIRECTION::NORD]->getZoneType() != casesVoisines[DIRECTION::SUD]->getZoneType()) return false;
         }
         if (pairTuile.first->x_ == voisin_bas->x_ && pairTuile.first->y_ == voisin_bas->y_) {
-            cout << "voisin bas" << endl;
             a_un_voisin = true;
             if (cases[DIRECTION::SUD]->getZoneType() != casesVoisines[DIRECTION::NORD]->getZoneType()) return false;
         }
     }
-    cout << "a un voisin=" << a_un_voisin << "plateau empty=" << plateau.empty() << endl;
     return a_un_voisin || plateau.empty(); //si il y a un voisin ou si c'est la premiere tuile placée on peut la poser
 
     //todo @daphne ajouter règle rivière
