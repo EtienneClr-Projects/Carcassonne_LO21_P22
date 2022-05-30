@@ -46,13 +46,6 @@ enum class EXTENSION {
     NORMAL, PAYSANS, ABBE, RIVIERE, AUBERGES_CATHEDRALES, MARCHANDS_BATISSEURS
 };
 
-/**
- * Permet de parcourir toutes les directions
- */
-
-constexpr static const DIRECTION ALL_DIRECTIONS[] = {DIRECTION::NORD_OUEST, DIRECTION::NORD, DIRECTION::NORD_EST,
-                                                     DIRECTION::EST, DIRECTION::MILIEU, DIRECTION::OUEST,
-                                                     DIRECTION::SUD_EST, DIRECTION::SUD, DIRECTION::SUD_OUEST};
 constexpr static const DIRECTION DIRECTIONS_ORDERED[]{DIRECTION::NORD_OUEST, DIRECTION::NORD, DIRECTION::NORD_EST,
                                                       DIRECTION::OUEST, DIRECTION::MILIEU, DIRECTION::EST,
                                                       DIRECTION::SUD_OUEST, DIRECTION::SUD, DIRECTION::SUD_EST};

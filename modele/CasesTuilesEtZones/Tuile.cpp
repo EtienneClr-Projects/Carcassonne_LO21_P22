@@ -19,7 +19,6 @@ Case *Tuile::getCase(DIRECTION d) const {
 
 std::string Tuile::toString() {
     std::string res = "Tuile:\n";
-    int i = 1;
     for (int i = 1; i < 10; i++) {
         res += getCase(DIRECTIONS_ORDERED[i - 1])->toString() + " ";
 //        res += it.second->toString() + std::to_string(it.second->getIdConnexion()) +
@@ -27,7 +26,7 @@ std::string Tuile::toString() {
         if (i % 3 == 0) res += "\n";
 //        i++;
     }
-    return res + "\t";// + cheminImage;
+    return res + "\t" + cheminImage;
 }
 
 void Tuile::pivoterTuileSensTrigo(int nbre_rotation) {

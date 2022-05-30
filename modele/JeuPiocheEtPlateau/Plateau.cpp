@@ -222,37 +222,43 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
     //on prend les voisins de la tuile
     auto voisin_droit = new Coord(coord->x_ + 1, coord->y_);
     auto voisin_gauche = new Coord(coord->x_ - 1, coord->y_);
-    auto voisin_haut = new Coord(coord->x_, coord->y_ + 1);
-    auto voisin_bas = new Coord(coord->x_, coord->y_ - 1);
+    auto voisin_haut = new Coord(coord->x_, coord->y_ - 1);
+    auto voisin_bas = new Coord(coord->x_, coord->y_ + 1);
 
-    map<DIRECTION, Case *> t = tuile->getCases();
+    map<DIRECTION, Case *> cases = tuile->getCases();
     bool a_un_voisin = false;//vérifier que la tuile a bien un voisin
 
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
 
-        map<DIRECTION, Case *> pt = pairTuile.second->getCases();
+        map<DIRECTION, Case *> casesVoisines = pairTuile.second->getCases();
         if (coord == pairTuile.first) {
+            cout << "positions identiques" << endl;
             return false;//vérifie que l'utilisateur n'a pas cliqué sur une tuile existante
         }
 
         //verifie que pour chaque tuile, la zone adjacente est la même
         if (pairTuile.first->x_ == voisin_droit->x_ && pairTuile.first->y_ == voisin_droit->y_) {
+            cout << "voisin droit" << endl;
             a_un_voisin = true;
-            if (t[DIRECTION::OUEST]->getZoneType() != pt[DIRECTION::EST]->getZoneType()) return false;
+            if (cases[DIRECTION::EST]->getZoneType() != casesVoisines[DIRECTION::OUEST]->getZoneType()) return false;
         }
         if (pairTuile.first->x_ == voisin_gauche->x_ && pairTuile.first->y_ == voisin_gauche->y_) {
+            cout << "voisin gauche" << endl;
             a_un_voisin = true;
-            if (t[DIRECTION::EST]->getZoneType() != pt[DIRECTION::OUEST]->getZoneType()) return false;
+            if (cases[DIRECTION::OUEST]->getZoneType() != casesVoisines[DIRECTION::EST]->getZoneType()) return false;
         }
         if (pairTuile.first->x_ == voisin_haut->x_ && pairTuile.first->y_ == voisin_haut->y_) {
+            cout << "voisin haut" << endl;
             a_un_voisin = true;
-            if (t[DIRECTION::SUD]->getZoneType() != pt[DIRECTION::NORD]->getZoneType()) return false;
+            if (cases[DIRECTION::NORD]->getZoneType() != casesVoisines[DIRECTION::SUD]->getZoneType()) return false;
         }
         if (pairTuile.first->x_ == voisin_bas->x_ && pairTuile.first->y_ == voisin_bas->y_) {
+            cout << "voisin bas" << endl;
             a_un_voisin = true;
-            if (t[DIRECTION::NORD]->getZoneType() != pt[DIRECTION::SUD]->getZoneType()) return false;
+            if (cases[DIRECTION::SUD]->getZoneType() != casesVoisines[DIRECTION::NORD]->getZoneType()) return false;
         }
     }
+    cout << "a un voisin=" << a_un_voisin << "plateau empty=" << plateau.empty() << endl;
     return a_un_voisin || plateau.empty(); //si il y a un voisin ou si c'est la premiere tuile placée on peut la poser
 
     //todo @daphne ajouter règle rivière
@@ -315,7 +321,7 @@ void Plateau::afficherConsole() {
                     bool found = false;
                     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
                         if (pairTuile.first->x_ == x and pairTuile.first->y_ == y) {
-                            cout << pairTuile.second->cases[ALL_DIRECTIONS[iYCase * 3 + iXCase]]->toString() << " ";
+                            cout << pairTuile.second->cases[DIRECTIONS_ORDERED[iYCase * 3 + iXCase]]->toString() << " ";
                             found = true;
                         }
                     }
