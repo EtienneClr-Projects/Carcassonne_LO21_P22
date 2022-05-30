@@ -198,12 +198,15 @@ int main() {
             }
 
             cout << "Entrez la position de la tuile :";
-            int x, y;
+            char x, y;
             cin >> x >> y;
-            while (!plateau->checkerTuile(t, new Coord(x, y))) {
+            while (!plateau->checkerTuile(t, new Coord(x, y)) && x != 'Q' && y != 'Q') {
                 cout << "Placement non valide, veuillez recommencer" << endl;
-                cout << "Position de la tuile :";
+                cout << "Position de la tuile (Q pour quitter):";
                 cin >> x >> y;
+            }
+            if (x == 'Q' || y == 'Q') {
+                continue;
             }
             plateau->ajouterTuile(t, new Coord(x, y));
             cout << "\naffichage du plateau de jeu : " << endl;
