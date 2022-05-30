@@ -1,8 +1,10 @@
 
 #include "CasesTuilesEtZones/Tuile.h"
+#include "JeuPiocheEtPlateau/Plateau.h"
 
 # include <string>
 # include <map>
+#include <windows.h>
 
 
 using namespace std;
@@ -17,14 +19,27 @@ Case *Tuile::getCase(DIRECTION d) const {
     return cases.find(d)->second;
 }
 
-std::string Tuile::toString() {
-    std::string res = "Tuile:\n";
+void Tuile::afficher() const {
+    HANDLE console_color;
+    console_color = GetStdHandle(STD_OUTPUT_HANDLE);
+    cout << "tuile:\n";
     for (int i = 1; i < 10; i++) {
-        res += getCase(DIRECTIONS_ORDERED[i - 1])->toString() + " ";
+        Case *c = getCase(DIRECTIONS_ORDERED[i - 1]);
+        Plateau::ColorForZone(console_color, c);
+        cout << c->toString() + " ";
+        if (i % 3 == 0) cout << "\n";
+    }
+    SetConsoleTextAttribute(console_color, 15);
+}
+
+std::string Tuile::toString() {
+    std::string res = "tuile:\n";
+    for (int i = 1; i < 10; i++) {
+        Case *c = getCase(DIRECTIONS_ORDERED[i - 1]);
+        res += c->toString() + " ";
 //        res += it.second->toString() + std::to_string(it.second->getIdConnexion()) +
 //               " ";// +ParametresPartie::toStringDIRECTION(it.second->getDirection())+ " ";
         if (i % 3 == 0) res += "\n";
-//        i++;
     }
     return res + "\t" + cheminImage;
 }
@@ -56,6 +71,7 @@ bool Tuile::estSource() {
             return true;
         }
     }
+    return false;
 }
 
 bool Tuile::estLac() {

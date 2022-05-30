@@ -232,7 +232,7 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
 
         map<DIRECTION, Case *> casesVoisines = pairTuile.second->getCases();
-        if (coord == pairTuile.first) {
+        if (coord->x_ == pairTuile.first->x_ && coord->y_ == pairTuile.first->y_) {
             return false;//vérifie que l'utilisateur n'a pas cliqué sur une tuile existante
         }
 
@@ -304,8 +304,7 @@ void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &me
 
 void Plateau::afficherConsole() {
     HANDLE console_color;
-    console_color = GetStdHandle(
-            STD_OUTPUT_HANDLE);
+    console_color = GetStdHandle(STD_OUTPUT_HANDLE);
 //on trouve le coin en haut à gauche du plateau par rapport aux coordonnées (x,y) des tuiles
 //puis on affiche toutes les tuiles une par une
     Coord *coinHautGauche = getCoinHautGauche();
@@ -319,45 +318,14 @@ void Plateau::afficherConsole() {
                     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
                         if (pairTuile.first->x_ == x and pairTuile.first->y_ == y) {
                             Case *c = pairTuile.second->cases[DIRECTIONS_ORDERED[iYCase * 3 + iXCase]];
-                            switch (c->getZoneType()) {
-                                case ZONE_TYPE::PRAIRIE:
-                                    SetConsoleTextAttribute(console_color, 34);
-                                    break;
-                                case ZONE_TYPE::VILLE:
-                                    SetConsoleTextAttribute(console_color, 44);
-                                    break;
-                                case ZONE_TYPE::CHEMIN:
-                                    SetConsoleTextAttribute(console_color, 119);
-                                    break;
-                                case ZONE_TYPE::RIVIERE:
-                                    SetConsoleTextAttribute(console_color, 19);
-                                    break;
-                                case ZONE_TYPE::FIN_DE_ROUTE:
-                                    SetConsoleTextAttribute(console_color, 8);
-                                    break;
-                                case ZONE_TYPE::ABBAYE:
-                                    SetConsoleTextAttribute(console_color, 12);
-                                    break;
-                                case ZONE_TYPE::JARDIN:
-                                    SetConsoleTextAttribute(console_color, 10);
-                                    break;
-                                case ZONE_TYPE::LAC:
-                                    SetConsoleTextAttribute(console_color, 19);
-                                    break;
-                                case ZONE_TYPE::SOURCE:
-                                    SetConsoleTextAttribute(console_color, 19);
-                                    break;
-                                case ZONE_TYPE::CATHEDRALE:
-                                    SetConsoleTextAttribute(console_color, 48);
-                                    break;
-                            }
-                            cout << c->toString() << "";
+                            ColorForZone(console_color, c);
+                            cout << c->toString() << " ";
                             SetConsoleTextAttribute(console_color, 15);
                             found = true;
                         }
                     }
                     if (!found)
-                        cout << "  ";
+                        cout << "   ";
                 }
                 //affichage de la ligne de separation verticale
                 cout << "|";
@@ -366,8 +334,43 @@ void Plateau::afficherConsole() {
         }
         //affichage de la ligne de separation horizontale
         for (int iSep = 0; iSep <= coinBasDroite->x_ - coinHautGauche->x_; iSep++)
-            cout << "-------";
+            cout << "---------";
         cout << endl;
+    }
+}
+
+void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
+    switch (c->getZoneType()) {
+        case ZONE_TYPE::PRAIRIE:
+            SetConsoleTextAttribute(console_color, 34);
+            break;
+        case ZONE_TYPE::VILLE:
+            SetConsoleTextAttribute(console_color, 44);
+            break;
+        case ZONE_TYPE::CHEMIN:
+            SetConsoleTextAttribute(console_color, 119);
+            break;
+        case ZONE_TYPE::RIVIERE:
+            SetConsoleTextAttribute(console_color, 19);
+            break;
+        case ZONE_TYPE::FIN_DE_ROUTE:
+            SetConsoleTextAttribute(console_color, 8);
+            break;
+        case ZONE_TYPE::ABBAYE:
+            SetConsoleTextAttribute(console_color, 12);
+            break;
+        case ZONE_TYPE::JARDIN:
+            SetConsoleTextAttribute(console_color, 10);
+            break;
+        case ZONE_TYPE::LAC:
+            SetConsoleTextAttribute(console_color, 19);
+            break;
+        case ZONE_TYPE::SOURCE:
+            SetConsoleTextAttribute(console_color, 19);
+            break;
+        case ZONE_TYPE::CATHEDRALE:
+            SetConsoleTextAttribute(console_color, 48);
+            break;
     }
 }
 

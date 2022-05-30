@@ -91,6 +91,8 @@ public:
     Coord *getCoinHautGauche();
 
     Coord *getCoinBasDroite();
+
+    static void ColorForZone(void *console_color, const Case *c);
 };
 
 #endif //CARCASSONNE_LO21_P22_PLATEAU_H

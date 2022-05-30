@@ -83,10 +83,10 @@ void test_ajout_user_Tuiles() {
 
     Plateau *plateau = Plateau::getInstance();
 
-
     while (1) {
         Tuile *t = pioche->piocher();
-        cout << "vous avez pioche la tuile :" << t->toString() << endl;
+        cout << "vous avez pioche la tuile :" << endl;
+        t->afficher();
         cout << "position de la tuile :";
         int x, y;
         cin >> x >> y;
@@ -177,7 +177,8 @@ int main() {
     while (1) {
         for (string joueur: nomsJoueurs) {
             Tuile *t = pioche->piocher();
-            cout << "Joueur " << joueur << " vous avez pioche la " << t->toString() << endl;
+            cout << "Joueur " << joueur << " vous avez pioche la " << endl;
+            t->afficher();
             //le joueur peut soit tourner la tuile, soit la poser
             int choixPoserTourner = 0;
             while (choixPoserTourner != 1) {
@@ -191,7 +192,8 @@ int main() {
                     int nbRotations;
                     cin >> nbRotations;
                     t->pivoterTuileSensTrigo(nbRotations);
-                    cout << "La tuile est maintenant : " << t->toString() << endl;
+                    cout << "La tuile est maintenant : " << endl;
+                    t->afficher();
                 }
             }
 

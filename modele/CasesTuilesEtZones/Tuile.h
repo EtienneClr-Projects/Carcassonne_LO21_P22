@@ -32,6 +32,8 @@ public:
     bool estLac();
 
     bool estSource();
+
+    void afficher() const;
 };
 
 #endif
