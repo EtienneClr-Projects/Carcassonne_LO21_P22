@@ -11,7 +11,8 @@ std::string Case::toString() {
     if (meeple_pose != nullptr) {
         res += "m";//on signale la présence d'un meeple par un petit m
     } else {
-        res += std::to_string(id_connexion);
+        res += " ";
+        //res += std::to_string(id_connexion);
     }
     return res;
 }

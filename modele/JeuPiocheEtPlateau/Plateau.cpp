@@ -4,6 +4,7 @@
 # include <string>
 # include <map>
 #include <vector>
+#include <windows.h>
 
 #include "CasesTuilesEtZones/Tuile.h"
 #include "Gestion/Coord.h"
@@ -258,12 +259,11 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
     //todo @daphne ajouter règle rivière
 }
 
-bool Plateau::poserMeeple(Joueur *j, Case *c, MEEPLE_TYPE type, vector<Meeple *> meeplesPoses,
-                          vector<Meeple *> meeplesEnReserve) {
+bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
+                          vector<Meeple *> &meeplesEnReserve) {
     Zone *zone = c->getZoneParente();
     if (nullptr == zone->getGagnant()) {// si pas de meeple déjà posé dans la zone
 
-        COULEUR couleur = j->getCouleur();
         unsigned int i = 0;
         while ((couleur != meeplesEnReserve[i]->getCouleur() and
                 type != meeplesEnReserve[i]->getType()) and i <= meeplesEnReserve.size()) { i++; }
@@ -303,6 +303,9 @@ void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &me
 }
 
 void Plateau::afficherConsole() {
+    HANDLE console_color;
+    console_color = GetStdHandle(
+            STD_OUTPUT_HANDLE);
 //on trouve le coin en haut à gauche du plateau par rapport aux coordonnées (x,y) des tuiles
 //puis on affiche toutes les tuiles une par une
     Coord *coinHautGauche = getCoinHautGauche();
@@ -315,12 +318,46 @@ void Plateau::afficherConsole() {
                     bool found = false;
                     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
                         if (pairTuile.first->x_ == x and pairTuile.first->y_ == y) {
-                            cout << pairTuile.second->cases[DIRECTIONS_ORDERED[iYCase * 3 + iXCase]]->toString() << " ";
+                            Case *c = pairTuile.second->cases[DIRECTIONS_ORDERED[iYCase * 3 + iXCase]];
+                            switch (c->getZoneType()) {
+                                case ZONE_TYPE::PRAIRIE:
+                                    SetConsoleTextAttribute(console_color, 34);
+                                    break;
+                                case ZONE_TYPE::VILLE:
+                                    SetConsoleTextAttribute(console_color, 44);
+                                    break;
+                                case ZONE_TYPE::CHEMIN:
+                                    SetConsoleTextAttribute(console_color, 119);
+                                    break;
+                                case ZONE_TYPE::RIVIERE:
+                                    SetConsoleTextAttribute(console_color, 19);
+                                    break;
+                                case ZONE_TYPE::FIN_DE_ROUTE:
+                                    SetConsoleTextAttribute(console_color, 8);
+                                    break;
+                                case ZONE_TYPE::ABBAYE:
+                                    SetConsoleTextAttribute(console_color, 12);
+                                    break;
+                                case ZONE_TYPE::JARDIN:
+                                    SetConsoleTextAttribute(console_color, 10);
+                                    break;
+                                case ZONE_TYPE::LAC:
+                                    SetConsoleTextAttribute(console_color, 19);
+                                    break;
+                                case ZONE_TYPE::SOURCE:
+                                    SetConsoleTextAttribute(console_color, 19);
+                                    break;
+                                case ZONE_TYPE::CATHEDRALE:
+                                    SetConsoleTextAttribute(console_color, 48);
+                                    break;
+                            }
+                            cout << c->toString() << "";
+                            SetConsoleTextAttribute(console_color, 15);
                             found = true;
                         }
                     }
                     if (!found)
-                        cout << "   ";
+                        cout << "  ";
                 }
                 //affichage de la ligne de separation verticale
                 cout << "|";
@@ -329,7 +366,7 @@ void Plateau::afficherConsole() {
         }
         //affichage de la ligne de separation horizontale
         for (int iSep = 0; iSep <= coinBasDroite->x_ - coinHautGauche->x_; iSep++)
-            cout << "----------";
+            cout << "-------";
         cout << endl;
     }
 }
