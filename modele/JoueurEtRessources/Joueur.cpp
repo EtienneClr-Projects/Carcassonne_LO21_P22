@@ -3,7 +3,3 @@
 //
 
 #include "Joueur.h"
-
-COULEUR Joueur::getCouleur() {
-    return couleur;
-}
