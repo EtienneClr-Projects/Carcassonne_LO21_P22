@@ -48,3 +48,22 @@ void Tuile::pivoterTuileSensTrigo(int nbre_rotation) {
 std::map<DIRECTION, Case *> Tuile::getCases() const {
     return cases;
 }
+
+bool Tuile::estSource() {
+    //on parcourt les cases de la tuile et si y'a une source on renvoie true
+    for (auto &it: cases) {
+        if (it.second->getZoneType() == ZONE_TYPE::SOURCE) {
+            return true;
+        }
+    }
+}
+
+bool Tuile::estLac() {
+    //on parcourt les cases de la tuile et si y'a un lac on renvoie true
+    for (auto &it: cases) {
+        if (it.second->getZoneType() == ZONE_TYPE::LAC) {
+            return true;
+        }
+    }
+    return false;
+}

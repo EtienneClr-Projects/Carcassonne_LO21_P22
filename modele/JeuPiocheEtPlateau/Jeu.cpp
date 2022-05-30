@@ -168,19 +168,29 @@ string Jeu::getCheminFromExtension(EXTENSION extension) {
 }
 
 void Jeu::setExtensions(vector<EXTENSION> extensions) {
-    vector<Tuile *> tuilesTemp;
+    vector < Tuile * > tuilesTemp;
     for (auto &ext: extensions) {
         if (ext == EXTENSION::RIVIERE) {
             getTuilesDesRessources(ext, &tuilesRiviere);
+            // on veut que le tableau de tuilesRiviere soit mélangé et qu'il commence par la source et finisse par le lac
+            shuffle(tuilesRiviere.begin(), tuilesRiviere.end(), std::mt19937(std::random_device()()));
+
         } else {
             getTuilesDesRessources(ext, &tuilesTemp);
             getMeeplesDesRessources(ext, &meeplesPossibleEnFonctionDesExtensions);
         }
     }
     if (!tuilesRiviere.empty()) {//on ajoute d'abord les tuiles de la rivière
+        Tuile *lac;
+        Tuile *source;
         for (auto &t: tuilesRiviere) {
-            tuiles.push_back(t);
+            if (t->estLac()) lac = t;
+            else if (t->estSource()) source = t;
+            else
+                tuiles.push_back(t);
         }
+        tuiles.insert(tuiles.begin(), source);
+        tuiles.push_back(lac);
     }
 
     //puis on ajoute les autres tuiles dans le désordre

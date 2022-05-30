@@ -28,6 +28,10 @@ public:
     std::map<DIRECTION, Case *> getCases() const;
 
     std::map<DIRECTION, Case *> cases;
+
+    bool estLac();
+
+    bool estSource();
 };
 
 #endif
