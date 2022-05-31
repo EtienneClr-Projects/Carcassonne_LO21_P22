@@ -281,9 +281,9 @@ std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
 Coord *ParametresPartie::toDeplacement(DIRECTION direction) {
     switch (direction) {
         case DIRECTION::NORD:
-            return new Coord(0, 1);
-        case DIRECTION::SUD:
             return new Coord(0, -1);
+        case DIRECTION::SUD:
+            return new Coord(0, 1);
         case DIRECTION::EST:
             return new Coord(1, 0);
         case DIRECTION::OUEST:

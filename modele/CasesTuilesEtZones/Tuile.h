@@ -16,7 +16,11 @@ class Tuile;
 
 class Tuile {
     std::string cheminImage;
+    std::vector<Zone *> zonesInternes;
+
 public:
+    std::vector<Zone *> getZonesInternes() { return zonesInternes; };
+
     explicit Tuile(std::map<DIRECTION, Case *> cases, std::string cheminImage);
 
     std::string toString();
@@ -34,6 +38,13 @@ public:
     bool estSource();
 
     void afficher() const;
+
+    void fusionZonesInternes();
+
+    void majOuverturesZonesCOTE(Tuile *pTuile);
+
+    std::vector<std::pair<int, Zone *>> calcZonesInternes();
+
 };
 
 #endif

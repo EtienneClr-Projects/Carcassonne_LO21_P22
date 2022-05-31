@@ -13,20 +13,11 @@ using namespace std;
 Plateau *Plateau::instance = nullptr;
 
 void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
-    cout << "\n\n FUSION DE LA TUILE :" << tuile->toString() << endl;
 //###################ZONES INTERNES###################
-    //fusion des zones internes
-    std::vector<pair<int, Zone *>> zonesInternesTemp = calcZonesInternes(tuile);
-    // on ajoute les zones internes à la liste des zones
-    for (std::pair<const int, Zone *> pair: zonesInternesTemp) {
-        zones.push_back(pair.second);
-        cout << "Ajout de la zone : " << pair.second->toString() << endl;
+// les zones internes sont déjà calculées, mais il faut les récupérer
+    for (auto *zone: tuile->getZonesInternes()) {
+        zones.push_back(zone);
     }
-    //on met à jour les ouvertures de chaque zone qui sont sur les côtés de la tuile
-    majOuverturesZonesCOTE(tuile);
-
-    cout << "FIN FUSION INTERNE DE LA TUILE :" << tuile->toString() << endl;
-
 
 //###################ZONES EXTERNES###################
     //on a besoin de la Coord de cette tuile
@@ -34,40 +25,44 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
 
     //pour chaque case sur une ParametresPartie::DIRECTION_COTE de la tuile
     for (int i = 0; i < 4; i++) {
-        // on prend sa zone
-        Zone *zone = tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente();
+        cout << "HEHOOOO" << endl;
+        // on prend sa zoneCoteActuelle
+        Zone *zoneCoteActuelle = tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente();
 
         //on cherche son voisin dans la liste plateau dans la bonne direction.
         //Par exemple si la case est au NORD, on cherche une tuile au NORD de la case actuelle
         Tuile *tuileVoisine = findTuileVoisine(coordTuile, i);
-        if (tuileVoisine == nullptr) continue; //si la tuile voisine n'existe pas on passe au côté suivant
+        if (tuileVoisine == nullptr) {
+            cout << "\ttuileVoisine == nullptr" << endl;
+            continue; //si la tuile voisine n'existe pas on passe au côté suivant
+        }
 
-        //on fusionne la zone avec la zone de la tuile voisine pour les COTES
+        //on fusionne la zoneCoteActuelle avec la zoneCoteActuelle de la tuile voisine pour les COTES
         Case *caseTuileVoisine = tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]];
 
 
-        if (caseTuileVoisine->getZoneParente() == zone) {
-            cout << caseTuileVoisine << " == " << tuile->cases[DIRECTIONS_COTE[i]] << endl;
-            throw std::runtime_error("caseTuileVoisine->getZoneParente()==zone");
+        if (caseTuileVoisine->getZoneParente() == zoneCoteActuelle) {
+            cout << caseTuileVoisine << " == " << tuile->cases[DIRECTIONS_COTE_INVERSE[i]] << endl;
+//            throw std::runtime_error("caseTuileVoisine->getZoneParente()==zoneCoteActuelle");
+//            continue;
         }
-//        cout << "Fusion de la zone " << zone->toString() << " avec la zone de la case voisine "
-//             << caseTuileVoisine->getZoneParente()->toString()
-//             << endl;
-//        cout << "affichage des zones du plateau :" << endl;
-//        for (Zone *zPlateau: zones) {
-//            cout << zPlateau->toString() << endl;
-//        }
 
 
         //on met à jour les ouvertures des zones
-        int ttOuvertures = zone->ouvertures + caseTuileVoisine->getZoneParente()->ouvertures;
-        zone->ouvertures = ttOuvertures - 2;
-        caseTuileVoisine->getZoneParente()->ouvertures = ttOuvertures - 2;//todo vérifier après
+        cout << "zone actuelle : " << zoneCoteActuelle->toString() << endl;
+        cout << "zone voisine : " << caseTuileVoisine->getZoneParente()->toString() << endl;
+        int ttOuvertures = zoneCoteActuelle->ouvertures + caseTuileVoisine->getZoneParente()->ouvertures - 2;
+        cout << "ouvertures de la zoneCoteActuelle : " << zoneCoteActuelle->ouvertures << endl;
+        cout << "ouvertures de la caseTuileVoisine : " << caseTuileVoisine->getZoneParente()->ouvertures << endl;
+        cout << "ouvertures totales : " << ttOuvertures << endl;
+        zoneCoteActuelle->ouvertures = ttOuvertures;
+        caseTuileVoisine->getZoneParente()->ouvertures = ttOuvertures;
 
         //puis on fusionne les zones
-        fusionZones(caseTuileVoisine->getZoneParente(), zone);
+        cout << "TRANSFERT DES ZONES" << endl;
+        transfererZone(caseTuileVoisine->getZoneParente(), zoneCoteActuelle);
 //        cout << "resultat sur la case " << tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]]->getZoneParente()->toString()
-//             << ", zone: "
+//             << ", zoneCoteActuelle: "
 //             << tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente()->toString() << "\n\n" << endl;
 //        cout << "REaffichage des zones du plateau :" << endl;
 //        for (Zone *zPlateau: zones) {
@@ -97,7 +92,7 @@ bool Plateau::fusionPossible(Zone *zone1, Zone *zone2) {
  * @param zoneASuppr la zone a fusionner qui va être supprimée.
  * @param zoneB la zone avec laquelle fusionner.
  */
-void Plateau::fusionZones(Zone *zoneASuppr, Zone *zoneB) {
+void Plateau::transfererZone(Zone *zoneASuppr, Zone *zoneB) {
     // on ajoute toutes les cases de la zoneASuppr à la zoneB
     for (Case *_case: zoneASuppr->getCases()) {
         _case->setZoneParente(zoneB);
@@ -125,7 +120,7 @@ void Plateau::fusionZones(Zone *zoneASuppr, Zone *zoneB) {
 
 void Plateau::ajouterTuile(Tuile *tuile, Coord *coord) {
     plateau.emplace_back(coord, tuile);
-//    fusionnerZonesAvecPlateau(tuile); //todo @Etienne
+    fusionnerZonesAvecPlateau(tuile);
 }
 
 std::string Plateau::toString() {
@@ -138,43 +133,6 @@ std::string Plateau::toString() {
     return str;
 }
 
-std::vector<pair<int, Zone *>> Plateau::calcZonesInternes(Tuile *tuile) {
-    std::vector<pair<int, Zone *>> zonesInternesTemp;
-    for (std::pair<const DIRECTION, Case *> _caseTuile: tuile->cases) {
-        //on vérifie que l'id de la case n'est pas déjà l'id d'une zone existante dans zonesInternesTemp de même type
-        bool trouveDansZoneExistante = false;
-        for (std::pair<const int, Zone *> pair: zonesInternesTemp) {
-            if (pair.first == _caseTuile.second->getIdConnexion() &&
-                pair.second->getType() == _caseTuile.second->getZoneType()) {
-                //si l'id est déjà dedans et c'est le même type,
-                // donc c'est que l'on a déjà créé la zone donc on ajoute cette case à la zone
-                pair.second->ajouterCase(_caseTuile.second);
-                _caseTuile.second->setZoneParente(pair.second);
-                trouveDansZoneExistante = true;
-                break;
-            }
-        }
-        if (!trouveDansZoneExistante) {
-            //sinon on crée une nouvelle zone et on l'ajoute à la liste
-            Zone *zone = new Zone(_caseTuile.second);
-            _caseTuile.second->setZoneParente(zone);
-            zonesInternesTemp.emplace_back(_caseTuile.second->getIdConnexion(), zone);
-        }
-    }
-    return zonesInternesTemp;
-}
-
-void Plateau::majOuverturesZonesCOTE(Tuile *tuile) {
-    for (int i = 0; i < 4; i++) {
-        std::cout << "I" + std::to_string(i) << " ";
-        // on prend sa zone et on lui ajoute +1 en ouverture
-        Case *caseCote = tuile->cases[DIRECTIONS_COTE[i]];
-        Zone *zoneCote = caseCote->getZoneParente();
-        tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente()->ouvertures++;
-//        std::cout << zoneCote->toString() << "ouvertures = " << zoneCote->ouvertures << std::endl;
-        //la tuile n'est pas encore vraiment posée, donc toutes les zones sont ouvertes, donc on les incrémente toutes
-    } // todo
-}
 
 Coord *Plateau::findCoordTuile(Tuile *tuile) {
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
@@ -192,7 +150,7 @@ Tuile *Plateau::findTuileVoisine(Coord *coordTuile, int i) {
          << coordTuileVoisine->toString() << "?" << endl;
     //on a sa coordonnée, maintenant on cherche la bonne tuile dans la liste
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
-        if (pairTuile.first == coordTuileVoisine) {
+        if (pairTuile.first->x_ == coordTuileVoisine->x_ && pairTuile.first->y_ == coordTuileVoisine->y_) {
             // on a trouvé la bonne tuile dans la liste
             return pairTuile.second;
         }
@@ -212,7 +170,7 @@ void Plateau::fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine) {
                                                                                                       DIRECTIONS_COTE[i])];
             //on fusionne les zones si même type de zone et si les zones ne sont déjà pas fusionnées
             if (fusionPossible(caseAFusionner->getZoneParente(), tuile->cases[deuxCoin]->getZoneParente())) {
-                fusionZones(caseAFusionner->getZoneParente(), tuile->cases[deuxCoin]->getZoneParente());
+                transfererZone(caseAFusionner->getZoneParente(), tuile->cases[deuxCoin]->getZoneParente());
             }
         }
     }
@@ -334,24 +292,26 @@ void Plateau::afficherConsole() {
         }
         //affichage de la ligne de separation horizontale
         for (int iSep = 0; iSep <= coinBasDroite->x_ - coinHautGauche->x_; iSep++)
-            cout << "---------";
+            cout << "----------";
         cout << endl;
     }
 }
 
 void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
+    //cf https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.codeproject.com%2FArticles%2F24896%2FJLib-A-Windows-Console-Library&psig=AOvVaw2HJb7bJSXUngLwowMwWUs7&ust=1653986979192000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCIjbmefXifgCFQAAAAAdAAAAABAD
+
     switch (c->getZoneType()) {
         case ZONE_TYPE::PRAIRIE:
-            SetConsoleTextAttribute(console_color, 34);
+            SetConsoleTextAttribute(console_color, 32);//34
             break;
         case ZONE_TYPE::VILLE:
-            SetConsoleTextAttribute(console_color, 44);
+            SetConsoleTextAttribute(console_color, 203);//204
             break;
         case ZONE_TYPE::CHEMIN:
-            SetConsoleTextAttribute(console_color, 119);
+            SetConsoleTextAttribute(console_color, 112);//119
             break;
         case ZONE_TYPE::RIVIERE:
-            SetConsoleTextAttribute(console_color, 19);
+            SetConsoleTextAttribute(console_color, 16);//19
             break;
         case ZONE_TYPE::FIN_DE_ROUTE:
             SetConsoleTextAttribute(console_color, 8);

@@ -13,6 +13,62 @@ using namespace std;
 Tuile::Tuile(std::map<DIRECTION, Case *> cases, std::string cheminImage) {
     this->cases = std::move(cases);
     this->cheminImage = std::move(cheminImage);
+    fusionZonesInternes();
+}
+
+void Tuile::fusionZonesInternes() {
+    cout << "\n\n FUSION DE LA TUILE :" << toString() << endl;
+//###################ZONES INTERNES###################
+    //fusion des zones internes
+    std::vector<pair<int, Zone *>> zonesInternesTemp = calcZonesInternes();
+    // on ajoute les zones internes à la liste des zones
+    for (std::pair<const int, Zone *> pair: zonesInternesTemp) {
+        zonesInternes.push_back(pair.second);
+        cout << "Ajout de la zone : " << pair.second->toString() << endl;
+    }
+    //on met à jour les ouvertures de chaque zone qui sont sur les côtés de la tuile
+    majOuverturesZonesCOTE(this);
+
+    cout << "\nFIN FUSION INTERNE DE LA TUILE :" << toString() << endl;
+}
+
+
+std::vector<pair<int, Zone *>> Tuile::calcZonesInternes() {
+    std::vector<pair<int, Zone *>> zonesInternesTemp;
+    for (std::pair<const DIRECTION, Case *> _caseTuile: cases) {
+        //on vérifie que l'id de la case n'est pas déjà l'id d'une zone existante dans zonesInternes de même type
+        bool trouveDansZoneExistante = false;
+        for (std::pair<const int, Zone *> pair: zonesInternesTemp) {
+            if (pair.first == _caseTuile.second->getIdConnexion() &&
+                pair.second->getType() == _caseTuile.second->getZoneType()) {
+                //si l'id est déjà dedans et c'est le même type,
+                // donc c'est que l'on a déjà créé la zone donc on ajoute cette case à la zone
+                pair.second->ajouterCase(_caseTuile.second);
+                _caseTuile.second->setZoneParente(pair.second);
+                trouveDansZoneExistante = true;
+                break;
+            }
+        }
+        if (!trouveDansZoneExistante) {
+            //sinon on crée une nouvelle zone et on l'ajoute à la liste
+            Zone *zone = new Zone(_caseTuile.second);
+            _caseTuile.second->setZoneParente(zone);
+            zonesInternesTemp.emplace_back(_caseTuile.second->getIdConnexion(), zone);
+        }
+    }
+    return zonesInternesTemp;
+}
+
+void Tuile::majOuverturesZonesCOTE(Tuile *tuile) {
+    for (int i = 0; i < 4; i++) {
+        std::cout << "I" + std::to_string(i) << " ";
+        // on prend sa zone et on lui ajoute +1 en ouverture
+        Case *caseCote = tuile->cases[DIRECTIONS_COTE[i]];
+        Zone *zoneCote = caseCote->getZoneParente();
+        tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente()->ouvertures++;
+//        std::cout << zoneCote->toString() << "ouvertures = " << zoneCote->ouvertures << std::endl;
+        //la tuile n'est pas encore vraiment posée, donc toutes les zones sont ouvertes, donc on les incrémente toutes
+    }
 }
 
 Case *Tuile::getCase(DIRECTION d) const {

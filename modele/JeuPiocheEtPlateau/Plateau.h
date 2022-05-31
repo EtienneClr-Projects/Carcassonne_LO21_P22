@@ -37,13 +37,9 @@ private :
 
     vector<Zone *> zones;
 
-    void fusionZones(Zone *zoneASuppr, Zone *zoneB);
+    void transfererZone(Zone *zoneASuppr, Zone *zoneB);
 
     static bool fusionPossible(Zone *zone1, Zone *zone2);
-
-    static std::vector<std::pair<int, Zone *>> calcZonesInternes(Tuile *pTuile);
-
-    static void majOuverturesZonesCOTE(Tuile *pTuile);
 
     Coord * findCoordTuile(Tuile *tuile);
 
