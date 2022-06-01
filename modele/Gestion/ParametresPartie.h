@@ -103,7 +103,7 @@ public:
 
     ParametresPartie &operator=(const ParametresPartie &) = delete;
 
-    static ParametresPartie &getInstance();
+    static ParametresPartie *getInstance();
 
     //METHODES DU SINGLETON
     std::vector<EXTENSION> getExtensionsChoisies() const;

@@ -8,6 +8,8 @@
 #include "CasesTuilesEtZones/Tuile.h"
 #include "JoueurEtRessources/Meeple.h"
 #include "Gestion/Partie.h"
+#include <QString>
+#include <QDir>
 
 using namespace std;
 typedef std::vector<std::string> stringVec;
@@ -22,8 +24,10 @@ Jeu *Jeu::instance = nullptr;
 
 void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles) {
     //on récupère le chemin du dossier en fonction de l'_extension demandée
-    std::string chemin = "../" + getCheminFromExtension(_extension);
+    std::string chemin = ":/" + getCheminFromExtension(_extension);
+    //std::string chemin = "../" + getCheminFromExtension(_extension);
     chemin += TUILES; //ici on récupère les _tuiles
+    std::cout << chemin << "\n";
     stringVec v;
     lireDossier(chemin, v);
 
@@ -35,12 +39,10 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
         map<DIRECTION, Case *> cases;
         int iInfo = 0;
 
-        cout << "cheminImage" << "\t: " << cheminImage << "\n";
-
         for (auto &c: cheminImage.substr(1)) {
             ZONE_TYPE type;
             int idConnexion;
-            SUPP_TYPE suppType = SUPP_TYPE::AUCUN;
+            SUPP_TYPE suppType;
 
             if (iInfo == 0) {//type de la tuile
                 type = ParametresPartie::toZONE_TYPE(c);
@@ -51,7 +53,6 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
             if (iInfo == 2) {// l'info spéciale de la tuile
                 if (c == '1') { //booléen pour le blason
                     suppType = SUPP_TYPE::BLASON;
-                    cout << "\tblason\n";
                 }
                 if (c == '2') { //booléen pour l'auberge
                     suppType = SUPP_TYPE::AUBERGE;
@@ -89,8 +90,10 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
  */
 void Jeu::getMeeplesDesRessources(EXTENSION _extension, vector<Meeple *> *meeples) {
     //on récupère le chemin du dossier en fonction de l'_extension demandée
-    std::string chemin = "../" + getCheminFromExtension(_extension);
+    std::string chemin = ":/" + getCheminFromExtension(_extension);
+    //std::string chemin = "../" + getCheminFromExtension(_extension);
     chemin += MEEPLES; //ici on récupère les meeples
+    std::cout << chemin << "\n";
 
     stringVec v;
     lireDossier(chemin, v);
@@ -124,6 +127,19 @@ void Jeu::getMeeplesDesRessources(EXTENSION _extension, vector<Meeple *> *meeple
  * @param vecteurDeStrings le vector de string où sera stocké le contenu du dossier
  */
 void Jeu::lireDossier(const std::string &chemin, stringVec &vecteurDeStrings) {
+
+    QString qchemin = QString::fromStdString(chemin);
+    QDir directory(qchemin);
+    QStringList images = directory.entryList(QStringList() << "*.png" << "*.PNG", QDir::Files);
+            foreach(QString filename, images) {
+            if (filename[0] != '.') {//pour ne pas ajouter les noms . et ..
+                //cout << "Lets go!\n";
+
+                std::string filename_std = filename.toUtf8().constData();
+                vecteurDeStrings.push_back(filename_std);
+            }
+        }
+    /*
     DIR *dirp = opendir(chemin.c_str());
     struct dirent *dp;
     while ((dp = readdir(dirp)) != nullptr) {
@@ -132,6 +148,7 @@ void Jeu::lireDossier(const std::string &chemin, stringVec &vecteurDeStrings) {
         }
     }
     closedir(dirp);
+    */
 }
 
 /**

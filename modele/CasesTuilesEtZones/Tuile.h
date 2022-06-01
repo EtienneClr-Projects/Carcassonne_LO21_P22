@@ -16,6 +16,10 @@ class Tuile;
 
 class Tuile {
     std::string cheminImage;
+public:
+    const std::string &getCheminImage() const;
+
+private:
     std::vector<Zone *> zonesInternes;
 
 public:

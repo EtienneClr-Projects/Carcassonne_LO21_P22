@@ -10,11 +10,11 @@ ParametresPartie *ParametresPartie::instance_ = nullptr;
  * Permet de récupérer l'instance singleton de ParametresPartie
  * @return l'instance
  */
-ParametresPartie &ParametresPartie::getInstance() {
+ParametresPartie * ParametresPartie::getInstance() {
     if (instance_ == nullptr) {
         instance_ = new ParametresPartie();
     }
-    return *instance_;
+    return instance_;
 }
 
 /**

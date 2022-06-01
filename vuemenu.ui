@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>vueMenu</class>
+    <widget class="QDialog" name="vueMenu">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>400</width>
+                <height>210</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Dialog</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+                <layout class="QVBoxLayout" name="verticalLayout_2">
+                    <item>
+                        <widget class="QLabel" name="label">
+                            <property name="text">
+                                <string>Extensions :</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="exRiviere">
+                            <property name="text">
+                                <string>La rivière</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="exCathAub">
+                            <property name="text">
+                                <string>Auberges et cathédrales</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="exAbbe">
+                            <property name="text">
+                                <string>L Abbe</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="exPaysans">
+                            <property name="text">
+                                <string>Les paysans</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item>
+                <layout class="QVBoxLayout" name="verticalLayout_3">
+                    <item>
+                        <widget class="QLabel" name="label_2">
+                            <property name="text">
+                                <string>Joueurs (0 enregistrés) :</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QCheckBox" name="checkBox">
+                            <property name="text">
+                                <string>Virtuel</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <layout class="QHBoxLayout" name="horizontalLayout">
+                            <item>
+                                <widget class="QLineEdit" name="lineEdit"/>
+                            </item>
+                            <item>
+                                <widget class="QPushButton" name="pushButton_2">
+                                    <property name="text">
+                                        <string>Suivant</string>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </item>
+                </layout>
+            </item>
+            <item>
+                <widget class="QPushButton" name="pushButton">
+                    <property name="text">
+                        <string>Confirmer Choix</string>
+                    </property>
+                </widget>
+            </item>
+        </layout>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>

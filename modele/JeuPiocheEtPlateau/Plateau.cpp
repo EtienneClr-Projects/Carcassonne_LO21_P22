@@ -4,7 +4,7 @@
 # include <string>
 # include <map>
 #include <vector>
-#include <windows.h>
+//#include <windows.h>
 #include <algorithm>
 
 #include "CasesTuilesEtZones/Tuile.h"
@@ -243,8 +243,8 @@ void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &me
 }
 
 void Plateau::afficherConsole() {
-    HANDLE console_color;
-    console_color = GetStdHandle(STD_OUTPUT_HANDLE);
+//    HANDLE console_color;
+//    console_color = GetStdHandle(STD_OUTPUT_HANDLE);
 //on trouve le coin en haut à gauche du plateau par rapport aux coordonnées (x,y) des tuiles
 //puis on affiche toutes les tuiles une par une
     Coord *coinHautGauche = getCoinHautGauche();
@@ -258,9 +258,9 @@ void Plateau::afficherConsole() {
                     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
                         if (pairTuile.first->x_ == x and pairTuile.first->y_ == y) {
                             Case *c = pairTuile.second->cases[DIRECTIONS_ORDERED[iYCase * 3 + iXCase]];
-                            ColorForZone(console_color, c);
+//                            ColorForZone(console_color, c);
                             cout << c->toString() << " ";
-                            SetConsoleTextAttribute(console_color, COLOR_NORMALE);
+//                            SetConsoleTextAttribute(console_color, COLOR_NORMALE);
                             found = true;
                         }
                     }
@@ -278,45 +278,45 @@ void Plateau::afficherConsole() {
         cout << endl;
     }
 }
-
-void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
-    //cf https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.codeproject.com%2FArticles%2F24896%2FJLib-A-Windows-Console-Library&psig=AOvVaw2HJb7bJSXUngLwowMwWUs7&ust=1653986979192000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCIjbmefXifgCFQAAAAAdAAAAABAD
-
-    switch (c->getZoneType()) {
-        case ZONE_TYPE::PRAIRIE:
-            SetConsoleTextAttribute(console_color, 32);//34
-            break;
-        case ZONE_TYPE::VILLE:
-            SetConsoleTextAttribute(console_color, 203);//204
-            break;
-        case ZONE_TYPE::CHEMIN:
-            SetConsoleTextAttribute(console_color, 112);//119
-            break;
-        case ZONE_TYPE::RIVIERE:
-            SetConsoleTextAttribute(console_color, 16);//19
-            break;
-        case ZONE_TYPE::FIN_DE_ROUTE:
-            SetConsoleTextAttribute(console_color, 8);
-            break;
-        case ZONE_TYPE::ABBAYE:
-            SetConsoleTextAttribute(console_color, 12);
-            break;
-        case ZONE_TYPE::JARDIN:
-            SetConsoleTextAttribute(console_color, 10);
-            break;
-        case ZONE_TYPE::LAC:
-            SetConsoleTextAttribute(console_color, 16);
-            break;
-        case ZONE_TYPE::SOURCE:
-            SetConsoleTextAttribute(console_color, 16);
-            break;
-        case ZONE_TYPE::CATHEDRALE:
-            SetConsoleTextAttribute(console_color, 48);
-            break;
-        case ZONE_TYPE::AUTRE:
-            break;
-    }
-}
+//
+//void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
+//    //cf https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.codeproject.com%2FArticles%2F24896%2FJLib-A-Windows-Console-Library&psig=AOvVaw2HJb7bJSXUngLwowMwWUs7&ust=1653986979192000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCIjbmefXifgCFQAAAAAdAAAAABAD
+//
+//    switch (c->getZoneType()) {
+//        case ZONE_TYPE::PRAIRIE:
+//            SetConsoleTextAttribute(console_color, 32);//34
+//            break;
+//        case ZONE_TYPE::VILLE:
+//            SetConsoleTextAttribute(console_color, 203);//204
+//            break;
+//        case ZONE_TYPE::CHEMIN:
+//            SetConsoleTextAttribute(console_color, 112);//119
+//            break;
+//        case ZONE_TYPE::RIVIERE:
+//            SetConsoleTextAttribute(console_color, 16);//19
+//            break;
+//        case ZONE_TYPE::FIN_DE_ROUTE:
+//            SetConsoleTextAttribute(console_color, 8);
+//            break;
+//        case ZONE_TYPE::ABBAYE:
+//            SetConsoleTextAttribute(console_color, 12);
+//            break;
+//        case ZONE_TYPE::JARDIN:
+//            SetConsoleTextAttribute(console_color, 10);
+//            break;
+//        case ZONE_TYPE::LAC:
+//            SetConsoleTextAttribute(console_color, 16);
+//            break;
+//        case ZONE_TYPE::SOURCE:
+//            SetConsoleTextAttribute(console_color, 16);
+//            break;
+//        case ZONE_TYPE::CATHEDRALE:
+//            SetConsoleTextAttribute(console_color, 48);
+//            break;
+//        case ZONE_TYPE::AUTRE:
+//            break;
+//    }
+//}
 
 Coord *Plateau::getCoinHautGauche() {
     auto *coinHautGauche = new Coord(tailleMaxPlateau,

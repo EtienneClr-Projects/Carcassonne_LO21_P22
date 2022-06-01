@@ -4,7 +4,7 @@
 
 # include <string>
 # include <map>
-#include <windows.h>
+//#include <windows.h>
 #include <algorithm>
 
 
@@ -70,19 +70,19 @@ Case *Tuile::getCase(DIRECTION d) const {
 }
 
 void Tuile::afficher() const {
-    HANDLE console_color;
-    console_color = GetStdHandle(STD_OUTPUT_HANDLE);
+//    HANDLE console_color;
+//    console_color = GetStdHandle(STD_OUTPUT_HANDLE);
     cout << "tuile:\n";
     for (int i = 1; i < 10; i++) {
         Case *c = getCase(DIRECTIONS_ORDERED[i - 1]);
-        Plateau::ColorForZone(console_color, c);
+//        Plateau::ColorForZone(console_color, c);
         cout << c->toString() + " ";
         if (i % 3 == 0) {
-            SetConsoleTextAttribute(console_color, COLOR_NORMALE);
+//            SetConsoleTextAttribute(console_color, COLOR_NORMALE);
             cout << "\n";
         }
     }
-    SetConsoleTextAttribute(console_color, COLOR_NORMALE);
+//    SetConsoleTextAttribute(console_color, COLOR_NORMALE);
 }
 
 std::string Tuile::toString() {
@@ -131,4 +131,8 @@ bool Tuile::estLac() {
                        [](std::pair<const DIRECTION, Case *> &it) {
                            return it.second->getZoneType() == ZONE_TYPE::LAC;
                        });
+}
+
+const string &Tuile::getCheminImage() const {
+    return cheminImage;
 }

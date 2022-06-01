@@ -1,7 +1,7 @@
 //
 // Created by etienne on 27/04/2022.
 //
-
+/*
 #include <iostream>
 #include "JeuPiocheEtPlateau/Pioche.h"
 #include "JeuPiocheEtPlateau/Jeu.h"
@@ -269,4 +269,15 @@ int main() {
     }
 
     return 0;
+}*/
+
+
+#include "vuepartie.h"
+#include <QApplication>
+
+int main(int argc, char *argv[]) {
+    QApplication a(argc, argv);
+    vuePartie w;
+    w.show();
+    return a.exec();
 }
