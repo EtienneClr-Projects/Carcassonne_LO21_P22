@@ -253,7 +253,7 @@ std::string ParametresPartie::toStringMEEPLE_TYPE(MEEPLE_TYPE type) {
  * @param exts Extensions à transformer
  * @return String correspondant aux extensions fournies
  */
-std::string ParametresPartie::toStringEXTENSIONS(std::vector<EXTENSION> exts) {
+std::string ParametresPartie::toStringEXTENSIONS(const std::vector<EXTENSION> &exts) {
     std::string str;
     for (EXTENSION ext: exts) {
         str += toStringEXTENSION(ext) + ", ";

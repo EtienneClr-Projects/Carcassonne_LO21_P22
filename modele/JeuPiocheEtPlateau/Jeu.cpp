@@ -144,9 +144,9 @@ map<DIRECTION, Case *> Jeu::deepCopyMap(const map<DIRECTION, Case *> &map1) {
     return map2;
 }
 
-string Jeu::getCheminFromExtension(EXTENSION extension) {
+string Jeu::getCheminFromExtension(EXTENSION ext) {
     string chemin;
-    switch (extension) {
+    switch (ext) {
         case EXTENSION::NORMAL:
             chemin = RESSOURCES_NORMALES;
             break;
@@ -168,8 +168,8 @@ string Jeu::getCheminFromExtension(EXTENSION extension) {
     return chemin;
 }
 
-void Jeu::setExtensions(vector<EXTENSION> extensions) {
-    vector < Tuile * > tuilesTemp;
+void Jeu::setExtensions(const vector<EXTENSION> &extensions) {
+    vector<Tuile *> tuilesTemp;
     for (auto &ext: extensions) {
         if (ext == EXTENSION::RIVIERE) {
             getTuilesDesRessources(ext, &tuilesRiviere);

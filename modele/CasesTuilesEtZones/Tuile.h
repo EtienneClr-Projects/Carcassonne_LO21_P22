@@ -2,7 +2,7 @@
 #define CARCASSONNE_LO21_P22_TUILE_H
 #pragma once
 
-#include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <string>
 #include <initializer_list>
@@ -41,7 +41,7 @@ public:
 
     void fusionZonesInternes();
 
-    void majOuverturesZonesCOTE(Tuile *pTuile);
+    static void majOuverturesZonesCOTE(Tuile *pTuile);
 
     std::vector<std::pair<int, Zone *>> calcZonesInternes();
 

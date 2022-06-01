@@ -1,12 +1,15 @@
 #ifndef CARCASSONNE_LO21_P22_JOUEUR_H
 #define CARCASSONNE_LO21_P22_JOUEUR_H
+
+#include <utility>
+
 #include "Gestion/ParametresPartie.h"
 
 class Joueur {
 
 public :
-    Joueur(const std::string &n, COULEUR c) :
-            couleur(c), nom(n), points(0) {}
+    Joueur(std::string n, COULEUR c) :
+            couleur(c), nom(std::move(n)), points(0) {}
 
     int getNbPoints() const { return points; }
 

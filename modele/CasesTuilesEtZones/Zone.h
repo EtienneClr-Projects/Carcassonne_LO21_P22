@@ -51,7 +51,7 @@ public:
 
     void supprimerCase(Case *pCase);
 
-    Zone(Case *init_case);
+    explicit Zone(Case *init_case);
 };
 
 #endif //CARCASSONNE_LO21_P22_ZONE_H

@@ -1,7 +1,9 @@
 #ifndef CARCASSONNE_LO21_P22_PLATEAU_H
 #define CARCASSONNE_LO21_P22_PLATEAU_H
 
-#include <stdio.h>
+static const int tailleMaxPlateau = 200;
+
+#include <cstdio>
 # include <iostream>
 # include <string>
 # include <initializer_list>
@@ -15,19 +17,17 @@
 #include "JoueurEtRessources/Meeple.h"
 #include "CasesTuilesEtZones/Zone.h"
 #include "Gestion/Coord.h"
-
-using namespace std;
-
-
 #include "CasesTuilesEtZones/Tuile.h"
 #include "Gestion/Coord.h"
+
+using namespace std;
 
 class Plateau {
 private :
     static Plateau *instance;
     std::vector<std::pair<Coord *, Tuile *>> plateau;
 
-    Plateau(const vector<std::pair<Coord *, Tuile *>> &p) : plateau(p) {};
+    explicit Plateau(const vector<std::pair<Coord *, Tuile *>> &p) : plateau(p) {};
 
     Plateau() {
         plateau = {};

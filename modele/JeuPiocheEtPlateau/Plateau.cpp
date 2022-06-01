@@ -175,7 +175,7 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
             if (cases[DIRECTION::SUD]->getZoneType() != casesVoisines[DIRECTION::NORD]->getZoneType()) return false;
         }
     }
-    return a_un_voisin || plateau.empty(); //si il y a un voisin ou si c'est la premiere tuile placée on peut la poser
+    return a_un_voisin || plateau.empty(); //s'il y a un voisin ou si c'est la premiere tuile placée on peut la poser
 
     //todo @daphne ajouter règle rivière
 }
@@ -220,10 +220,8 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
 void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
     for (auto zone: zones) {//on regarde toutes les zones
         if (!(zone->estOuverte())) { // si la zone est fermée
-            cout << "\t zone ouverte" << endl;
-            for (auto c: zone->getCases()) {//pour toute les cases de cette zone
+            for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (c->getMeeplePose() != nullptr) {//si il y a un meeple
-                    cout << "\t meeple" << endl;
                     meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
                     int i = 0;
                     for (auto meeple: meeplesPoses) {
@@ -312,13 +310,15 @@ void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
         case ZONE_TYPE::CATHEDRALE:
             SetConsoleTextAttribute(console_color, 48);
             break;
+        case ZONE_TYPE::AUTRE:
+            break;
     }
 }
 
 Coord *Plateau::getCoinHautGauche() {
-    auto *coinHautGauche = new Coord(200,
-                                     200); //todo @etienne améliorer le 200, pareil en bas et dans la méthode en dessous
-    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
+    auto *coinHautGauche = new Coord(tailleMaxPlateau,
+                                     tailleMaxPlateau);
+    for (std::pair < Coord * , Tuile * > pairTuile: plateau) {
         if (pairTuile.first->x_ < coinHautGauche->x_) {
             coinHautGauche->x_ = pairTuile.first->x_;
         }
@@ -326,14 +326,14 @@ Coord *Plateau::getCoinHautGauche() {
             coinHautGauche->y_ = pairTuile.first->y_;
         }
     }
-    if (coinHautGauche->x_ == 200 || coinHautGauche->y_ == 200) {
+    if (coinHautGauche->x_ == tailleMaxPlateau || coinHautGauche->y_ == tailleMaxPlateau) {
         throw CarcassonneException("erreur dans le calcul du coin haut gauche");
     }
     return coinHautGauche;
 }
 
 Coord *Plateau::getCoinBasDroite() {
-    auto *coinBasDroite = new Coord(-200, -200);
+    auto *coinBasDroite = new Coord(-tailleMaxPlateau, -tailleMaxPlateau);
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
         if (pairTuile.first->x_ > coinBasDroite->x_) {
             coinBasDroite->x_ = pairTuile.first->x_;
@@ -342,7 +342,7 @@ Coord *Plateau::getCoinBasDroite() {
             coinBasDroite->y_ = pairTuile.first->y_;
         }
     }
-    if (coinBasDroite->x_ == -200 || coinBasDroite->y_ == -200) {
+    if (coinBasDroite->x_ == -tailleMaxPlateau || coinBasDroite->y_ == -tailleMaxPlateau) {
         cout << "erreur dans le calcul du coin bas droite" << endl;
         throw CarcassonneException("erreur dans le calcul du coin bas droite");
     }

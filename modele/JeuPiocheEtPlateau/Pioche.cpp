@@ -4,9 +4,9 @@
 
 #include "Pioche.h"
 
-Pioche::Pioche(std::vector<Tuile *> tuiles) {
+Pioche::Pioche(const std::vector<Tuile *> &tuiles) {
     this->tuiles = tuiles;
-    this->nbTuilesRestantes = tuiles.size();
+    this->nbTuilesRestantes = (int) tuiles.size();
 }
 
 /**

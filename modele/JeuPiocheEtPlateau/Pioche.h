@@ -13,8 +13,9 @@ class Pioche {
 private:
     std::vector<Tuile *> tuiles;
 public:
-    Pioche(std::vector<Tuile*> tuiles);
-    Tuile* piocher();
+    explicit Pioche(const std::vector<Tuile *> &tuiles);
+
+    Tuile *piocher();
 
     int nbTuilesRestantes;
 };

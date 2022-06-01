@@ -34,12 +34,14 @@ class Jeu {
 
     Jeu() = default;
 
-    ~Jeu();
+    ~Jeu() {
+        //todo
+    }
 
     vector<EXTENSION> extension;
     vector<Tuile *> tuilesRiviere;
 
-    string getCheminFromExtension(EXTENSION extension);
+    static string getCheminFromExtension(EXTENSION ext);
 
     static map<DIRECTION, Case *> deepCopyMap(const map<DIRECTION, Case *> &map1);
 
@@ -48,7 +50,7 @@ public:
     vector<Tuile *> tuiles;
 
     //SINGLETON
-    void setExtensions(vector<EXTENSION> extensions);
+    void setExtensions(const vector<EXTENSION> &extensions);
 
     static Jeu *getInstance() {
         if (instance == nullptr) {

@@ -59,7 +59,7 @@ void Zone::ajouterCase(Case *c) {
         this->cases.push_back(c);
     } else {
         cout << "Erreur: la zone " << this->toString() << " ne peut pas recevoir la case " << c->toString() << endl;
-//        throw std::invalid_argument("Erreur : la case n'appartient pas a la bonne zone");
+//        throw std::invalid_argument("Erreur : la case n'appartient pas à la bonne zone");
     }
 }
 

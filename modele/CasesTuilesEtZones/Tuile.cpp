@@ -58,12 +58,10 @@ std::vector<pair<int, Zone *>> Tuile::calcZonesInternes() {
 }
 
 void Tuile::majOuverturesZonesCOTE(Tuile *tuile) {
-    for (int i = 0; i < 4; i++) {
+    //la tuile n'est pas encore vraiment posée, donc toutes les zones sont ouvertes, donc on les incrémente toutes
+    for (auto i: DIRECTIONS_COTE) {
         // on prend sa zone et on lui ajoute +1 en ouverture
-        Case *caseCote = tuile->cases[DIRECTIONS_COTE[i]];
-        Zone *zoneCote = caseCote->getZoneParente();
-        tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente()->ouvertures++;
-        //la tuile n'est pas encore vraiment posée, donc toutes les zones sont ouvertes, donc on les incrémente toutes
+        tuile->cases[i]->getZoneParente()->ouvertures++;
     }
 }
 
@@ -120,7 +118,7 @@ std::map<DIRECTION, Case *> Tuile::getCases() const {
 }
 
 bool Tuile::estSource() {
-    //on parcourt les cases de la tuile et si y'a une source on renvoie true
+    //on parcourt les cases de la tuile et s'il y a une source on renvoie true
     return std::any_of(cases.begin(), cases.end(),
                        [](std::pair<const DIRECTION, Case *> &it) {
                            return it.second->getZoneType() == ZONE_TYPE::SOURCE;
@@ -128,7 +126,7 @@ bool Tuile::estSource() {
 }
 
 bool Tuile::estLac() {
-    //on parcourt les cases de la tuile et si y'a un lac on renvoie true
+    //on parcourt les cases de la tuile et s'il y a un lac on renvoie true
     return std::any_of(cases.begin(), cases.end(),
                        [](std::pair<const DIRECTION, Case *> &it) {
                            return it.second->getZoneType() == ZONE_TYPE::LAC;
