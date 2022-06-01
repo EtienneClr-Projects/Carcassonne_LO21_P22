@@ -5,9 +5,11 @@
 # include <map>
 #include <vector>
 #include <windows.h>
+#include <algorithm>
 
 #include "CasesTuilesEtZones/Tuile.h"
 #include "Gestion/Coord.h"
+#include "Gestion/Partie.h"
 
 using namespace std;
 Plateau *Plateau::instance = nullptr;
@@ -229,8 +231,9 @@ void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &me
                             meeplesPoses.erase(meeplesPoses.begin() + i);//et on le retire du tableau des meeple poses
                         i++;
                     }
-                    cout << "Joueur " << ParametresPartie::toStringCOULEUR(c->getMeeplePose()->getCouleur())
-                         << " a recupere un meeple" << endl;
+                    Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
+                    donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
+                    cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
                     c->retirerMeeplePose(); // on retire le meeple de la case
 
                 }
@@ -318,7 +321,7 @@ void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
 Coord *Plateau::getCoinHautGauche() {
     auto *coinHautGauche = new Coord(tailleMaxPlateau,
                                      tailleMaxPlateau);
-    for (std::pair < Coord * , Tuile * > pairTuile: plateau) {
+    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
         if (pairTuile.first->x_ < coinHautGauche->x_) {
             coinHautGauche->x_ = pairTuile.first->x_;
         }
@@ -347,4 +350,30 @@ Coord *Plateau::getCoinBasDroite() {
         throw CarcassonneException("erreur dans le calcul du coin bas droite");
     }
     return coinBasDroite;
+}
+
+void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
+// en fonction du type de la zone, on affecte pas le même nombre de points avec la méthode joueur.ajouterPoints
+    vector<Tuile *> tuilesPassees;
+    //pour chaque case de la zone, on ajoute les points au joueur
+    for (Case *c: pZone->getCases()) {
+        //si la tuile parente de la case est dans tuilesPassees, on continue;
+        if (std::find(begin(tuilesPassees), end(tuilesPassees), c->getTuileParente()) != tuilesPassees.end())
+            continue;
+
+        if (c->getSuppType() == SUPP_TYPE::BLASON) {
+            pJoueur->ajouterPoints(2);
+        }
+        if (pZone->getType() == ZONE_TYPE::VILLE) {
+            pJoueur->ajouterPoints(2);
+            tuilesPassees.push_back(c->getTuileParente());
+        } else if (pZone->getType() == ZONE_TYPE::CHEMIN) {
+            pJoueur->ajouterPoints(1);
+            tuilesPassees.push_back(c->getTuileParente());
+        }
+    }
+
+
+    //todo : compte déjà les points pour les routes et les chemins, faut faire les abbayes/jardins
+    // et voir les extensions ce qui rapporte des points
 }

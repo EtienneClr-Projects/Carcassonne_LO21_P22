@@ -16,7 +16,7 @@ class Case;
 class Case {
     ZONE_TYPE zone_type;
     DIRECTION direction;
-    SUPP_TYPE supp_type;
+    SUPP_TYPE supp_type = SUPP_TYPE::AUCUN;
     int id_connexion;
     Tuile *tuile_parente;
     Zone *zone_parente;

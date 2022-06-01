@@ -273,6 +273,8 @@ std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
             return "Ton";
         case SUPP_TYPE::TISSU:
             return "Tis";
+        case SUPP_TYPE::AUCUN:
+            return " ";
         default:
             throw std::invalid_argument("Type de supplement invalide");
     }

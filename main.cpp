@@ -260,7 +260,10 @@ int main() {
             }
             plateau->retirerMeeple(partie->meeplesPoses, partie->meeplesEnReserve);
 
-
+            cout << "Scores Actuels : " << endl;
+            for (Joueur *j: joueursPartie) {
+                cout << j->getNom() << " \t\t: " << j->getNbPoints() << endl;
+            }
             cout << "\n" << endl;
         }
     }
