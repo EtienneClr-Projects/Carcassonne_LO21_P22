@@ -25,6 +25,7 @@ public:
 
     static Partie &getInstance();
 
+    Joueur *getJoueur(COULEUR couleur);
 };
 
 

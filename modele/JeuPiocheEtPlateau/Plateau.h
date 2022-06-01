@@ -58,8 +58,8 @@ public:
 
     bool checkerTuile(Tuile *tuile, Coord *coord);
 
-    static bool poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
-                            vector<Meeple *> &meeplesEnReserve);
+    bool poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
+                     vector<Meeple *> &meeplesEnReserve);
 
     static Plateau *getInstance(const vector<std::pair<Coord *, Tuile *>> &plateau) {
         if (instance == nullptr) {

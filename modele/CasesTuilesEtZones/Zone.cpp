@@ -13,11 +13,6 @@ Zone::Zone(Case *init_case) {
     this->type = init_case->getZoneType();
 
     this->cases.push_back(init_case);
-    this->joueursPartie = Partie::getInstance().getJoueurs();
-
-    for (Joueur *joueur: joueursPartie) {
-        this->gagnantsActuels.insert({joueur, 0});
-    }
 }
 
 const ZONE_TYPE &Zone::getType() {
@@ -33,15 +28,25 @@ int Zone::getNombreDePoints() const {
  * @return le gagnant de la zone. nullptr si tous les joueurs en ont 0.
  */
 Joueur * Zone::getGagnant() {
-    // on parcourt la map des gagnants actuels et on prend celui qui a le plus de meeples dans la zone
-    int nbMaxMeeples = 0;
-    Joueur *gagnant = nullptr;
-    for (auto &gagnantsActuel: this->gagnantsActuels) {
-        if (gagnantsActuel.second > nbMaxMeeples) {
-            nbMaxMeeples = gagnantsActuel.second;
-            gagnant = gagnantsActuel.first;
+    //on parcourt toutes les cases de la Zone, et on compte le nombre de Meeples de chaque COULEUR
+    std::map<COULEUR, int> nbMeeplesParCouleur;
+    for (Case *c: this->cases) {
+        Meeple *m = c->getMeeplePose();
+        if (m != nullptr) {
+            nbMeeplesParCouleur[m->getCouleur()]++;
         }
     }
+
+    //on cherche le gagnant
+    Joueur *gagnant = nullptr;
+    int nbMaxMeeples = 0;
+    for (auto &it: nbMeeplesParCouleur) {
+        if (it.second > nbMaxMeeples) {
+            gagnant = Partie::getInstance().getJoueur(it.first);
+            nbMaxMeeples = it.second;
+        }
+    }
+
     return gagnant;
 }
 

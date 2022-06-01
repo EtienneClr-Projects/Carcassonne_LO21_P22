@@ -28,9 +28,7 @@ protected:
     ZONE_TYPE type;
     int points = 0;
     // Map associant le nombre de meeples de chaque joueur à la zone.
-    std::map<Joueur *, int> gagnantsActuels;
     std::vector<Case *> cases;
-    std::vector<Joueur *> joueursPartie;
 
 //##################################################################################################################
     //Méthodes

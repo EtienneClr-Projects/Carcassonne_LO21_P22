@@ -18,3 +18,12 @@ Partie &Partie::getInstance() {
 const vector<Joueur *> &Partie::getJoueurs() const {
     return joueurs;
 }
+
+Joueur *Partie::getJoueur(COULEUR couleur) {
+    for (auto joueur: joueurs) {
+        if (joueur->getCouleur() == couleur) {
+            return joueur;
+        }
+    }
+    return nullptr;
+}
