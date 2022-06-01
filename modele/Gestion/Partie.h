@@ -3,16 +3,17 @@
 
 #include <vector>
 #include "JoueurEtRessources/Joueur.h"
+#include "JoueurEtRessources/Meeple.h"
 
 using namespace std;
 
 //Partie est un Singleton
 class Partie {
 private:
-    //SINGLETON
-    static Partie *instance;
-
     Partie() = default;
+
+//SINGLETON
+    static Partie *instance;
 
     std::vector<Joueur *> joueurs;
 public:
@@ -23,9 +24,20 @@ public:
 
     Partie &operator=(const Partie &) = delete;
 
-    static Partie &getInstance();
+    static Partie *getInstance() {
+        if (instance == nullptr) {
+            instance = new Partie();
+        }
+        return instance;
+    }
 
     Joueur *getJoueur(COULEUR couleur);
+
+    vector<Meeple *> meeplesPoses;
+
+    vector<Meeple *> meeplesEnReserve;
+
+    void ajouterJoueur(Joueur *joueur);
 };
 
 

@@ -69,7 +69,8 @@ void Plateau::transfererZone(Zone *zoneASuppr, Zone *zoneB) {
     }
 
     if (zoneASuppr == zoneB) //si ce sont les mêmes adresses on supprime pas
-        throw std::invalid_argument("zoneASuppr == zoneB");
+        return;
+//        throw std::invalid_argument("zoneASuppr == zoneB");
 
     //on supprime la zone A de la liste
     int i = 0;
@@ -194,17 +195,18 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
     if (nullptr == zone->getGagnant()) {// si pas de meeple déjà posé dans la zone
 
         unsigned int i = 0;
-        while ((couleur != meeplesEnReserve[i]->getCouleur() and
-                type != meeplesEnReserve[i]->getType()) and i <= meeplesEnReserve.size()) { i++; }
+        while ((i < meeplesEnReserve.size() and couleur != meeplesEnReserve[i]->getCouleur() and
+                type != meeplesEnReserve[i]->getType())) { i++; }
 
         //retirer du tableau "meeple en réserve" le meeple
         if (i > meeplesEnReserve.size()) {
             throw CarcassonneException("pas de meeple de ce type et de cette couleur disponible");
         }
-        c->setMeeple(meeplesEnReserve[i]);
         //on déplace le meeple dans le bon tableau
-        meeplesPoses.push_back(meeplesEnReserve[i]);
+        Meeple *m = meeplesEnReserve[i];
+        meeplesPoses.push_back(m);
         meeplesEnReserve.erase(meeplesEnReserve.begin() + i);
+        c->setMeeple(m);
         return true;
     }
     return false;
@@ -218,8 +220,10 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
 void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
     for (auto zone: zones) {//on regarde toutes les zones
         if (!(zone->estOuverte())) { // si la zone est fermée
+            cout << "\t zone ouverte" << endl;
             for (auto c: zone->getCases()) {//pour toute les cases de cette zone
                 if (c->getMeeplePose() != nullptr) {//si il y a un meeple
+                    cout << "\t meeple" << endl;
                     meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
                     int i = 0;
                     for (auto meeple: meeplesPoses) {
@@ -227,6 +231,8 @@ void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &me
                             meeplesPoses.erase(meeplesPoses.begin() + i);//et on le retire du tableau des meeple poses
                         i++;
                     }
+                    cout << "Joueur " << ParametresPartie::toStringCOULEUR(c->getMeeplePose()->getCouleur())
+                         << " a recupere un meeple" << endl;
                     c->retirerMeeplePose(); // on retire le meeple de la case
 
                 }

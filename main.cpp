@@ -6,6 +6,7 @@
 #include "JeuPiocheEtPlateau/Pioche.h"
 #include "JeuPiocheEtPlateau/Jeu.h"
 #include "JeuPiocheEtPlateau/Plateau.h"
+#include "Gestion/Partie.h"
 
 using namespace std;
 
@@ -110,6 +111,8 @@ int main() {
         cout << "nom du joueur " << i + 1 << " : ";
         cin >> nom;
         nomsJoueurs.push_back(nom);
+        auto *j = new Joueur(nom, ALL_COULEURS[i]);
+        Partie::getInstance()->ajouterJoueur(j);
     }
 
 
@@ -173,11 +176,12 @@ int main() {
     cout << "\net les extensions : ";
     cout << ParametresPartie::toStringEXTENSIONS(extensionsChoisies) << "\n" << endl;
 
-
+    Partie *partie = Partie::getInstance();
+    vector<Joueur *> joueursPartie = partie->getJoueurs();
     while (1) {
-        for (string joueur: nomsJoueurs) {
+        for (Joueur *joueur: joueursPartie) {
             Tuile *t = pioche->piocher();
-            cout << "Joueur " << joueur << " vous avez pioche la " << endl;
+            cout << "Joueur " << joueur->getNom() << " vous avez pioche la " << endl;
             t->afficher();
             //le joueur peut soit tourner la tuile, soit la poser
             int choixPoserTourner = 0;
@@ -242,11 +246,19 @@ int main() {
                     cin >> choixDir;
                 }
                 DIRECTION dir = DIRECTIONS_ORDERED[choixDir - 1];
-                auto *meeple = new Meeple(MEEPLE_TYPE::NORMAL, COULEUR::BLEU, "");//todo uniquement pour les tests
-                t->getCase(dir)->setMeeple(meeple);
+                auto *meeple = new Meeple(MEEPLE_TYPE::NORMAL, joueur->getCouleur(),
+                                          "");//todo uniquement pour les tests
+
+                if (plateau->poserMeeple(meeple->getCouleur(), t->getCase(dir), meeple->getType(), partie->meeplesPoses,
+                                         partie->meeplesEnReserve)) {
+                    cout << "Meeple pose" << endl;
+                } else {
+                    cout << "Meeple non pose !!" << endl;
+                }
                 cout << "\naffichage du plateau de jeu : " << endl;
                 plateau->afficherConsole();
             }
+            plateau->retirerMeeple(partie->meeplesPoses, partie->meeplesEnReserve);
 
 
             cout << "\n" << endl;

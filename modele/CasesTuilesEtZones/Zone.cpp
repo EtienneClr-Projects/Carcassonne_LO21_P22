@@ -42,7 +42,7 @@ Joueur * Zone::getGagnant() {
     int nbMaxMeeples = 0;
     for (auto &it: nbMeeplesParCouleur) {
         if (it.second > nbMaxMeeples) {
-            gagnant = Partie::getInstance().getJoueur(it.first);
+            gagnant = Partie::getInstance()->getJoueur(it.first);
             nbMaxMeeples = it.second;
         }
     }
@@ -76,7 +76,7 @@ std::vector<Case *> Zone::getCases() {
  * @return vrai si la zone est ouverte, faux sinon.
  */
 bool Zone::estOuverte() const {
-    return this->ouvertures == 0;
+    return this->ouvertures != 0;
 }
 
 std::string Zone::toString() {

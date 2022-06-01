@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "CasesTuilesEtZones/Tuile.h"
 #include "JoueurEtRessources/Meeple.h"
+#include "Gestion/Partie.h"
 
 using namespace std;
 typedef std::vector<std::string> stringVec;
@@ -177,8 +178,8 @@ void Jeu::setExtensions(vector<EXTENSION> extensions) {
 
         } else {
             getTuilesDesRessources(ext, &tuilesTemp);
-            getMeeplesDesRessources(ext, &meeplesPossibleEnFonctionDesExtensions);
         }
+        getMeeplesDesRessources(ext, &meeplesPossibleEnFonctionDesExtensions);
     }
     if (!tuilesRiviere.empty()) {//on ajoute d'abord les tuiles de la rivière
         Tuile *lac;
@@ -199,6 +200,8 @@ void Jeu::setExtensions(vector<EXTENSION> extensions) {
         tuiles.push_back(t);
     }
 
-    //todo faire les Meeples aussi ?
+
+    //puis on donne les meeples à la Partie
+    Partie::getInstance()->meeplesEnReserve = meeplesPossibleEnFonctionDesExtensions;
 }
 

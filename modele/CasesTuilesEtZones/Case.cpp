@@ -8,14 +8,11 @@ Case::Case(ZONE_TYPE zt, DIRECTION d, SUPP_TYPE s, int i) : zone_type(zt), direc
 std::string Case::toString() {
     std::string res;
     res += ParametresPartie::toStringZONE_TYPE(zone_type);
-    if (meeple_pose != nullptr) {
+    if (meeple_pose != nullptr)
         res += "m";//on signale la présence d'un meeple par un petit m
-    } else {
-        if (zone_parente != nullptr)
-            res += std::to_string(zone_parente->ouvertures);
-//        res += " ";
-        //res += std::to_string(id_connexion);
-    }
+    else if (zone_parente != nullptr)
+        res += std::to_string(zone_parente->ouvertures);
+
     return res;
 }
 
