@@ -4,6 +4,9 @@
 
 #include <string>
 
+static const int COLOR_NORMALE = 15;
+
+
 /**
  * Le type de la zone : PRAIRIE, VILLE, CHEMIN, ou AUTRE ou FIN pour une fin de chemin
  */

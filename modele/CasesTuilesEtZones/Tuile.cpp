@@ -5,6 +5,7 @@
 # include <string>
 # include <map>
 #include <windows.h>
+#include <algorithm>
 
 
 using namespace std;
@@ -17,19 +18,16 @@ Tuile::Tuile(std::map<DIRECTION, Case *> cases, std::string cheminImage) {
 }
 
 void Tuile::fusionZonesInternes() {
-    cout << "\n\n FUSION DE LA TUILE :" << toString() << endl;
 //###################ZONES INTERNES###################
     //fusion des zones internes
     std::vector<pair<int, Zone *>> zonesInternesTemp = calcZonesInternes();
     // on ajoute les zones internes à la liste des zones
     for (std::pair<const int, Zone *> pair: zonesInternesTemp) {
         zonesInternes.push_back(pair.second);
-        cout << "Ajout de la zone : " << pair.second->toString() << endl;
     }
     //on met à jour les ouvertures de chaque zone qui sont sur les côtés de la tuile
     majOuverturesZonesCOTE(this);
 
-    cout << "\nFIN FUSION INTERNE DE LA TUILE :" << toString() << endl;
 }
 
 
@@ -61,12 +59,10 @@ std::vector<pair<int, Zone *>> Tuile::calcZonesInternes() {
 
 void Tuile::majOuverturesZonesCOTE(Tuile *tuile) {
     for (int i = 0; i < 4; i++) {
-        std::cout << "I" + std::to_string(i) << " ";
         // on prend sa zone et on lui ajoute +1 en ouverture
         Case *caseCote = tuile->cases[DIRECTIONS_COTE[i]];
         Zone *zoneCote = caseCote->getZoneParente();
         tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente()->ouvertures++;
-//        std::cout << zoneCote->toString() << "ouvertures = " << zoneCote->ouvertures << std::endl;
         //la tuile n'est pas encore vraiment posée, donc toutes les zones sont ouvertes, donc on les incrémente toutes
     }
 }
@@ -83,9 +79,12 @@ void Tuile::afficher() const {
         Case *c = getCase(DIRECTIONS_ORDERED[i - 1]);
         Plateau::ColorForZone(console_color, c);
         cout << c->toString() + " ";
-        if (i % 3 == 0) cout << "\n";
+        if (i % 3 == 0) {
+            SetConsoleTextAttribute(console_color, COLOR_NORMALE);
+            cout << "\n";
+        }
     }
-    SetConsoleTextAttribute(console_color, 15);
+    SetConsoleTextAttribute(console_color, COLOR_NORMALE);
 }
 
 std::string Tuile::toString() {
@@ -122,20 +121,16 @@ std::map<DIRECTION, Case *> Tuile::getCases() const {
 
 bool Tuile::estSource() {
     //on parcourt les cases de la tuile et si y'a une source on renvoie true
-    for (auto &it: cases) {
-        if (it.second->getZoneType() == ZONE_TYPE::SOURCE) {
-            return true;
-        }
-    }
-    return false;
+    return std::any_of(cases.begin(), cases.end(),
+                       [](std::pair<const DIRECTION, Case *> &it) {
+                           return it.second->getZoneType() == ZONE_TYPE::SOURCE;
+                       });
 }
 
 bool Tuile::estLac() {
     //on parcourt les cases de la tuile et si y'a un lac on renvoie true
-    for (auto &it: cases) {
-        if (it.second->getZoneType() == ZONE_TYPE::LAC) {
-            return true;
-        }
-    }
-    return false;
+    return std::any_of(cases.begin(), cases.end(),
+                       [](std::pair<const DIRECTION, Case *> &it) {
+                           return it.second->getZoneType() == ZONE_TYPE::LAC;
+                       });
 }

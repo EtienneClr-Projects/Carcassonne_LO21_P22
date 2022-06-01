@@ -25,7 +25,6 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
 
     //pour chaque case sur une ParametresPartie::DIRECTION_COTE de la tuile
     for (int i = 0; i < 4; i++) {
-        cout << "HEHOOOO" << endl;
         // on prend sa zoneCoteActuelle
         Zone *zoneCoteActuelle = tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente();
 
@@ -33,52 +32,22 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
         //Par exemple si la case est au NORD, on cherche une tuile au NORD de la case actuelle
         Tuile *tuileVoisine = findTuileVoisine(coordTuile, i);
         if (tuileVoisine == nullptr) {
-            cout << "\ttuileVoisine == nullptr" << endl;
             continue; //si la tuile voisine n'existe pas on passe au côté suivant
         }
 
         //on fusionne la zoneCoteActuelle avec la zoneCoteActuelle de la tuile voisine pour les COTES
         Case *caseTuileVoisine = tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]];
 
-
-        if (caseTuileVoisine->getZoneParente() == zoneCoteActuelle) {
-            cout << caseTuileVoisine << " == " << tuile->cases[DIRECTIONS_COTE_INVERSE[i]] << endl;
-//            throw std::runtime_error("caseTuileVoisine->getZoneParente()==zoneCoteActuelle");
-//            continue;
-        }
-
-
         //on met à jour les ouvertures des zones
-        cout << "zone actuelle : " << zoneCoteActuelle->toString() << endl;
-        cout << "zone voisine : " << caseTuileVoisine->getZoneParente()->toString() << endl;
         int ttOuvertures = zoneCoteActuelle->ouvertures + caseTuileVoisine->getZoneParente()->ouvertures - 2;
-        cout << "ouvertures de la zoneCoteActuelle : " << zoneCoteActuelle->ouvertures << endl;
-        cout << "ouvertures de la caseTuileVoisine : " << caseTuileVoisine->getZoneParente()->ouvertures << endl;
-        cout << "ouvertures totales : " << ttOuvertures << endl;
         zoneCoteActuelle->ouvertures = ttOuvertures;
-        caseTuileVoisine->getZoneParente()->ouvertures = ttOuvertures;
+//        caseTuileVoisine->getZoneParente()->ouvertures = ttOuvertures;//todo enlever ?
 
         //puis on fusionne les zones
-        cout << "TRANSFERT DES ZONES" << endl;
         transfererZone(caseTuileVoisine->getZoneParente(), zoneCoteActuelle);
-//        cout << "resultat sur la case " << tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]]->getZoneParente()->toString()
-//             << ", zoneCoteActuelle: "
-//             << tuile->cases[DIRECTIONS_COTE[i]]->getZoneParente()->toString() << "\n\n" << endl;
-//        cout << "REaffichage des zones du plateau :" << endl;
-//        for (Zone *zPlateau: zones) {
-//            cout << zPlateau->toString() << endl;
-//        }
 
         // Si caseCote est Prairie ou chemin ou rivière, alors on peut fusionner aussi les COINS avec la case à côté
         fusionZonesCOINS(tuile, i, tuileVoisine);
-
-        cout << "###############################################################" << endl;
-    }
-
-    //affichage de toutes les zones
-    std::cout << "\n\nFIN : \n" << std::endl;
-    for (Zone *zone: zones) {
-        std::cout << zone->toString() << std::endl;
     }
 }
 
@@ -97,7 +66,6 @@ void Plateau::transfererZone(Zone *zoneASuppr, Zone *zoneB) {
     for (Case *_case: zoneASuppr->getCases()) {
         _case->setZoneParente(zoneB);
         zoneB->ajouterCase(_case);
-//        cout << "\t" <<_case->getZoneParente()->toString() << " ajoute la case " << endl;
     }
 
     if (zoneASuppr == zoneB) //si ce sont les mêmes adresses on supprime pas
@@ -107,10 +75,6 @@ void Plateau::transfererZone(Zone *zoneASuppr, Zone *zoneB) {
     int i = 0;
     for (Zone *z: zones) {
         if (z == zoneASuppr) {
-//            cout << "suppression de la zone " << zoneASuppr->toString() << endl;
-//            for (Case *_case: zoneASuppr->getCase()) {
-//                cout << "\t"<<_case->getZoneParente()->toString() << endl;
-//            }
             zones.erase(zones.begin() + i);
             break;
         }
@@ -146,8 +110,6 @@ Coord *Plateau::findCoordTuile(Tuile *tuile) {
 Tuile *Plateau::findTuileVoisine(Coord *coordTuile, int i) {
     Coord *deplacement = ParametresPartie::toDeplacement(DIRECTIONS_COTE[i]);
     auto *coordTuileVoisine = new Coord(coordTuile->x_ + deplacement->x_, coordTuile->y_ + deplacement->y_);
-    cout << "CALC DEPLACEMENT Tuile trouvee au : " << ParametresPartie::toStringDIRECTION(DIRECTIONS_COTE[i]) << " "
-         << coordTuileVoisine->toString() << "?" << endl;
     //on a sa coordonnée, maintenant on cherche la bonne tuile dans la liste
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
         if (pairTuile.first->x_ == coordTuileVoisine->x_ && pairTuile.first->y_ == coordTuileVoisine->y_) {
@@ -217,6 +179,15 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
     //todo @daphne ajouter règle rivière
 }
 
+/**
+ * Permet de poser un meeple sur une case.
+ * @param couleur  la couleur du meeple à poser
+ * @param c  la case sur laquelle poser le meeple
+ * @param type  le type de meeple à poser
+ * @param meeplesPoses  la liste des meeples déjà posés de Partie
+ * @param meeplesEnReserve  la liste des meeples en réserve de Partie
+ * @return true si le meeple a bien été posé, false sinon.
+ */
 bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
                           vector<Meeple *> &meeplesEnReserve) {
     Zone *zone = c->getZoneParente();
@@ -231,15 +202,19 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
             throw CarcassonneException("pas de meeple de ce type et de cette couleur disponible");
         }
         c->setMeeple(meeplesEnReserve[i]);
+        //on déplace le meeple dans le bon tableau
         meeplesPoses.push_back(meeplesEnReserve[i]);
         meeplesEnReserve.erase(meeplesEnReserve.begin() + i);
-        //on met le meeple dans le bon tableau
         return true;
     }
     return false;
 }
 
-
+/**
+ * Appellée à chaque fin de tour, permet de vérifier si une zone est fermée pour récupérer les meeples.
+ * @param meeplesPoses  la liste des meeples déjà posés de Partie
+ * @param meeplesEnReserve  la liste des meeples en réserve de Partie
+ */
 void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
     for (auto zone: zones) {//on regarde toutes les zones
         if (!(zone->estOuverte())) { // si la zone est fermée
@@ -278,7 +253,7 @@ void Plateau::afficherConsole() {
                             Case *c = pairTuile.second->cases[DIRECTIONS_ORDERED[iYCase * 3 + iXCase]];
                             ColorForZone(console_color, c);
                             cout << c->toString() << " ";
-                            SetConsoleTextAttribute(console_color, 15);
+                            SetConsoleTextAttribute(console_color, COLOR_NORMALE);
                             found = true;
                         }
                     }
@@ -323,10 +298,10 @@ void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
             SetConsoleTextAttribute(console_color, 10);
             break;
         case ZONE_TYPE::LAC:
-            SetConsoleTextAttribute(console_color, 19);
+            SetConsoleTextAttribute(console_color, 16);
             break;
         case ZONE_TYPE::SOURCE:
-            SetConsoleTextAttribute(console_color, 19);
+            SetConsoleTextAttribute(console_color, 16);
             break;
         case ZONE_TYPE::CATHEDRALE:
             SetConsoleTextAttribute(console_color, 48);
@@ -335,7 +310,8 @@ void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
 }
 
 Coord *Plateau::getCoinHautGauche() {
-    auto *coinHautGauche = new Coord(200, 200); //todo @etienne améliorer le 200
+    auto *coinHautGauche = new Coord(200,
+                                     200); //todo @etienne améliorer le 200, pareil en bas et dans la méthode en dessous
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
         if (pairTuile.first->x_ < coinHautGauche->x_) {
             coinHautGauche->x_ = pairTuile.first->x_;
