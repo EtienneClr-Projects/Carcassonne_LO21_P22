@@ -235,7 +235,6 @@ void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &me
                     donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
                     cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
                     c->retirerMeeplePose(); // on retire le meeple de la case
-
                 }
             }
         }

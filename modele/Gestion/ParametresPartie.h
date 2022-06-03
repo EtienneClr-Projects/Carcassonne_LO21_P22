@@ -39,8 +39,9 @@ enum class COULEUR {
  * Un paramètre supplémentaire des cases. Si elles possèdent un blason par exemple.
  */
 enum class SUPP_TYPE {
-    BLASON, AUBERGE, BLE, TONNEAU, TISSU, AUCUN
+    BLASON, AUBERGE, BLE, TONNEAU, TISSU, AUCUN, JARDIN
 };
+
 /**
  * Les différentes extensions avec lesquelles il est possible de jouer.
  * Par exemple PAYSANS.

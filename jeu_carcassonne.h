@@ -47,6 +47,7 @@ private:
     int position_tour = 0; //1=poser tuile piocher, 2=choix action, 3=score
     int numero_tour = 0;
     int score_suivant = 0;//permet de vérifier que tout les joueurs ont eu leur score d'enregistré
+    int etape_action = 0;
 
     controleurPartie *cPartie;
     Tuile *tuile_active;
