@@ -51,11 +51,14 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
                 idConnexion = (int) c - 48; //conversion depuis l'ascii
             }
             if (iInfo == 2) {// l'info spéciale de la tuile
-                if (c == '1') { //booléen pour le blason
+                if (c == '1') { //blason
                     suppType = SUPP_TYPE::BLASON;
                 }
-                if (c == '2') { //booléen pour l'auberge
+                if (c == '2') { //auberge
                     suppType = SUPP_TYPE::AUBERGE;
+                }
+                if (c == '3') { //jardin
+                    suppType = SUPP_TYPE::JARDIN;
                 }
 
             }

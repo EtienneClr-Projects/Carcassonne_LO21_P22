@@ -275,6 +275,8 @@ std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
             return "Tis";
         case SUPP_TYPE::AUCUN:
             return " ";
+        case SUPP_TYPE::JARDIN:
+            return "Jar";
         default:
             throw std::invalid_argument("Type de supplement invalide");
     }
