@@ -45,7 +45,7 @@ private slots:
 
 private:
     int position_tour = 0; //1=poser tuile piocher, 2=choix action, 3=score
-    int numero_tour = 0;
+    int numero_tour = -1;
     int score_suivant = 0;//permet de vérifier que tout les joueurs ont eu leur score d'enregistré
     //pas oublier de les initialiser dans debut_tour
     int etape_action = 0;
@@ -65,7 +65,8 @@ private:
     QLabel *infos_joueurs[4];
     QLabel *infos_scores[4];
     QLabel *infos_ressources[4];
-//    Joueur *joueurs_couleur;
+    COULEUR couleurs_joueurs[4] = {COULEUR::BLEU, COULEUR::JAUNE, COULEUR::ROUGE, COULEUR::VERT};
+    COULEUR couleur_actuelle;
 
 
     void initialisation(QString *joueurs);

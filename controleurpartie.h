@@ -24,8 +24,11 @@ public:
 
     ParametresPartie *getParametresPartie() const { return pPartie; }
 
+    Partie * getpartie() {return partie;}
+
 
 private:
+    Partie *partie;
     Jeu *jeu;
     Pioche *pioche = nullptr;
     Plateau *plateau;
