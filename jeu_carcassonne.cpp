@@ -376,14 +376,14 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                         }
                     }
                     meeple_image = meeple_image.scaledToHeight(25);
-                    painter.drawPixmap(20, 20, meeple_image);
+                    painter.drawPixmap(10, 10, meeple_image);
                     icon.addPixmap(result);
                     buttons[index_tuile_active]->setIcon(icon);
 
                     actions_finis = 1;
                 }
             }
-            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal nord")) {
+            if (item->text() == QString("Ajouter Meeple Normal nord")) {
                 if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::NORD),
                                                        MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
                                                        cPartie->getpartie()->meeplesEnReserve))
@@ -405,14 +405,14 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                         }
                     }
                     meeple_image = meeple_image.scaledToHeight(25);
-                    painter.drawPixmap(70, 20, meeple_image);
+                    painter.drawPixmap(65, 10, meeple_image);
                     icon.addPixmap(result);
                     buttons[index_tuile_active]->setIcon(icon);
 
                     actions_finis = 1;
                 }
             }
-            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal nord-est")) {
+            if (item->text() == QString("Ajouter Meeple Normal nord-est")) {
                 if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::NORD_EST),
                                                        MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
                                                        cPartie->getpartie()->meeplesEnReserve))
@@ -434,30 +434,184 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                         }
                     }
                     meeple_image = meeple_image.scaledToHeight(25);
-                    painter.drawPixmap(140, 20, meeple_image);
+                    painter.drawPixmap(120, 10, meeple_image);
                     icon.addPixmap(result);
                     buttons[index_tuile_active]->setIcon(icon);
 
                     actions_finis = 1;
                 }
             }
-            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal ouest")) {
+            if (item->text() == QString("Ajouter Meeple Normal ouest")) {
+                if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::OUEST),
+                                                       MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
+                    QPixmap image = images_grilles[index_tuile_active];
 
+                    QIcon icon;
+                    QPixmap result(image.width(), image.height());
+                    result.fill(Qt::transparent);
+                    QPainter painter(&result);
+                    painter.drawPixmap(0, 0, image);
+
+                    QPixmap meeple_image;
+                    for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
+                        if (m->getCouleur() == couleur_actuelle && m->getType() == MEEPLE_TYPE::NORMAL) {
+                            QPixmap meep(QString::fromStdString(m->getCheminImage()));
+                            meeple_image = meep;
+                            break;
+                        }
+                    }
+                    meeple_image = meeple_image.scaledToHeight(25);
+                    painter.drawPixmap(10, 70, meeple_image);
+                    icon.addPixmap(result);
+                    buttons[index_tuile_active]->setIcon(icon);
+
+                    actions_finis = 1;
+                }
             }
-            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal centre")) {
+            if (item->text() == QString("Ajouter Meeple Normal centre")) {
+                if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::MILIEU),
+                                                       MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
+                    QPixmap image = images_grilles[index_tuile_active];
 
+                    QIcon icon;
+                    QPixmap result(image.width(), image.height());
+                    result.fill(Qt::transparent);
+                    QPainter painter(&result);
+                    painter.drawPixmap(0, 0, image);
+
+                    QPixmap meeple_image;
+                    for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
+                        if (m->getCouleur() == couleur_actuelle && m->getType() == MEEPLE_TYPE::NORMAL) {
+                            QPixmap meep(QString::fromStdString(m->getCheminImage()));
+                            meeple_image = meep;
+                            break;
+                        }
+                    }
+                    meeple_image = meeple_image.scaledToHeight(25);
+                    painter.drawPixmap(65, 70, meeple_image);
+                    icon.addPixmap(result);
+                    buttons[index_tuile_active]->setIcon(icon);
+
+                    actions_finis = 1;
+                }
             }
-            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal est")) {
+            if (item->text() == QString("Ajouter Meeple Normal est")) {
+                if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::EST),
+                                                       MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
+                    QPixmap image = images_grilles[index_tuile_active];
 
+                    QIcon icon;
+                    QPixmap result(image.width(), image.height());
+                    result.fill(Qt::transparent);
+                    QPainter painter(&result);
+                    painter.drawPixmap(0, 0, image);
+
+                    QPixmap meeple_image;
+                    for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
+                        if (m->getCouleur() == couleur_actuelle && m->getType() == MEEPLE_TYPE::NORMAL) {
+                            QPixmap meep(QString::fromStdString(m->getCheminImage()));
+                            meeple_image = meep;
+                            break;
+                        }
+                    }
+                    meeple_image = meeple_image.scaledToHeight(25);
+                    painter.drawPixmap(120, 70, meeple_image);
+                    icon.addPixmap(result);
+                    buttons[index_tuile_active]->setIcon(icon);
+
+                    actions_finis = 1;
+                }
             }
-            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal sud-ouest")) {
+            if (item->text() == QString("Ajouter Meeple Normal sud-ouest"))
+            {
+                if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::SUD_OUEST),
+                                                       MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
+                                                       cPartie->getpartie()->meeplesEnReserve))
+                {
+                    QPixmap image = images_grilles[index_tuile_active];
 
+                    QIcon icon;
+                    QPixmap result(image.width(), image.height());
+                    result.fill(Qt::transparent);
+                    QPainter painter(&result);
+                    painter.drawPixmap(0, 0, image);
+
+                    QPixmap meeple_image;
+                    for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
+                        if (m->getCouleur() == couleur_actuelle && m->getType() == MEEPLE_TYPE::NORMAL) {
+                            QPixmap meep(QString::fromStdString(m->getCheminImage()));
+                            meeple_image = meep;
+                            break;
+                        }
+                    }
+                    meeple_image = meeple_image.scaledToHeight(25);
+                    painter.drawPixmap(10, 130, meeple_image);
+                    icon.addPixmap(result);
+                    buttons[index_tuile_active]->setIcon(icon);
+
+                    actions_finis = 1;
+                }
             }
-            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal sud")) {
+            if (item->text() == QString("Ajouter Meeple Normal sud")) {
+                if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::SUD),
+                                                       MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
+                                                       cPartie->getpartie()->meeplesEnReserve))
+                {
+                    QPixmap image = images_grilles[index_tuile_active];
 
+                    QIcon icon;
+                    QPixmap result(image.width(), image.height());
+                    result.fill(Qt::transparent);
+                    QPainter painter(&result);
+                    painter.drawPixmap(0, 0, image);
+
+                    QPixmap meeple_image;
+                    for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
+                        if (m->getCouleur() == couleur_actuelle && m->getType() == MEEPLE_TYPE::NORMAL) {
+                            QPixmap meep(QString::fromStdString(m->getCheminImage()));
+                            meeple_image = meep;
+                            break;
+                        }
+                    }
+                    meeple_image = meeple_image.scaledToHeight(25);
+                    painter.drawPixmap(65, 130, meeple_image);
+                    icon.addPixmap(result);
+                    buttons[index_tuile_active]->setIcon(icon);
+
+                    actions_finis = 1;
+                }
             }
-            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal sud-est")) {
+            if (item->text() == QString("Ajouter Meeple Normal sud-est")) {
+                if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::SUD_EST),
+                                                       MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
+                                                       cPartie->getpartie()->meeplesEnReserve))
+                {
+                    QPixmap image = images_grilles[index_tuile_active];
 
+                    QIcon icon;
+                    QPixmap result(image.width(), image.height());
+                    result.fill(Qt::transparent);
+                    QPainter painter(&result);
+                    painter.drawPixmap(0, 0, image);
+
+                    QPixmap meeple_image;
+                    for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
+                        if (m->getCouleur() == couleur_actuelle && m->getType() == MEEPLE_TYPE::NORMAL) {
+                            QPixmap meep(QString::fromStdString(m->getCheminImage()));
+                            meeple_image = meep;
+                            break;
+                        }
+                    }
+                    meeple_image = meeple_image.scaledToHeight(25);
+                    painter.drawPixmap(120, 130, meeple_image);
+                    icon.addPixmap(result);
+                    buttons[index_tuile_active]->setIcon(icon);
+
+                    actions_finis = 1;
+                }
             }
         }
         if (actions_finis == 1) {
