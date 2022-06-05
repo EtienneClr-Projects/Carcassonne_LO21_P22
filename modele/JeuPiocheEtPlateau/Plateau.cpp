@@ -151,10 +151,13 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
 
     map<DIRECTION, Case *> cases = tuile->getCases();
 
+    //partie rivière
     bool chekerRiviere=true;
     for (auto i : DIRECTIONS_COTE)
-        if(cases[i]->getZoneType()==ZONE_TYPE::RIVIERE) chekerRiviere=false; //si il y a une rivière sur la tuile
+    {if(cases[i]->getZoneType()==ZONE_TYPE::RIVIERE) chekerRiviere=false;}//si il y a une rivière sur la tuile
         //on doit vérifier que le côté rivière est bien collé  1 fois à un voisin.
+    if (cases[DIRECTION::MILIEU]->getZoneType()==ZONE_TYPE::SOURCE) chekerRiviere=true;
+
 
     bool a_un_voisin = false;//vérifier que la tuile a bien un voisin
 
