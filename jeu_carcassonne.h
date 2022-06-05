@@ -17,6 +17,7 @@
 #include <QPainter>
 #include <QLabel>
 #include <QMessageBox>
+#include <random>
 
 //Attention_grille_20x20 = 400;
 
@@ -28,7 +29,7 @@ class Jeu_Carcassonne : public QDialog {
 Q_OBJECT
 
 public:
-    explicit Jeu_Carcassonne(QString *joueurs, int nb_joueurs,
+    explicit Jeu_Carcassonne(QString *joueurs, int nb_joueurs, int* tj,
                              bool exPaysans, bool exAbbe, bool exCathAub, bool exRiviere, QWidget *parent = nullptr);
 
     ~Jeu_Carcassonne();
@@ -39,11 +40,15 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void annuler();
+
     void test();
 
     void on_pushButton_5_clicked();
 
 private:
+    std::random_device rd;//pour IA random
+
     int position_tour = 0; //1=poser tuile piocher, 2=choix action, 3=score
     int numero_tour = -1;
     int score_suivant = 0;//permet de vérifier que tout les joueurs ont eu leur score d'enregistré
@@ -65,11 +70,12 @@ private:
     QLabel *infos_joueurs[4];
     QLabel *infos_scores[4];
     QLabel *infos_ressources[4];
+    int types_joueurs[4];//0=humain, 1 = IARAndom
     COULEUR couleurs_joueurs[4] = {COULEUR::BLEU, COULEUR::JAUNE, COULEUR::ROUGE, COULEUR::VERT};
     COULEUR couleur_actuelle;
 
 
-    void initialisation(QString *joueurs);
+    void initialisation(QString *joueurs, int* tj);
 
     void debut_tour();
 
@@ -82,6 +88,8 @@ private:
     void setActions();
 
     void updateRessources();
+
+    void tourIARandom();
 };
 
 #endif // JEU_CARCASSONNE_H

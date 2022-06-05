@@ -3,10 +3,11 @@
 #include "modele/JeuPiocheEtPlateau/Pioche.h"
 
 Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
-                                 int nb_joueurs, bool exPaysans, bool exAbbe, bool exCathAub, bool exRiviere,
+                                 int nb_joueurs, int* tj, bool exPaysans, bool exAbbe, bool exCathAub, bool exRiviere,
                                  QWidget *parent) :
         QDialog(parent),
-        ui(new Ui::Jeu_Carcassonne) {
+        ui(new Ui::Jeu_Carcassonne)
+        {
 
     //création controleur partie (création plateau, paramètresPartie, jeu et pioche)
     cPartie = new controleurPartie(nb_joueurs, exPaysans, exAbbe, exCathAub, exRiviere);
@@ -41,30 +42,18 @@ Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
         connect(buttons[i], &QPushButton::clicked, this, &Jeu_Carcassonne::test);
         grid->setIndexWidget(grid->model()->index(i % 20, i / 20), buttons[i]);
     }
+    //connection du bouton annuler
+    connect(ui->pushButton_4, &QPushButton::clicked, this, &Jeu_Carcassonne::annuler);
     ui->scrollArea->verticalScrollBar()->setSliderPosition((175 * 15) / 2);
     ui->scrollArea->horizontalScrollBar()->setSliderPosition((175 * 15) / 2);
-    //creation des labels des informations des joueurs :
-    infos_joueurs[0] = ui->label_4;
-    infos_joueurs[1] = ui->label_10;
-    infos_joueurs[2] = ui->label_13;
-    infos_joueurs[3] = ui->label_7;
 
-    infos_ressources[0] = ui->label_5;
-    infos_ressources[1] = ui->label_11;
-    infos_ressources[2] = ui->label_14;
-    infos_ressources[3] = ui->label_9;
-
-    infos_scores[0] = ui->label_6;
-    infos_scores[1] = ui->label_12;
-    infos_scores[2] = ui->label_15;
-    infos_scores[3] = ui->label_8;
 
 
 
     //débuter le jeu : premier tour
     //initialisation des joueurs et des scores et de la pioche
 //    joueurs_couleur = new Joueur[cPartie->getParametresPartie()->getNombreJoueurs()];
-    initialisation(joueurs);
+    initialisation(joueurs, tj);
 
     //maintenant le tour peut commencer
     debut_tour();
@@ -87,6 +76,10 @@ Jeu_Carcassonne::~Jeu_Carcassonne() {
 
 void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
 {
+    if (position_tour == 1)
+    {
+        tourIARandom();
+    }
     if (position_tour == 3) {
         if (ui->lineEdit->text() != "") {
             int nouveau_score = ui->lineEdit->text().toInt();
@@ -231,7 +224,24 @@ void Jeu_Carcassonne::test() {
 }
 
 
-void Jeu_Carcassonne::initialisation(QString *joueurs) {
+void Jeu_Carcassonne::initialisation(QString *joueurs, int* tj) {
+    //creation des labels des informations des joueurs :
+    infos_joueurs[0] = ui->label_4;
+    infos_joueurs[1] = ui->label_10;
+    infos_joueurs[2] = ui->label_13;
+    infos_joueurs[3] = ui->label_7;
+
+    infos_ressources[0] = ui->label_5;
+    infos_ressources[1] = ui->label_11;
+    infos_ressources[2] = ui->label_14;
+    infos_ressources[3] = ui->label_9;
+
+    infos_scores[0] = ui->label_6;
+    infos_scores[1] = ui->label_12;
+    infos_scores[2] = ui->label_15;
+    infos_scores[3] = ui->label_8;
+
+
     //progress bar de la pioche
     ui->progressBar->setMaximum(cPartie->getJeu()->getNbTuiles());
     ui->progressBar->setMinimum(0);
@@ -266,7 +276,15 @@ void Jeu_Carcassonne::initialisation(QString *joueurs) {
     }
 
     for (int i = 0; i < nb; i++) {
-        infos_joueurs[i]->setText(joueurs[i]);
+        types_joueurs[i] = tj[i];
+        if (types_joueurs[i]==1)
+        {
+            infos_joueurs[i]->setText(joueurs[i].append(" (Bot: IARandom)"));
+        }
+        else
+        {
+            infos_joueurs[i]->setText(joueurs[i]);
+        }
         infos_ressources[i]->setText(QString("Meeple: %1").arg(0));
         infos_scores[i]->setText(QString("Score: %1").arg(0));
     }
@@ -323,6 +341,16 @@ void Jeu_Carcassonne::debut_tour() {
     }
 
     setActions();
+
+    if(types_joueurs[numero_joueur] == 1)
+    {
+        tourIARandom();
+    }
+    else
+    {
+        //le joueur humain peut prendre les commandes.
+    }
+
 }
 
 int Jeu_Carcassonne::getScore(QString infos_scores) {
@@ -342,7 +370,6 @@ void Jeu_Carcassonne::setActions() {
         }
         //rajouter d'autres actions en fonctions d'extensions
     }
-
 }
 
 void Jeu_Carcassonne::updateRessources()
@@ -705,5 +732,73 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
     }
 }
 
+void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
+{
+    int random;
+    int nb_choix=0;
+    int count=0;
+    while(position_tour == 1)
+    {
+        std::mt19937 rng(rd());// random-number engine Mersenne-Twister
+        std::uniform_int_distribution<int> uni(0,3);
+        random = uni(rng);
 
+        for(int i=0; i<random+1; i++)
+        {
+            on_pushButton_clicked();
+            cout << "Hello\n";
+        }
+
+        for(int i=0; i<10; i++)
+        {
+            nb_choix +=1;
+            std::mt19937 rng(rd());// random-number engine Mersenne-Twister
+            std::uniform_int_distribution<int> uni(0,399);
+            random = uni(rng);
+            buttons[random]->clicked();
+            cout << "Kitty\n";
+            if (position_tour == 2)
+            {
+                break;
+            }
+            if (nb_choix >= 1000000)//pas de choix possibles
+            {
+                break;
+            }
+        }
+    }
+    while(position_tour == 2)
+    {
+        if (nb_choix >= 1000000)//pas de choix possibles
+        {
+            break;
+        }
+
+        count = ui->listWidget->count();
+        std::mt19937 rng(rd());// random-number engine Mersenne-Twister
+        std::uniform_int_distribution<int> uni(0,count);
+        random = uni(rng);
+        if(random == count)
+        {
+            annuler();
+        }
+        else
+        {
+            ui->listWidget->setCurrentRow(random);
+            on_pushButton_5_clicked();
+        }
+    }
+}
+
+void Jeu_Carcassonne::annuler()
+{
+    if (position_tour == 2)
+    {
+        setActions();
+        etape_action = 0;
+        choix_action = 0;
+        actions_finis = 0;
+
+    }
+}
 

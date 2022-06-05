@@ -26,6 +26,7 @@ private slots:
 private:
     Ui::vueMenu *ui;
     QString joueurs[4];
+    int type_joueurs[4];
     int nb_joueurs = 0;
     bool exPaysans = 0;
     bool exAbbe = 0;

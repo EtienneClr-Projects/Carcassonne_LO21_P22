@@ -34,8 +34,12 @@ void vueMenu::on_pushButton_clicked() {
         //Compléter paramètres de la partie (et joueurs)
 
 
-
-        jeu_carca = new Jeu_Carcassonne(joueurs, nb_joueurs,
+        for (int i=0; i<nb_joueurs; i++)
+        {
+            cout << type_joueurs[i] << "\n";
+        }
+        cout << "\nHello\n";
+        jeu_carca = new Jeu_Carcassonne(joueurs, nb_joueurs, type_joueurs,
                                         exPaysans, exAbbe, exCathAub, exRiviere, this);
         jeu_carca->setModal(true);
         jeu_carca->exec();
@@ -55,6 +59,15 @@ void vueMenu::on_pushButton_2_clicked() {
         QMessageBox::critical(this, "Erreur", "Veuillez insérer un nom de joueur.");
     } else {
         joueurs[nb_joueurs] = ui->lineEdit->text();
+        if(ui->checkBox->isChecked())
+        {
+            type_joueurs[nb_joueurs]=1;
+            ui->checkBox->setChecked(0);
+        }
+        else
+        {
+            type_joueurs[nb_joueurs]=0;
+        }
         nb_joueurs++;
         ui->label_2->setText(QString("Joueurs (%1 enregistrés) :").arg(nb_joueurs));
         ui->lineEdit->setText(QString(""));
