@@ -90,9 +90,13 @@ public:
 
     Coord *getCoinBasDroite();
 
+    bool retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, COULEUR couleur);
+
     static void ColorForZone(void *console_color, const Case *c);
 
     void donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone);
+
+    int CompterVoisins(Tuile* tuile);
 };
 
 #endif //CARCASSONNE_LO21_P22_PLATEAU_H

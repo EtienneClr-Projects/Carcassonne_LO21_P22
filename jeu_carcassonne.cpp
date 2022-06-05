@@ -114,10 +114,16 @@ void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
 void Jeu_Carcassonne::fin_tour()
 {
     //update les meeples retirés des zones
-    /*
-    std::vector<Coord *> coord_tuiles_modifiees = cPartie->getPlateau()->retirerMeeples(Partie::getInstance()->meeplesPoses,
-                                                                                  Partie::getInstance()->meeplesEnReserve);
 
+    std::vector<Coord *> coord_tuiles_modifiees = cPartie->getPlateau()->retirerMeeples(cPartie->getpartie()->meeplesPoses,
+                                                                                        cPartie->getpartie()->meeplesEnReserve);
+
+
+    if (!coord_tuiles_modifiees.empty())
+    {for (auto i: coord_tuiles_modifiees)
+        {cout << i->toString();}
+    }
+    /*
     int index=0;
     QIcon icon;
     if (!coord_tuiles_modifiees.empty())
@@ -154,7 +160,6 @@ void Jeu_Carcassonne::on_pushButton_clicked()//tourner
 
 void Jeu_Carcassonne::test() {
     if (position_tour == 1) {
-        std::cout << "\n\n\n" << cPartie->getPioche()->nbTuilesRestantes << "\n\n\n";
 
         QPushButton *buttonSender = qobject_cast<QPushButton *>(sender());
 
@@ -261,6 +266,7 @@ void Jeu_Carcassonne::debut_tour() {
     choix_action = 0;
     actions_finis = 0;
 
+    updateRessources();
 
     //piocher une tuile
     tuile_active = cPartie->getPioche()->piocher();
@@ -288,7 +294,6 @@ void Jeu_Carcassonne::debut_tour() {
             labelText.append("</font></i></b></P></br>");
             infos_joueurs[i]->clear();
             infos_joueurs[i]->setText(labelText);
-            cout << labelText.toLocal8Bit().constData() << "\n\n vainqueur\n\n";
             infos_joueurs[i]->update();
         }
             //le joueur précédent perd sa police
@@ -324,6 +329,69 @@ void Jeu_Carcassonne::setActions() {
         //rajouter d'autres actions en fonctions d'extensions
     }
 
+}
+
+void Jeu_Carcassonne::updateRessources()
+{
+    int nb = cPartie->getParametresPartie()->getNombreJoueurs();
+
+    //pour chaque extension
+    int normal = 0;
+    int abbe = 0;
+    int grand = 0;
+    QString text;
+    QString tmp;
+    vector<EXTENSION> extensionsChoisies = cPartie->getParametresPartie()->getExtensionsChoisies();
+
+    for (int i=0; i<nb; i++)
+    {
+        text.clear();
+        tmp.clear();
+        normal = 0;
+        abbe = 0;
+        grand = 0;
+        for (auto m : cPartie->getpartie()->meeplesEnReserve)
+        {
+            if (m->getCouleur() == couleurs_joueurs[i])
+            {
+                if (m->getType() == MEEPLE_TYPE::NORMAL)
+                {
+                    normal +=1;
+                }
+                if (m->getType() == MEEPLE_TYPE::ABBE)
+                {
+                    abbe +=1;
+                }
+                if (m->getType() == MEEPLE_TYPE::GRAND_MEEPLE)
+                {
+                    grand +=1;
+                }
+            }
+
+        }
+        text.append("m: ");
+        tmp = QString::number(normal);
+        text.append(tmp);
+
+        for (auto e: extensionsChoisies) {
+            if (e == EXTENSION::ABBE) {
+                text.append(", A: ");
+                tmp = QString::number(abbe);
+                text.append(tmp);
+            }
+            else if(e == EXTENSION::AUBERGES_CATHEDRALES)
+            {
+                text.append(", G: ");
+                tmp = QString::number(grand);
+                text.append(tmp);
+            }
+            //rajouter d'autres possibilités de meeple en fonctions d'extensions
+        }
+
+        infos_ressources[i]->clear();
+        infos_ressources[i]->setText(text);
+        infos_ressources[i]->update();
+    }
 }
 
 void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
@@ -618,15 +686,10 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             ui->label_3->clear();
             ui->label_3->setText(QString("Joueur %1:").arg(score_suivant + 1));
             position_tour = 3;
+            updateRessources();
         }
     }
 }
-
-
-
-
-
-
 
 
 

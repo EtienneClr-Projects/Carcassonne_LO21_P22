@@ -142,6 +142,7 @@ void Plateau::fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine) {
     }
 }
 
+
 bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
     //on prend les voisins de la tuile
     auto voisin_droit = new Coord(coord->x_ + 1, coord->y_);
@@ -178,8 +179,6 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
         }
     }
     return a_un_voisin || plateau.empty(); //s'il y a un voisin ou si c'est la premiere tuile placée on peut la poser
-
-    //todo @daphne ajouter règle rivière
 }
 
 /**
@@ -220,18 +219,19 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
  * @param meeplesEnReserve  la liste des meeples en réserve de Partie
  */
 
+
 bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c){
     if (c->getMeeplePose() != nullptr) {//si il y a un meeple
 
         meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
         int i = 0;
-        for (auto meeple: meeplesPoses) {
-            if (meeple == c->getMeeplePose())
+        for (Meeple *meeple: meeplesPoses) {
+            if (c->getMeeplePose() == meeple)
                 meeplesPoses.erase(meeplesPoses.begin() + i);//et on le retire du tableau des meeple poses
             i++;
         }
         Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
-        //donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
+        donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
         cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
         c->retirerMeeplePose(); // on retire le meeple de la case
         return true;
@@ -240,19 +240,59 @@ bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &
 }
 
 
-std::vector<Coord*> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
+std::vector<Coord*>  Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
     std::vector<Coord*> coord_tuiles_de_zones_ouvertes;
-
-
     for (auto zone: zones) {//on regarde toutes les zones
         if (!(zone->estOuverte())) { // si la zone est fermée
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
-                retirerLeMeeple(meeplesPoses,meeplesEnReserve, c);
+                retirerLeMeeple(meeplesPoses,meeplesEnReserve, c);//on retire les meeples présents dans les villes et chemins
                 coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+            }
+        }
+        if(zone->getType()==ZONE_TYPE::ABBAYE) { // on retire les abbes
+            Case* c=zone->getCases()[0];
+            if (CompterVoisins(c->getTuileParente()) == 9){
+                retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
+                coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+            }
+
+
+        }
+        if(zone->getType()==ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
+            for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
+                if (c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 9) {
+                    retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
+                    coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                }
             }
         }
     }
     return coord_tuiles_de_zones_ouvertes;
+}
+
+bool Plateau::retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, COULEUR couleur) {
+    for (auto zone: zones) {
+        if(zone->getType()==ZONE_TYPE::ABBAYE || zone->getType()==ZONE_TYPE::PRAIRIE)
+            for(auto c: zone->getCases()){
+                if(c->getMeeplePose()!=nullptr)
+                    if (MEEPLE_TYPE::ABBE == c->getMeeplePose()->getType() && couleur==c->getMeeplePose()->getCouleur()){
+                        //on vérifie la couleur du joueur et celui du meeple à retirer, on ne veut pas retirer un meeple qui n'appartient pas au joueur
+                        meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
+                        int i = 0;
+                        for (Meeple* meeple: meeplesPoses) {
+                            if (meeple == c->getMeeplePose())
+                                meeplesPoses.erase(meeplesPoses.begin() + i);//et on le retire du tableau des meeple poses
+                            i++;
+                        }
+                        Joueur *joueurGagnant = Partie::getInstance()->getJoueur(couleur);
+                        donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
+                        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
+                        c->retirerMeeplePose(); // on retire le meeple de la case
+                        return true;
+                    }
+            }
+    }
+    return false; //si les conditions ne sont pas respectées, il reçoit une erreur
 }
 
  /*
@@ -404,13 +444,40 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
         if (pZone->getType() == ZONE_TYPE::VILLE) {
             pJoueur->ajouterPoints(2);
             tuilesPassees.push_back(c->getTuileParente());
-        } else if (pZone->getType() == ZONE_TYPE::CHEMIN) {
+        }
+        if (pZone->getType() == ZONE_TYPE::CHEMIN) {
             pJoueur->ajouterPoints(1);
             tuilesPassees.push_back(c->getTuileParente());
         }
+        if (pZone->getType() == ZONE_TYPE::ABBAYE || c->getSuppType() == SUPP_TYPE::JARDIN) {
+            pJoueur->ajouterPoints(CompterVoisins(c->getTuileParente()));
+            tuilesPassees.push_back(c->getTuileParente());
+        }
+
     }
 
 
     //todo : compte déjà les points pour les routes et les chemins, faut faire les abbayes/jardins
     // et voir les extensions ce qui rapporte des points
+}
+
+
+int Plateau::CompterVoisins(Tuile* tuile){
+    int nbVoisins = 0;
+    vector<Tuile *> tuilesPassees;
+    Coord*co=findCoordTuile(tuile);
+
+    for (int i=-1;i<2;i++)
+        for(int j=-1;i<2;i++){
+            auto voisin = new Coord(co->x_ + i, co->y_ +j);
+            for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
+                if (std::find(begin(tuilesPassees), end(tuilesPassees), pairTuile.second) != tuilesPassees.end())
+                    continue;
+                if (voisin->x_ == pairTuile.first->x_ && voisin->y_ == pairTuile.first->y_) {
+                    nbVoisins++;
+                    tuilesPassees.push_back(pairTuile.second);
+                }
+            }
+        }
+    return nbVoisins;
 }

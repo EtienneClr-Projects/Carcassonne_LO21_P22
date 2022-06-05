@@ -80,6 +80,8 @@ private:
     int getMeeple(QString infos_ressources);
 
     void setActions();
+
+    void updateRessources();
 };
 
 #endif // JEU_CARCASSONNE_H
