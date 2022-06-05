@@ -54,12 +54,12 @@ public:
 
     std::string toString();
 
-    void retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve);
+    vector<Coord *> retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve);
 
     bool checkerTuile(Tuile *tuile, Coord *coord);
 
-    bool poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
-                     vector<Meeple *> &meeplesEnReserve);
+    static bool poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
+                     vector<Meeple *> &meeplesEnReserve,const vector<EXTENSION> &extension);
 
     static Plateau *getInstance(const vector<std::pair<Coord *, Tuile *>> &plateau) {
         if (instance == nullptr) {
@@ -91,6 +91,10 @@ public:
     static void ColorForZone(void *console_color, const Case *c);
 
     void donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone);
+    bool retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c);
+    int CompterVoisins(Tuile* tuile);
+
+    bool retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, COULEUR couleur);
 };
 
 #endif //CARCASSONNE_LO21_P22_PLATEAU_H
