@@ -14,6 +14,8 @@ Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
     //création interface, notamment vuePlateau
     ui->setupUi(this);
     this->setWindowTitle(QString("Carcassonne"));
+
+    //this->showFullScreen();
     this->setFixedSize(1920 / 1.5, 900 / 1.5);
     grid = new QTableView;
     modele = new QStandardItemModel(20, 20, this);
@@ -233,6 +235,18 @@ void Jeu_Carcassonne::initialisation(QString *joueurs) {
     //progress bar de la pioche
     ui->progressBar->setMaximum(cPartie->getJeu()->getNbTuiles());
     ui->progressBar->setMinimum(0);
+    infos_joueurs[0]->setStyleSheet("QLabel { color : blue}");
+    infos_ressources[0]->setStyleSheet("QLabel { color : blue}");
+    infos_scores[0]->setStyleSheet("QLabel { color : blue}");
+    infos_joueurs[1]->setStyleSheet("QLabel { color : orange}");
+    infos_ressources[1]->setStyleSheet("QLabel { color : orange}");
+    infos_scores[1]->setStyleSheet("QLabel { color : orange}");
+    infos_joueurs[2]->setStyleSheet("QLabel { color : red}");
+    infos_ressources[2]->setStyleSheet("QLabel { color : red}");
+    infos_scores[2]->setStyleSheet("QLabel { color : red}");
+    infos_joueurs[3]->setStyleSheet("QLabel { color : green}");
+    infos_ressources[3]->setStyleSheet("QLabel { color : green}");
+    infos_scores[3]->setStyleSheet("QLabel { color : green}");
 
     //informations joueurs
     int nb = cPartie->getParametresPartie()->getNombreJoueurs();
