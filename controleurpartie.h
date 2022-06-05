@@ -8,6 +8,7 @@
 #include "modele/JeuPiocheEtPlateau/Plateau.h"
 #include "modele/Gestion/ParametresPartie.h"
 #include "modele/Gestion/Coord.h"
+#include "modele/Gestion/Partie.h"
 
 class controleurPartie {
 public:

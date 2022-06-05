@@ -27,13 +27,15 @@ Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
     ui->scrollArea->setWidget(grid);
     //creation boutons de vuePlateau :
     QIcon icon;
+    QPixmap pix(":/Ressources/Blanc/image_blanche.jpg");
     for (int i = 0; i < 400; i++) {
         buttons[i] = new QPushButton;
-        images_grilles[i] = new QPixmap(":/Ressources/Blanc/image_blanche.jpg");
-        icon.addPixmap(*images_grilles[i]);
+        images_grilles[i] = pix;
+        icon.addPixmap(pix);
         buttons[i]->setIcon(icon);
         buttons[i]->setIconSize(QSize(170, 170));
         buttons[i]->setFixedSize(175, 175);
+
         connect(buttons[i], &QPushButton::clicked, this, &Jeu_Carcassonne::test);
         grid->setIndexWidget(grid->model()->index(i % 20, i / 20), buttons[i]);
     }
@@ -73,7 +75,6 @@ Jeu_Carcassonne::~Jeu_Carcassonne() {
 
     for (int i = 0; i < 400; i++) {
         delete buttons[i];
-        delete images_grilles[i];
     }
     delete grid;
 //    delete joueurs_couleur;
@@ -98,8 +99,8 @@ void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
 
             if (score_suivant == cPartie->getParametresPartie()->getNombreJoueurs()) {
                 //nouveau tour
-                numero_tour = numero_tour + 1;
-                debut_tour();
+                fin_tour();
+
             } else {
                 ui->label_3->clear();
                 ui->label_3->setText(QString("Joueur %1:").arg(score_suivant + 1));
@@ -110,6 +111,30 @@ void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
     }
 }
 
+void Jeu_Carcassonne::fin_tour()
+{
+    //update les meeples retirés des zones
+    std::vector<Coord *> coord_tuiles_modifiees = cPartie->getPlateau()->retirerMeeples(Partie::getInstance()->meeplesPoses,
+                                                                                  Partie::getInstance()->meeplesEnReserve);
+    int index=0;
+    QIcon icon;
+    for (auto c : coord_tuiles_modifiees)
+    {
+        index = (c->x_-1)* 20 + (c->y_ -1);
+        icon.addPixmap(images_grilles[index]);
+        buttons[index]->setIcon(icon);
+    }
+
+    if (tuile_active == nullptr)
+    {
+
+    }
+    else//tuile_active a encore la valeur de la tuile posée, mais elle va être changée dans debut_tour
+    {
+        debut_tour();
+    }
+}
+
 void Jeu_Carcassonne::on_pushButton_clicked()//tourner
 {
     if (position_tour == 1) {
@@ -117,7 +142,6 @@ void Jeu_Carcassonne::on_pushButton_clicked()//tourner
         ui->label_tuile->setPixmap(rotated);
         tuile_active->pivoterTuileSensTrigo(1);
     }
-
 }
 
 void Jeu_Carcassonne::test() {
@@ -132,7 +156,7 @@ void Jeu_Carcassonne::test() {
                 index = i;
             }
         }
-
+        index_tuile_active = index;
 
         QPixmap image = ui->label_tuile->pixmap();
 
@@ -147,9 +171,11 @@ void Jeu_Carcassonne::test() {
                 painter.drawPixmap(0, 0, image);
                 //meeple = meeple.scaledToHeight(50);
                 //painter.drawPixmap(25, 25, meeple);
-                icon.addPixmap(result);
-                buttonSender->setIcon(icon);
 
+                images_grilles[index] = result;//image de tuile sans meeples
+                icon.addPixmap(result);
+                buttons[index]->setIcon(icon);
+                //buttonSender->setIcon(icon);
 
                 QPixmap pix(":/Ressources/Blanc/image_blanche.jpg");
                 ui->label_tuile->setPixmap(pix);
@@ -184,18 +210,15 @@ void Jeu_Carcassonne::test() {
         }
     }
     /*
-
     QPixmap meeple(":/Ressources_Interface/Meeple/1GJ.png");
     //ui->label_tuile->setPixmap(meeple);
     */
+    if (position_tour == 2)
+    {
 
-
-    /*
-    *images_grilles[index] = image;
-    */
-
-    //pioche avec couleur blanche;
+    }
 }
+
 
 void Jeu_Carcassonne::initialisation(QString *joueurs) {
     //progress bar de la pioche
@@ -227,8 +250,12 @@ void Jeu_Carcassonne::initialisation(QString *joueurs) {
 }
 
 void Jeu_Carcassonne::debut_tour() {
+    numero_tour = numero_tour+1;
     position_tour = 1;
     score_suivant = 0;
+    etape_action = 0;
+    choix_action = 0;
+    actions_finis = 0;
 
     //piocher une tuile
     tuile_active = cPartie->getPioche()->piocher();
@@ -282,19 +309,97 @@ void Jeu_Carcassonne::setActions() {
     for (auto e: extensionsChoisies) {
         if (e == EXTENSION::ABBE) {
             ui->listWidget->addItem("Ajouter Meeple Abbe");
-            ui->listWidget->addItem("Retirer Meeple Abbe");
-            ui->listWidget->addItem("Retirer Meeple normal");
+            ui->listWidget->addItem("Retirer Meeple dans Abbeye");
+            ui->listWidget->addItem("Retirer Meeple dans Jardin");
         }
+        //rajouter d'autres actions en fonctions d'extensions
     }
+
 }
 
 void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
 {
-    if (position_tour == 2) {
-        ui->label_3->clear();
-        ui->label_3->setText(QString("Joueur %1:").arg(score_suivant + 1));
-        position_tour = 3;
+    QListWidgetItem *item = ui->listWidget->currentItem();
 
+    if (position_tour == 2 ) {
+        //if (itm_text == QString("Ajouter Meeple Normal"))
+        if (item->text() == QString("Ajouter Meeple Normal") && etape_action == 0)
+        {
+            ui->listWidget->clear();
+            ui->listWidget->addItem("Ajouter Meeple Normal nord-ouest");
+            ui->listWidget->addItem("Ajouter Meeple Normal nord");
+            ui->listWidget->addItem("Ajouter Meeple Normal nord-est");
+            ui->listWidget->addItem("Ajouter Meeple Normal ouest");
+            ui->listWidget->addItem("Ajouter Meeple Normal centre");
+            ui->listWidget->addItem("Ajouter Meeple Normal est");
+            ui->listWidget->addItem("Ajouter Meeple Normal sud-ouest");
+            ui->listWidget->addItem("Ajouter Meeple Normal sud");
+            ui->listWidget->addItem("Ajouter Meeple Normal sud-est");
+            choix_action = 1;
+            etape_action = 1;
+
+        }
+        else if (etape_action == 1 && choix_action == 1)//ajouter meeple et une tuile a été sélectionnée
+        {
+            if (item->text() == QString("Ajouter Meeple Normal nord-ouest")) {
+                if (cPartie->getPlateau()->poserMeeple(COULEUR::BLEU, tuile_active->getCase(DIRECTION::NORD_OUEST),
+                                                       MEEPLE_TYPE::NORMAL, Partie::getInstance()->meeplesPoses,
+                                                       Partie::getInstance()->meeplesEnReserve))
+                {
+                    QPixmap image = images_grilles[index_tuile_active];
+
+                    QIcon icon;
+                    QPixmap result(image.width(), image.height());
+                    result.fill(Qt::transparent);
+                    QPainter painter(&result);
+                    painter.drawPixmap(0, 0, image);
+
+                    QPixmap meeple_image;
+                    for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
+                        if (m->getCouleur() == COULEUR::BLEU && m->getType() == MEEPLE_TYPE::NORMAL) {
+                            QPixmap meep(QString::fromStdString(m->getCheminImage()));
+                            meeple_image = meep;
+                            break;
+                        }
+                    }
+                    meeple_image = meeple_image.scaledToHeight(50);
+                    painter.drawPixmap(25, 25, meeple_image);
+                    icon.addPixmap(result);
+                    buttons[index_tuile_active]->setIcon(icon);
+
+                    actions_finis = 1;
+                }
+            }
+            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal nord")) {
+
+            }
+            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal nord-est")) {
+
+            }
+            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal ouest")) {
+
+            }
+            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal centre")) {
+
+            }
+            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal est")) {
+
+            }
+            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal sud-ouest")) {
+
+            }
+            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal sud")) {
+
+            }
+            if (ui->listWidget->currentItem()->text() == QString("Ajouter Meeple Normal sud-est")) {
+
+            }
+        }
+        if (actions_finis == 1) {
+            ui->label_3->clear();
+            ui->label_3->setText(QString("Joueur %1:").arg(score_suivant + 1));
+            position_tour = 3;
+        }
     }
 }
 

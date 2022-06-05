@@ -41,20 +41,22 @@ private :
 
     static bool fusionPossible(Zone *zone1, Zone *zone2);
 
-    Coord * findCoordTuile(Tuile *tuile);
-
     Tuile *findTuileVoisine(Coord *coordTuile, int i);
 
     void fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine);
 
 public:
+    static Coord * findCoordTuile(Tuile *tuile);//doit être public pour permettre à l'interface de connaître position des tuiles
+
     void fusionnerZonesAvecPlateau(Tuile *tuile);
 
     void ajouterTuile(Tuile *tuile, Coord *coord);
 
     std::string toString();
 
-    void retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve);
+    bool retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c);
+
+    std::vector<Coord*> retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve);
 
     bool checkerTuile(Tuile *tuile, Coord *coord);
 

@@ -102,7 +102,8 @@ std::string Plateau::toString() {
 
 
 Coord *Plateau::findCoordTuile(Tuile *tuile) {
-    for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
+
+    for (std::pair<Coord *, Tuile *> pairTuile: Plateau::getInstance()->plateau) {//pour permettre que findCoordTuile soit public
         if (pairTuile.second == tuile) {
             return pairTuile.first;
         }
@@ -140,7 +141,6 @@ void Plateau::fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine) {
         }
     }
 }
-
 
 bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
     //on prend les voisins de la tuile
@@ -219,27 +219,65 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
  * @param meeplesPoses  la liste des meeples déjà posés de Partie
  * @param meeplesEnReserve  la liste des meeples en réserve de Partie
  */
-void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
+
+bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c){
+    if (c->getMeeplePose() != nullptr) {//si il y a un meeple
+
+        meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
+        int i = 0;
+        for (auto meeple: meeplesPoses) {
+            if (meeple == c->getMeeplePose())
+                meeplesPoses.erase(meeplesPoses.begin() + i);//et on le retire du tableau des meeple poses
+            i++;
+        }
+        Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
+        //donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
+        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
+        c->retirerMeeplePose(); // on retire le meeple de la case
+        return true;
+    }
+    else {return false;}
+}
+
+
+std::vector<Coord*> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
+    std::vector<Coord*> coord_tuiles_de_zones_ouvertes;
+
+
     for (auto zone: zones) {//on regarde toutes les zones
         if (!(zone->estOuverte())) { // si la zone est fermée
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
-                if (c->getMeeplePose() != nullptr) {//si il y a un meeple
-                    meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
-                    int i = 0;
-                    for (auto meeple: meeplesPoses) {
-                        if (meeple == c->getMeeplePose())
-                            meeplesPoses.erase(meeplesPoses.begin() + i);//et on le retire du tableau des meeple poses
-                        i++;
-                    }
-                    Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
-                    donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
-                    cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
-                    c->retirerMeeplePose(); // on retire le meeple de la case
-                }
+                retirerLeMeeple(meeplesPoses,meeplesEnReserve, c);
+                coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
             }
         }
     }
+    return coord_tuiles_de_zones_ouvertes;
 }
+
+ /*
+ void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
+     for (auto zone: zones) {//on regarde toutes les zones
+         if (!(zone->estOuverte())) { // si la zone est fermée
+             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
+                 if (c->getMeeplePose() != nullptr) {//si il y a un meeple
+                     meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
+                     int i = 0;
+                     for (auto meeple: meeplesPoses) {
+                         if (meeple == c->getMeeplePose())
+                             meeplesPoses.erase(meeplesPoses.begin() + i);//et on le retire du tableau des meeple poses
+                         i++;
+                     }
+                     Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
+                     donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
+                     cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
+                     c->retirerMeeplePose(); // on retire le meeple de la case
+                 }
+             }
+         }
+     }
+ }
+ */
 
 void Plateau::afficherConsole() {
 //    HANDLE console_color;
