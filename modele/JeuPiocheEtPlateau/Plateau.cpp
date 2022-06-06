@@ -233,19 +233,14 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
 
 
 bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c) {
-    cout << "retirer le meeple" << endl;
     if (c->getMeeplePose() != nullptr) {//si il y a un meeple
-        cout << "meeple non nul" << endl;
-
-        cout << "meeple va etre retire de la couleur :";
-        cout << ParametresPartie::toStringCOULEUR(c->getMeeplePose()->getCouleur()) << endl;
         Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
         if (joueurGagnant == nullptr) {
             throw CarcassonneException("joueur gagnant null");
         }
-        cout << "joueur gagnant : " << joueurGagnant->getNom() << endl;
         donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
-        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
+        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple et a maintenant "
+             << joueurGagnant->getNbPoints() << " points" << endl;
 
 
         meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
@@ -264,9 +259,7 @@ bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &
 
 std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
     std::vector<Coord *> coord_tuiles_de_zones_ouvertes;
-    cout << "appel a retirerMeeples" << endl;
     for (auto zone: zones) {//on regarde toutes les zones
-        cout << "zone : " << ParametresPartie::toStringZONE_TYPE(zone->getType()) << endl;
         if (zone->getType() == ZONE_TYPE::ABBAYE) { // on retire les abbes
             Case *c = zone->getCases()[0];//todo @Etienne debug, pourquoi [0]??
             if (CompterVoisins(c->getTuileParente()) == 9) {
@@ -281,9 +274,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
                 }
             }
         } else if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
-            cout << "zone fermee non route :" << endl;
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
-                cout << "appel a retirer le meeple" << endl;
                 if (retirerLeMeeple(meeplesPoses, meeplesEnReserve,
                                     c))//on retire les meeples présents dans les villes et chemins
                     coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
@@ -312,7 +303,7 @@ bool Plateau::retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meep
                         }
                         Joueur *joueurGagnant = Partie::getInstance()->getJoueur(couleur);
                         donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
-                        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
+                        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple ABBE" << endl;
                         c->retirerMeeplePose(); // on retire le meeple de la case
                         return true;
                     }

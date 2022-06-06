@@ -131,7 +131,7 @@ void Jeu_Carcassonne::fin_tour() {
 
 
     if (tuile_active == nullptr) {
-
+//todo [MID] @Aness vide ??
     } else//tuile_active a encore la valeur de la tuile posée, mais elle va être changée dans debut_tour
     {
         debut_tour();
