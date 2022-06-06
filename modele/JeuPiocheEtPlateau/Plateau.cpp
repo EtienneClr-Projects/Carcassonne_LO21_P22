@@ -213,10 +213,12 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
     Zone *zone = c->getZoneParente();
     if (nullptr == zone->getGagnant()) {// si pas de meeple déjà posé dans la zone
 
-        if(c->getZoneType()!=ZONE_TYPE::PRAIRIE ||
+        if((c->getZoneType()!=ZONE_TYPE::FIN_DE_ROUTE
+        &&  c->getZoneType()!=ZONE_TYPE::RIVIERE
+        &&(c->getZoneType()!=ZONE_TYPE::PRAIRIE ||
                 (std::find(begin(extension),
                         end(extension),
-                        EXTENSION::PAYSANS) != extension.end())// soit ce n'est pas une prairie, soit on a l'extension prairie
+                        EXTENSION::PAYSANS) != extension.end()))// soit ce n'est pas une prairie, soit on a l'extension prairie
                 ){
             unsigned int i = 0;
             while ((i < meeplesEnReserve.size() and couleur != meeplesEnReserve[i]->getCouleur() and
