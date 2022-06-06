@@ -149,6 +149,10 @@ class CarcassonneException : public std::exception { //todo utiliser partout cet
 public:
     explicit CarcassonneException(std::string i) : info(std::move(i)) {}
 
+    const char *what() const noexcept override {
+        return info.c_str();
+    }
+
     std::string getInfo() const { return info; }
 
 private:
