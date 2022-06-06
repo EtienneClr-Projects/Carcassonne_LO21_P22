@@ -24,7 +24,7 @@ static const char *const ajoutMeeple = "Ajouter Meeple Normal";
 static const char *const aucuneAction = "Aucune action";
 
 #include "controleurpartie.h"
-#include "modele/JoueurEtRessources/Joueur.h"
+#include "JoueurEtRessources/Joueur.h"
 
 #include <QDialog>
 #include <QPixmap>

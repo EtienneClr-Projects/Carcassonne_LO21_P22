@@ -3,12 +3,12 @@
 
 
 #include <iostream>
-#include "modele/JeuPiocheEtPlateau/Pioche.h"
-#include "modele/JeuPiocheEtPlateau/Jeu.h"
-#include "modele/JeuPiocheEtPlateau/Plateau.h"
-#include "modele/Gestion/ParametresPartie.h"
-#include "modele/Gestion/Coord.h"
-#include "modele/Gestion/Partie.h"
+#include "JeuPiocheEtPlateau/Pioche.h"
+#include "JeuPiocheEtPlateau/Jeu.h"
+#include "JeuPiocheEtPlateau/Plateau.h"
+#include "Gestion/ParametresPartie.h"
+#include "Gestion/Coord.h"
+#include "Gestion/Partie.h"
 
 class controleurPartie {
 public:

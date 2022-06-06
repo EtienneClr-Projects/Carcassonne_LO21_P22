@@ -1,6 +1,6 @@
 #include "jeu_carcassonne.h"
 #include "ui_jeu_carcassonne.h"
-#include "modele/JeuPiocheEtPlateau/Pioche.h"
+#include "JeuPiocheEtPlateau/Pioche.h"
 
 Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
                                  int nb_joueurs, int *tj, bool exPaysans, bool exAbbe, bool exCathAub, bool exRiviere,

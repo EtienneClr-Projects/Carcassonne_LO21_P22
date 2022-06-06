@@ -272,7 +272,7 @@ int main() {
 }*/
 
 
-#include "vuepartie.h"
+#include "vue/vuepartie.h"
 #include <QApplication>
 
 int main(int argc, char *argv[]) {
