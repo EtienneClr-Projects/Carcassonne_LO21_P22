@@ -193,12 +193,14 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
  */
 bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
                           vector<Meeple *> &meeplesEnReserve) {
-    //vérification pour l'extensions PAYSANS
+    //vérification que l'extension PAYSANS est activée
     if (c->getZoneType() == ZONE_TYPE::PRAIRIE && not Jeu::getInstance()->hasExtension(EXTENSION::PAYSANS)) {
         cout << "Vous devez avoir l'extension PAYSANS pour poser un meeple sur une case de type PRAIRIE"
              << endl;//todo [LOW] @Etienne ou @Aness : en faire une boite de dialogue
         return false;
     }
+    if (c->getZoneType() == ZONE_TYPE::RIVIERE)//on a pas le droit de poser de meeples sur la rivière
+        return false;
 
     Zone *zone = c->getZoneParente();
     if (nullptr == zone->getGagnant()) {// si pas de meeple déjà posé dans la zone
