@@ -196,32 +196,47 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
     if (nullptr == zone->getGagnant()) {// si pas de meeple déjà posé dans la zone
 
         unsigned int i = 0;
-        while ((i < meeplesEnReserve.size() and couleur != meeplesEnReserve[i]->getCouleur() and
-                type != meeplesEnReserve[i]->getType())) { i++; }
-
-        //retirer du tableau "meeple en réserve" le meeple
-        if (i > meeplesEnReserve.size()) {
-            throw CarcassonneException("pas de meeple de ce type et de cette couleur disponible");
+        //parcours des meeples en réserve
+        for (Meeple *meeple: meeplesEnReserve) {
+            if (meeple->getCouleur() == couleur && meeple->getType() == type) {
+                //on a trouvé le meeple à poser
+                //on déplace le meeple dans le bon tableau
+                Meeple *m = meeplesEnReserve[i];
+                meeplesPoses.push_back(m);
+                meeplesEnReserve.erase(meeplesEnReserve.begin() + i);
+                c->setMeeple(m);
+                return true;
+            }
         }
-        //on déplace le meeple dans le bon tableau
-        Meeple *m = meeplesEnReserve[i];
-        meeplesPoses.push_back(m);
-        meeplesEnReserve.erase(meeplesEnReserve.begin() + i);
-        c->setMeeple(m);
-        return true;
+//
+//        while ((i < meeplesEnReserve.size() and couleur != meeplesEnReserve.at(i)->getCouleur() and
+//                type != meeplesEnReserve.at(i)->getType())) { i++; }
+//
+//        //retirer du tableau "meeple en réserve" le meeple
+//        if (i > meeplesEnReserve.size()) {
+//            throw CarcassonneException("pas de meeple de ce type et de cette couleur disponible");
+//        }
+
     }
     return false;
 }
 
-/**
- * Appellée à chaque fin de tour, permet de vérifier si une zone est fermée pour récupérer les meeples.
- * @param meeplesPoses  la liste des meeples déjà posés de Partie
- * @param meeplesEnReserve  la liste des meeples en réserve de Partie
- */
-
 
 bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c){
+    cout << "retirer le meeple" << endl;
     if (c->getMeeplePose() != nullptr) {//si il y a un meeple
+        cout << "meeple non nul" << endl;
+
+        cout << "meeple va etre retire de la couleur :";
+        cout << ParametresPartie::toStringCOULEUR(c->getMeeplePose()->getCouleur()) << endl;
+        Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
+        if (joueurGagnant == nullptr) {
+            throw CarcassonneException("joueur gagnant null");
+        }
+        cout << "joueur gagnant : " << joueurGagnant->getNom() << endl;
+        donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
+        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
+
 
         meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
         int i = 0;
@@ -230,10 +245,8 @@ bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &
                 meeplesPoses.erase(meeplesPoses.begin() + i);//et on le retire du tableau des meeple poses
             i++;
         }
-        Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
-        donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
-        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple" << endl;
         c->retirerMeeplePose(); // on retire le meeple de la case
+
         return true;
     }
     else {return false;}
@@ -242,28 +255,29 @@ bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &
 
 std::vector<Coord*>  Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
     std::vector<Coord*> coord_tuiles_de_zones_ouvertes;
+    cout << "appel a retirerMeeples" << endl;
     for (auto zone: zones) {//on regarde toutes les zones
-        if (!(zone->estOuverte())) { // si la zone est fermée
-            for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
-                retirerLeMeeple(meeplesPoses,meeplesEnReserve, c);//on retire les meeples présents dans les villes et chemins
-                coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
-            }
-        }
-        if(zone->getType()==ZONE_TYPE::ABBAYE) { // on retire les abbes
-            Case* c=zone->getCases()[0];
-            if (CompterVoisins(c->getTuileParente()) == 9){
+        cout << "zone : " << ParametresPartie::toStringZONE_TYPE(zone->getType()) << endl;
+        if (zone->getType() == ZONE_TYPE::ABBAYE) { // on retire les abbes
+            Case *c = zone->getCases()[0];//todo @Etienne debug, pourquoi [0]??
+            if (CompterVoisins(c->getTuileParente()) == 9) {
                 retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
                 coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
             }
-
-
-        }
-        if(zone->getType()==ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
+        } else if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 9) {
                     retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
                     coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
                 }
+            }
+        } else if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
+            cout << "zone fermee non route :" << endl;
+            for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
+                cout << "appel a retirer le meeple" << endl;
+                retirerLeMeeple(meeplesPoses, meeplesEnReserve,
+                                c);//on retire les meeples présents dans les villes et chemins
+                coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
             }
         }
     }

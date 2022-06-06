@@ -3,11 +3,10 @@
 #include "modele/JeuPiocheEtPlateau/Pioche.h"
 
 Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
-                                 int nb_joueurs, int* tj, bool exPaysans, bool exAbbe, bool exCathAub, bool exRiviere,
+                                 int nb_joueurs, int *tj, bool exPaysans, bool exAbbe, bool exCathAub, bool exRiviere,
                                  QWidget *parent) :
         QDialog(parent),
-        ui(new Ui::Jeu_Carcassonne)
-        {
+        ui(new Ui::Jeu_Carcassonne) {
 
     //création controleur partie (création plateau, paramètresPartie, jeu et pioche)
     cPartie = new controleurPartie(nb_joueurs, exPaysans, exAbbe, exCathAub, exRiviere);
@@ -54,7 +53,6 @@ Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
     //initialisation des joueurs et des scores et de la pioche
 //    joueurs_couleur = new Joueur[cPartie->getParametresPartie()->getNombreJoueurs()];
     initialisation(joueurs, tj);
-
     //maintenant le tour peut commencer
     debut_tour();
 
@@ -76,8 +74,7 @@ Jeu_Carcassonne::~Jeu_Carcassonne() {
 
 void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
 {
-    if (position_tour == 1)
-    {
+    if (position_tour == 1) {
         tourIARandom();
     }
     if (position_tour == 3) {
@@ -106,17 +103,18 @@ void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
     }
 }
 
-void Jeu_Carcassonne::fin_tour()
-{
+void Jeu_Carcassonne::fin_tour() {
     //update les meeples retirés des zones
 
-    std::vector<Coord *> coord_tuiles_modifiees = cPartie->getPlateau()->retirerMeeples(cPartie->getpartie()->meeplesPoses,
-                                                                                        cPartie->getpartie()->meeplesEnReserve);
+    std::vector<Coord *> coord_tuiles_modifiees = cPartie->getPlateau()->retirerMeeples(
+            cPartie->getpartie()->meeplesPoses,
+            cPartie->getpartie()->meeplesEnReserve);
 
 
     if (!coord_tuiles_modifiees.empty())
-    {for (auto i: coord_tuiles_modifiees)
-        {cout << i->toString();}
+        cout << "tuiles modifiees" << endl;
+    {
+        for (auto i: coord_tuiles_modifiees) { cout << i->toString(); }
     }
     /*
     int index=0;
@@ -134,11 +132,9 @@ void Jeu_Carcassonne::fin_tour()
      */
 
 
-    if (tuile_active == nullptr)
-    {
+    if (tuile_active == nullptr) {
 
-    }
-    else//tuile_active a encore la valeur de la tuile posée, mais elle va être changée dans debut_tour
+    } else//tuile_active a encore la valeur de la tuile posée, mais elle va être changée dans debut_tour
     {
         debut_tour();
     }
@@ -217,14 +213,13 @@ void Jeu_Carcassonne::test() {
             }
         }
     }
-    if (position_tour == 2)
-    {
+    if (position_tour == 2) {
 
     }
 }
 
 
-void Jeu_Carcassonne::initialisation(QString *joueurs, int* tj) {
+void Jeu_Carcassonne::initialisation(QString *joueurs, int *tj) {
     //creation des labels des informations des joueurs :
     infos_joueurs[0] = ui->label_4;
     infos_joueurs[1] = ui->label_10;
@@ -248,8 +243,9 @@ void Jeu_Carcassonne::initialisation(QString *joueurs, int* tj) {
     infos_joueurs[0]->setStyleSheet("QLabel { color : blue}");
     infos_ressources[0]->setStyleSheet("QLabel { color : blue}");
     infos_scores[0]->setStyleSheet("QLabel { color : blue}");
-    infos_joueurs[1]->setStyleSheet("QLabel { color : orange}");
-    infos_ressources[1]->setStyleSheet("QLabel { color : orange}");
+    infos_joueurs[1]->setStyleSheet("QLabel { color : jaune}");
+    infos_ressources[1]->setStyleSheet(
+            "QLabel { color : jaune}");//@Etienne todo vérifier que c'est jaune partout et pas orange
     infos_scores[1]->setStyleSheet("QLabel { color : orange}");
     infos_joueurs[2]->setStyleSheet("QLabel { color : red}");
     infos_ressources[2]->setStyleSheet("QLabel { color : red}");
@@ -275,23 +271,23 @@ void Jeu_Carcassonne::initialisation(QString *joueurs, int* tj) {
         infos_scores[3]->close();
     }
 
-    for (int i = 0; i < nb; i++) {
+    for (int i = 0; i < nb; i++) {//pour chaque joueur
         types_joueurs[i] = tj[i];
-        if (types_joueurs[i]==1)
-        {
+        if (types_joueurs[i] == 1) {
             infos_joueurs[i]->setText(joueurs[i].append(" (Bot: IARandom)"));
-        }
-        else
-        {
+        } else {
             infos_joueurs[i]->setText(joueurs[i]);
         }
         infos_ressources[i]->setText(QString("Meeple: %1").arg(0));
         infos_scores[i]->setText(QString("Score: %1").arg(0));
+
+        auto *joueur = new Joueur(joueurs[i].toStdString(), ALL_COULEURS[i]);
+        cPartie->getpartie()->ajouterJoueur(joueur);
     }
 }
 
 void Jeu_Carcassonne::debut_tour() {
-    numero_tour = numero_tour+1;
+    numero_tour = numero_tour + 1;
     position_tour = 1;
     score_suivant = 0;
     etape_action = 0;
@@ -342,12 +338,9 @@ void Jeu_Carcassonne::debut_tour() {
 
     setActions();
 
-    if(types_joueurs[numero_joueur] == 1)
-    {
+    if (types_joueurs[numero_joueur] == 1) {
         tourIARandom();
-    }
-    else
-    {
+    } else {
         //le joueur humain peut prendre les commandes.
     }
 
@@ -372,8 +365,7 @@ void Jeu_Carcassonne::setActions() {
     }
 }
 
-void Jeu_Carcassonne::updateRessources()
-{
+void Jeu_Carcassonne::updateRessources() {
     int nb = cPartie->getParametresPartie()->getNombreJoueurs();
 
     //pour chaque extension
@@ -384,28 +376,22 @@ void Jeu_Carcassonne::updateRessources()
     QString tmp;
     vector<EXTENSION> extensionsChoisies = cPartie->getParametresPartie()->getExtensionsChoisies();
 
-    for (int i=0; i<nb; i++)
-    {
+    for (int i = 0; i < nb; i++) {
         text.clear();
         tmp.clear();
         normal = 0;
         abbe = 0;
         grand = 0;
-        for (auto m : cPartie->getpartie()->meeplesEnReserve)
-        {
-            if (m->getCouleur() == couleurs_joueurs[i])
-            {
-                if (m->getType() == MEEPLE_TYPE::NORMAL)
-                {
-                    normal +=1;
+        for (auto m: cPartie->getpartie()->meeplesEnReserve) {
+            if (m->getCouleur() == couleurs_joueurs[i]) {
+                if (m->getType() == MEEPLE_TYPE::NORMAL) {
+                    normal += 1;
                 }
-                if (m->getType() == MEEPLE_TYPE::ABBE)
-                {
-                    abbe +=1;
+                if (m->getType() == MEEPLE_TYPE::ABBE) {
+                    abbe += 1;
                 }
-                if (m->getType() == MEEPLE_TYPE::GRAND_MEEPLE)
-                {
-                    grand +=1;
+                if (m->getType() == MEEPLE_TYPE::GRAND_MEEPLE) {
+                    grand += 1;
                 }
             }
 
@@ -419,9 +405,7 @@ void Jeu_Carcassonne::updateRessources()
                 text.append(", A: ");
                 tmp = QString::number(abbe);
                 text.append(tmp);
-            }
-            else if(e == EXTENSION::AUBERGES_CATHEDRALES)
-            {
+            } else if (e == EXTENSION::AUBERGES_CATHEDRALES) {
                 text.append(", G: ");
                 tmp = QString::number(grand);
                 text.append(tmp);
@@ -439,13 +423,10 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
 {
     QListWidgetItem *item = ui->listWidget->currentItem();
 
-    if (position_tour == 2 ) {
-        if (item->text() == QString("Aucune action"))
-        {
+    if (position_tour == 2) {
+        if (item->text() == QString("Aucune action")) {
             actions_finis = 1;
-        }
-        else if (item->text() == QString("Ajouter Meeple Normal") && etape_action == 0)
-        {
+        } else if (item->text() == QString("Ajouter Meeple Normal") && etape_action == 0) {
             ui->listWidget->clear();
             ui->listWidget->addItem("Ajouter Meeple Normal nord-ouest");
             ui->listWidget->addItem("Ajouter Meeple Normal nord");
@@ -459,15 +440,12 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             choix_action = 1;
             etape_action = 1;
 
-        }
-        else if (etape_action == 1 && choix_action == 1)//ajouter meeple et une tuile a été sélectionnée
+        } else if (etape_action == 1 && choix_action == 1)//ajouter meeple et une tuile a été sélectionnée
         {
-            if (item->text() == QString("Ajouter Meeple Normal nord-ouest"))
-            {
+            if (item->text() == QString("Ajouter Meeple Normal nord-ouest")) {
                 if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::NORD_OUEST),
                                                        MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
-                                                       cPartie->getpartie()->meeplesEnReserve))
-                {
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
                     QPixmap image = images_grilles[index_tuile_active];
 
                     QIcon icon;
@@ -495,8 +473,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             if (item->text() == QString("Ajouter Meeple Normal nord")) {
                 if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::NORD),
                                                        MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
-                                                       cPartie->getpartie()->meeplesEnReserve))
-                {
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
                     QPixmap image = images_grilles[index_tuile_active];
 
                     QIcon icon;
@@ -524,8 +501,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             if (item->text() == QString("Ajouter Meeple Normal nord-est")) {
                 if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::NORD_EST),
                                                        MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
-                                                       cPartie->getpartie()->meeplesEnReserve))
-                {
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
                     QPixmap image = images_grilles[index_tuile_active];
 
                     QIcon icon;
@@ -634,12 +610,10 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                     actions_finis = 1;
                 }
             }
-            if (item->text() == QString("Ajouter Meeple Normal sud-ouest"))
-            {
+            if (item->text() == QString("Ajouter Meeple Normal sud-ouest")) {
                 if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::SUD_OUEST),
                                                        MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
-                                                       cPartie->getpartie()->meeplesEnReserve))
-                {
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
                     QPixmap image = images_grilles[index_tuile_active];
 
                     QIcon icon;
@@ -667,8 +641,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             if (item->text() == QString("Ajouter Meeple Normal sud")) {
                 if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::SUD),
                                                        MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
-                                                       cPartie->getpartie()->meeplesEnReserve))
-                {
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
                     QPixmap image = images_grilles[index_tuile_active];
 
                     QIcon icon;
@@ -696,8 +669,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             if (item->text() == QString("Ajouter Meeple Normal sud-est")) {
                 if (cPartie->getPlateau()->poserMeeple(couleur_actuelle, tuile_active->getCase(DIRECTION::SUD_EST),
                                                        MEEPLE_TYPE::NORMAL, cPartie->getpartie()->meeplesPoses,
-                                                       cPartie->getpartie()->meeplesEnReserve))
-                {
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
                     QPixmap image = images_grilles[index_tuile_active];
 
                     QIcon icon;
@@ -735,30 +707,26 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
 void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
 {
     int random;
-    int nb_choix=0;
-    int count=0;
-    while(position_tour == 1)
-    {
+    int nb_choix = 0;
+    int count = 0;
+    while (position_tour == 1) {
         std::mt19937 rng(rd());// random-number engine Mersenne-Twister
-        std::uniform_int_distribution<int> uni(0,3);
+        std::uniform_int_distribution<int> uni(0, 3);
         random = uni(rng);
 
-        for(int i=0; i<random+1; i++)
-        {
+        for (int i = 0; i < random + 1; i++) {
             on_pushButton_clicked();
             cout << "Hello\n";
         }
 
-        for(int i=0; i<10; i++)
-        {
-            nb_choix +=1;
+        for (int i = 0; i < 10; i++) {
+            nb_choix += 1;
             std::mt19937 rng(rd());// random-number engine Mersenne-Twister
-            std::uniform_int_distribution<int> uni(0,399);
+            std::uniform_int_distribution<int> uni(0, 399);
             random = uni(rng);
             buttons[random]->clicked();
             cout << "Kitty\n";
-            if (position_tour == 2)
-            {
+            if (position_tour == 2) {
                 break;
             }
             if (nb_choix >= 1000000)//pas de choix possibles
@@ -767,8 +735,7 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
             }
         }
     }
-    while(position_tour == 2)
-    {
+    while (position_tour == 2) {
         if (nb_choix >= 1000000)//pas de choix possibles
         {
             break;
@@ -776,24 +743,19 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
 
         count = ui->listWidget->count();
         std::mt19937 rng(rd());// random-number engine Mersenne-Twister
-        std::uniform_int_distribution<int> uni(0,count);
+        std::uniform_int_distribution<int> uni(0, count);
         random = uni(rng);
-        if(random == count)
-        {
+        if (random == count) {
             annuler();
-        }
-        else
-        {
+        } else {
             ui->listWidget->setCurrentRow(random);
             on_pushButton_5_clicked();
         }
     }
 }
 
-void Jeu_Carcassonne::annuler()
-{
-    if (position_tour == 2)
-    {
+void Jeu_Carcassonne::annuler() {
+    if (position_tour == 2) {
         setActions();
         etape_action = 0;
         choix_action = 0;
