@@ -1,6 +1,28 @@
 #ifndef JEU_CARCASSONNE_H
 #define JEU_CARCASSONNE_H
 
+static const char *const ajoutMeepleNO = "Ajouter Meeple Normal nord-ouest";
+
+static const char *const ajoutMeepleN = "Ajouter Meeple Normal nord";
+
+static const char *const ajoutMeepleNE = "Ajouter Meeple Normal nord-est";
+
+static const char *const ajoutMeepleO = "Ajouter Meeple Normal ouest";
+
+static const char *const ajoutMeepleC = "Ajouter Meeple Normal centre";
+
+static const char *const ajoutMeepleE = "Ajouter Meeple Normal est";
+
+static const char *const ajoutMeepleSO = "Ajouter Meeple Normal sud-ouest";
+
+static const char *const ajoutMeepleS = "Ajouter Meeple Normal sud";
+
+static const char *const ajoutMeepleSE = "Ajouter Meeple Normal sud-est";
+
+static const char *const ajoutMeeple = "Ajouter Meeple Normal";
+
+static const char *const aucuneAction = "Aucune action";
+
 #include "controleurpartie.h"
 #include "modele/JoueurEtRessources/Joueur.h"
 
@@ -90,6 +112,12 @@ private:
     void updateRessources();
 
     void tourIARandom();
+
+    DIRECTION stringBtnToDir(QString dirStr);
+
+    int getXCaseFromDir(QString qString);
+
+    int getYCaseFromDir(QString qString);
 };
 
 #endif // JEU_CARCASSONNE_H
