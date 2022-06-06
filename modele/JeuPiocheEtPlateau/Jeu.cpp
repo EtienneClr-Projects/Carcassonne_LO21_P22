@@ -191,9 +191,10 @@ string Jeu::getCheminFromExtension(EXTENSION ext) {
     return chemin;
 }
 
-void Jeu::setExtensions(const vector<EXTENSION> &extensions) {
+void Jeu::setExtensions(const vector<EXTENSION> &_extensions) {
     vector<Tuile *> tuilesTemp;
-    for (auto &ext: extensions) {
+    for (auto &ext: _extensions) {
+        extensions.push_back(ext);
         if (ext == EXTENSION::RIVIERE) {
             getTuilesDesRessources(ext, &tuilesRiviere);
             // on veut que le tableau de tuilesRiviere soit mélangé et qu'il commence par la source et finisse par le lac
@@ -226,5 +227,12 @@ void Jeu::setExtensions(const vector<EXTENSION> &extensions) {
 
     //puis on donne les meeples à la Partie
     Partie::getInstance()->meeplesEnReserve = meeplesPossibleEnFonctionDesExtensions;
+}
+
+bool Jeu::hasExtension(EXTENSION ext) {
+    for (auto &e: extensions) {
+        if (e == ext) return true;
+    }
+    return false;
 }
 

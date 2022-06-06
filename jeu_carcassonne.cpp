@@ -116,20 +116,20 @@ void Jeu_Carcassonne::fin_tour() {
     {
         for (auto i: coord_tuiles_modifiees) { cout << i->toString(); }
     }
-    /*
+
     int index=0;
     QIcon icon;
     if (!coord_tuiles_modifiees.empty())
     {
         for (auto c : coord_tuiles_modifiees)
         {
-            std::cout << "c la fin\nc la fin\nc la fin\nc la fin\nc la fin\nc la fin\nc la fin\nc la fin\nc la fin\nc la fin\nc la fin\n";
-            index = (c->x_-1)* 20 + (c->y_ -1);
+            std::cout << "c la fin" << endl;
+            index = (c->x_ - 1) * 20 + (c->y_ - 1);
+            cout << "x: " << c->x_ << " y: " << c->y_ << "index: " << index << endl;
             icon.addPixmap(images_grilles[index]);
             buttons[index]->setIcon(icon);
         }
     }
-     */
 
 
     if (tuile_active == nullptr) {
@@ -368,7 +368,7 @@ void Jeu_Carcassonne::setActions() {
 void Jeu_Carcassonne::updateRessources() {
     int nb = cPartie->getParametresPartie()->getNombreJoueurs();
 
-    //pour chaque extension
+    //pour chaque extensions
     int normal = 0;
     int abbe = 0;
     int grand = 0;

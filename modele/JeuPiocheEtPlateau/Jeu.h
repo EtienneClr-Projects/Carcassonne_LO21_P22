@@ -38,7 +38,7 @@ class Jeu {
         //todo
     }
 
-    vector<EXTENSION> extension;
+    vector<EXTENSION> extensions;
     vector<Tuile *> tuilesRiviere;
 
     static string getCheminFromExtension(EXTENSION ext);
@@ -50,7 +50,9 @@ public:
     vector<Tuile *> tuiles;
 
     //SINGLETON
-    void setExtensions(const vector<EXTENSION> &extensions);
+    void setExtensions(const vector<EXTENSION> &_extensions);
+
+    bool hasExtension(EXTENSION ext);
 
     static Jeu *getInstance() {
         if (instance == nullptr) {

@@ -28,11 +28,13 @@ int Zone::getNombreDePoints() const {
  * @return le gagnant de la zone. nullptr si tous les joueurs en ont 0.
  */
 Joueur * Zone::getGagnant() {
+    cout << "getGagnant" << endl;
     //on parcourt toutes les cases de la Zone, et on compte le nombre de Meeples de chaque COULEUR
     std::map<COULEUR, int> nbMeeplesParCouleur;
     for (Case *c: this->cases) {
         Meeple *m = c->getMeeplePose();
         if (m != nullptr) {
+            cout << "m: " << m << endl;
             nbMeeplesParCouleur[m->getCouleur()]++;
         }
     }
@@ -72,7 +74,7 @@ std::vector<Case *> Zone::getCases() {
 }
 
 /**
- * Permet de savoir si la zone accepte l'extension de cases.
+ * Permet de savoir si la zone accepte l'extensions de cases.
  * @return vrai si la zone est ouverte, faux sinon.
  */
 bool Zone::estOuverte() const {
