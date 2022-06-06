@@ -593,7 +593,7 @@ int Jeu_Carcassonne::getYCaseFromDir(QString qString) {
         return 70;
     }
     if (dir == DIRECTION::SUD_OUEST || dir == DIRECTION::SUD || dir == DIRECTION::SUD_EST) {
-        return 10;
+        return 130;
     }
     throw CarcassonneException("Direction non reconnue");
 }

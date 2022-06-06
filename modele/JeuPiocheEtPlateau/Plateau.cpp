@@ -152,6 +152,15 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
     auto voisin_bas = new Coord(coord->x_, coord->y_ + 1);
 
     map<DIRECTION, Case *> cases = tuile->getCases();
+
+    //checker riviere
+    bool checkerRiviere = true;
+    for (auto i: DIRECTIONS_ORDERED) {
+        if (cases[i]->getZoneType() == ZONE_TYPE::RIVIERE)
+            checkerRiviere = false;
+    }//si il y a une rivière sur la tuile
+    //on doit vérifier que le côté rivière est bien collé  1 fois à un voisin.
+    if (cases[DIRECTION::MILIEU]->getZoneType() == ZONE_TYPE::SOURCE) checkerRiviere = true;
     bool a_un_voisin = false;//vérifier que la tuile a bien un voisin
 
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
@@ -165,21 +174,32 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
         if (pairTuile.first->x_ == voisin_droit->x_ && pairTuile.first->y_ == voisin_droit->y_) {
             a_un_voisin = true;
             if (cases[DIRECTION::EST]->getZoneType() != casesVoisines[DIRECTION::OUEST]->getZoneType()) return false;
+            if (cases[DIRECTION::EST]->getZoneType() == ZONE_TYPE::RIVIERE) checkerRiviere = true;
         }
         if (pairTuile.first->x_ == voisin_gauche->x_ && pairTuile.first->y_ == voisin_gauche->y_) {
             a_un_voisin = true;
             if (cases[DIRECTION::OUEST]->getZoneType() != casesVoisines[DIRECTION::EST]->getZoneType()) return false;
+            if (cases[DIRECTION::OUEST]->getZoneType() == ZONE_TYPE::RIVIERE) checkerRiviere = true;
         }
         if (pairTuile.first->x_ == voisin_haut->x_ && pairTuile.first->y_ == voisin_haut->y_) {
             a_un_voisin = true;
             if (cases[DIRECTION::NORD]->getZoneType() != casesVoisines[DIRECTION::SUD]->getZoneType()) return false;
+            if (cases[DIRECTION::NORD]->getZoneType() == ZONE_TYPE::RIVIERE) checkerRiviere = true;
         }
         if (pairTuile.first->x_ == voisin_bas->x_ && pairTuile.first->y_ == voisin_bas->y_) {
             a_un_voisin = true;
             if (cases[DIRECTION::SUD]->getZoneType() != casesVoisines[DIRECTION::NORD]->getZoneType()) return false;
+            if (cases[DIRECTION::SUD]->getZoneType() == ZONE_TYPE::RIVIERE) checkerRiviere = true;
         }
     }
-    return a_un_voisin || plateau.empty(); //s'il y a un voisin ou si c'est la premiere tuile placée on peut la poser
+//    return a_un_voisin || plateau.empty(); //s'il y a un voisin ou si c'est la premiere tuile placée on peut la poser
+
+    //si la condition de la rivière est bien respectée
+    if (checkerRiviere)
+        return a_un_voisin ||
+               plateau.empty(); //s'il y a un voisin ou si c'est la premiere tuile placée on peut la poser
+    else { return false; }
+    //todo @daphne ajouter règle rivière qui tourne
 }
 
 /**
@@ -199,7 +219,8 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
              << endl;//todo [LOW] @Etienne ou @Aness : en faire une boite de dialogue
         return false;
     }
-    if (c->getZoneType() == ZONE_TYPE::RIVIERE)//on a pas le droit de poser de meeples sur la rivière
+    if (c->getZoneType() == ZONE_TYPE::RIVIERE || c->getZoneType() ==
+                                                  ZONE_TYPE::FIN_DE_ROUTE)//on a pas le droit de poser de meeples sur la rivière ou fin de route
         return false;
 
     Zone *zone = c->getZoneParente();
