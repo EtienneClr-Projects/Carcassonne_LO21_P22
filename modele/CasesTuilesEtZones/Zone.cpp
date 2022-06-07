@@ -34,6 +34,8 @@ Joueur * Zone::getGagnant() {
         Meeple *m = c->getMeeplePose();
         if (m != nullptr) {
             nbMeeplesParCouleur[m->getCouleur()]++;
+            if(m->getType()==MEEPLE_TYPE::GRAND_MEEPLE) //si grand meeple, on rajoute un point en plus
+                nbMeeplesParCouleur[m->getCouleur()]++;
         }
     }
 
