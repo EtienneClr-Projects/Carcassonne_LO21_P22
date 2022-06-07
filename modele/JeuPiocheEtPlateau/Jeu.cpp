@@ -38,11 +38,11 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
         int iCase = 0;
         map<DIRECTION, Case *> cases;
         int iInfo = 0;
+        SUPP_TYPE suppType = SUPP_TYPE::AUCUN;
 
         for (auto &c: cheminImage.substr(1)) {
             ZONE_TYPE type;
             int idConnexion;
-            SUPP_TYPE suppType;
 
             if (iInfo == 0) {//type de la tuile
                 type = ParametresPartie::toZONE_TYPE(c);
@@ -67,6 +67,7 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
             if (c == '_') {//fin de la description de la case
                 cases[DIRECTIONS_ORDERED[iCase]] = new Case(type, DIRECTIONS_ORDERED[iCase], suppType, idConnexion);
                 iCase++;
+                suppType = SUPP_TYPE::AUCUN;
                 iInfo = 0;
                 if (iCase == 9) {//fin de la description de la tuile
                     break;

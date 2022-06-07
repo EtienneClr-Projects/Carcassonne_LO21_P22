@@ -487,16 +487,13 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
             pJoueur->ajouterPoints(1);
             tuilesPassees.push_back(c->getTuileParente());
         }
-        if (pZone->getType() == ZONE_TYPE::ABBAYE || c->getSuppType() == SUPP_TYPE::JARDIN) {
+        if (pZone->getType() == ZONE_TYPE::ABBAYE ||
+            c->getSuppType() == SUPP_TYPE::JARDIN) {//todo [HIGH] @Daphne c'est pas que quand on en a 9 ici ?
             pJoueur->ajouterPoints(CompterVoisins(c->getTuileParente()));
             tuilesPassees.push_back(c->getTuileParente());
         }
-
     }
 
-
-    //todo : compte déjà les points pour les routes et les chemins, faut faire les abbayes/jardins
-    // et voir les extensions ce qui rapporte des points
 }
 
 

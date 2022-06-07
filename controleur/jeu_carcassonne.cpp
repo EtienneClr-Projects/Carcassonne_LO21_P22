@@ -61,8 +61,8 @@ Jeu_Carcassonne::~Jeu_Carcassonne() {
     delete cPartie;
 
 
-    for (int i = 0; i < 400; i++) {
-        delete buttons[i];
+    for (auto &button: buttons) {
+        delete button;
     }
     delete grid;
 //    delete joueurs_couleur;
@@ -109,6 +109,14 @@ void Jeu_Carcassonne::fin_tour() {
             cPartie->getpartie()->meeplesPoses,
             cPartie->getpartie()->meeplesEnReserve);
 
+    //affichage des points donnés aux joueurs
+    for (int i = 0; i < cPartie->getParametresPartie()->getNombreJoueurs(); i++) {
+        infos_scores[i]->setText(
+                QString("Score: %1").arg(cPartie->getpartie()->getJoueur(ALL_COULEURS[i])->getNbPoints()));
+        infos_scores[i]->update();
+
+    }
+
 
     if (!coord_tuiles_modifiees.empty())
         cout << "tuiles modifiees" << endl;
@@ -149,7 +157,7 @@ void Jeu_Carcassonne::on_pushButton_clicked()//tourner
 void Jeu_Carcassonne::test() {
     if (position_tour == 1) {
 
-        QPushButton *buttonSender = qobject_cast<QPushButton *>(sender());
+        auto *buttonSender = qobject_cast<QPushButton *>(sender());
 
         int index = 0;
         for (int i = 0; i < 400; i++) {
@@ -164,7 +172,7 @@ void Jeu_Carcassonne::test() {
         if (cPartie->getPioche()->nbTuilesRestantes != 0) {
             if (cPartie->getPlateau()->checkerTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1))) {
                 cPartie->getPlateau()->ajouterTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1));
-
+                cout << "tuile posee : " << tuile_active->toString() << endl;
                 QIcon icon;
                 QPixmap result(image.width(), image.height());
                 result.fill(Qt::transparent);
@@ -216,7 +224,7 @@ void Jeu_Carcassonne::test() {
 }
 
 
-void Jeu_Carcassonne::initialisation(QString *joueurs, int *tj) {
+void Jeu_Carcassonne::initialisation(QString *joueurs, const int *tj) {
     //creation des labels des informations des joueurs :
     infos_joueurs[0] = ui->label_4;
     infos_joueurs[1] = ui->label_10;
@@ -235,7 +243,7 @@ void Jeu_Carcassonne::initialisation(QString *joueurs, int *tj) {
 
 
     //progress bar de la pioche
-    ui->progressBar->setMaximum(cPartie->getJeu()->getNbTuiles());
+    ui->progressBar->setMaximum((int) cPartie->getJeu()->getNbTuiles());
     ui->progressBar->setMinimum(0);
     infos_joueurs[0]->setStyleSheet("QLabel { color : blue}");
     infos_ressources[0]->setStyleSheet("QLabel { color : blue}");
@@ -342,8 +350,8 @@ void Jeu_Carcassonne::debut_tour() {
 
 }
 
-int Jeu_Carcassonne::getScore(QString infos_scores) {
-    return infos_scores.split(" ")[1].toInt();
+int Jeu_Carcassonne::getScore(const QString &_infos_scores) {
+    return _infos_scores.split(" ")[1].toInt();
 }
 
 void Jeu_Carcassonne::setActions() {
@@ -535,7 +543,7 @@ void Jeu_Carcassonne::annuler() {
     }
 }
 
-DIRECTION Jeu_Carcassonne::stringBtnToDir(QString dirStr) {
+DIRECTION Jeu_Carcassonne::stringBtnToDir(const QString &dirStr) {
     if (dirStr == ajoutMeepleN) {
         return DIRECTION::NORD;
     }
@@ -566,31 +574,27 @@ DIRECTION Jeu_Carcassonne::stringBtnToDir(QString dirStr) {
     throw CarcassonneException("Direction non reconnue");
 }
 
-int Jeu_Carcassonne::getXCaseFromDir(QString qString) {
+int Jeu_Carcassonne::getXCaseFromDir(const QString &qString) {
     DIRECTION dir = stringBtnToDir(qString);
 
     if (dir == DIRECTION::NORD_OUEST || dir == DIRECTION::OUEST || dir == DIRECTION::SUD_OUEST) {
         return 10;
-    }
-    if (dir == DIRECTION::NORD || dir == DIRECTION::MILIEU || dir == DIRECTION::SUD) {
+    } else if (dir == DIRECTION::NORD || dir == DIRECTION::MILIEU || dir == DIRECTION::SUD) {
         return 65;
-    }
-    if (dir == DIRECTION::NORD_EST || dir == DIRECTION::EST || dir == DIRECTION::SUD_EST) {
+    } else if (dir == DIRECTION::NORD_EST || dir == DIRECTION::EST || dir == DIRECTION::SUD_EST) {
         return 120;
     }
     throw CarcassonneException("Direction non reconnue");
 }
 
-int Jeu_Carcassonne::getYCaseFromDir(QString qString) {
+int Jeu_Carcassonne::getYCaseFromDir(const QString &qString) {
     DIRECTION dir = stringBtnToDir(qString);
 
     if (dir == DIRECTION::NORD_OUEST || dir == DIRECTION::NORD || dir == DIRECTION::NORD_EST) {
         return 10;
-    }
-    if (dir == DIRECTION::OUEST || dir == DIRECTION::MILIEU || dir == DIRECTION::EST) {
+    } else if (dir == DIRECTION::OUEST || dir == DIRECTION::MILIEU || dir == DIRECTION::EST) {
         return 70;
-    }
-    if (dir == DIRECTION::SUD_OUEST || dir == DIRECTION::SUD || dir == DIRECTION::SUD_EST) {
+    } else if (dir == DIRECTION::SUD_OUEST || dir == DIRECTION::SUD || dir == DIRECTION::SUD_EST) {
         return 130;
     }
     throw CarcassonneException("Direction non reconnue");

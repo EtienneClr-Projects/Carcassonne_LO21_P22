@@ -56,7 +56,7 @@ public:
     explicit Jeu_Carcassonne(QString *joueurs, int nb_joueurs, int* tj,
                              bool exPaysans, bool exAbbe, bool exCathAub, bool exRiviere, QWidget *parent = nullptr);
 
-    ~Jeu_Carcassonne();
+    ~Jeu_Carcassonne() override;
 
 private slots:
 
@@ -99,15 +99,15 @@ private:
     COULEUR couleur_actuelle;
 
 
-    void initialisation(QString *joueurs, int* tj);
+    void initialisation(QString *joueurs, const int *tj);
 
     void debut_tour();
 
     void fin_tour();
 
-    int getScore(QString infos_scores);
+    int getScore(const QString &_infos_scores);
 
-    int getMeeple(QString infos_ressources);
+    int getMeeple(QString infos_ressources); //todo [LOW] @Aness, cette fonction n'est pas implémentée et pas utilisée ?
 
     void setActions();
 
@@ -115,11 +115,11 @@ private:
 
     void tourIARandom();
 
-    DIRECTION stringBtnToDir(QString dirStr);
+    static DIRECTION stringBtnToDir(const QString &dirStr);
 
-    int getXCaseFromDir(QString qString);
+    static int getXCaseFromDir(const QString &qString);
 
-    int getYCaseFromDir(QString qString);
+    static int getYCaseFromDir(const QString &qString);
 };
 
 #endif // JEU_CARCASSONNE_H
