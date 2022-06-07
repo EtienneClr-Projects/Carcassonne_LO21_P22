@@ -19,8 +19,19 @@ public :
 
     void ajouterPoints(int pt) { points = points + pt; }
 
+    int getType() const {
+        return type;
+    }
+
+    void setType(int type) {
+        Joueur::type = type;
+    }
 
 private :
+    /**
+     * Le type du joueur : virtuel>0 ou réel=0
+     */
+    int type = 0;
     int points;
     std::string nom;
     COULEUR couleur;
