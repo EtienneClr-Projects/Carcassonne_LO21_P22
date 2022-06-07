@@ -73,38 +73,37 @@ Jeu_Carcassonne::~Jeu_Carcassonne() {
 
 void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
 {
-    if (position_tour == 1) {
-        tourIARandom();
-    }
-    if (position_tour == 3) {
-        if (ui->lineEdit->text() != "") {
-            int nouveau_score = ui->lineEdit->text().toInt();
-
-            nouveau_score = nouveau_score + getScore(infos_scores[score_suivant]->text());
-            infos_scores[score_suivant]->clear();
-            infos_scores[score_suivant]->setText(QString("Score: %1").arg(nouveau_score));
-            infos_scores[score_suivant]->update();
-            score_suivant = score_suivant + 1;
-
-            ui->lineEdit->setText(QString(""));
-
-            if (score_suivant == cPartie->getParametresPartie()->getNombreJoueurs()) {
-                //nouveau tour
-                fin_tour();
-
-            } else {
-                ui->label_3->clear();
-                ui->label_3->setText(QString("Joueur %1:").arg(score_suivant + 1));
-            }
-        } else {
-            QMessageBox::critical(this, "Erreur", "Veuillez insérer un score.");
-        }
-    }
+//    if (position_tour == 1) {
+//        tourIARandom();
+//    }
+//    if (position_tour == 3) {
+//        if (ui->lineEdit->text() != "") {
+//            int nouveau_score = ui->lineEdit->text().toInt();
+//
+//            nouveau_score = nouveau_score + getScore(infos_scores[i_score_suivant]->text());
+//            infos_scores[i_score_suivant]->clear();
+//            infos_scores[i_score_suivant]->setText(QString("Score: %1").arg(nouveau_score));
+//            infos_scores[i_score_suivant]->update();
+//            i_score_suivant = i_score_suivant + 1;
+//
+//            ui->lineEdit->setText(QString(""));
+//
+//            if (i_score_suivant == cPartie->getParametresPartie()->getNombreJoueurs()) {
+//                //nouveau tour
+//                fin_tour();
+//
+//            } else {
+//                ui->label_3->clear();
+//                ui->label_3->setText(QString("Joueur %1:").arg(i_score_suivant + 1));
+//            }
+//        } else {
+//            QMessageBox::critical(this, "Erreur", "Veuillez insérer un score.");
+//        }
+//    }
 }
 
 void Jeu_Carcassonne::fin_tour() {
     //update les meeples retirés des zones
-
     std::vector<Coord *> coord_tuiles_modifiees = cPartie->getPlateau()->retirerMeeples(
             cPartie->getpartie()->meeplesPoses,
             cPartie->getpartie()->meeplesEnReserve);
@@ -114,15 +113,11 @@ void Jeu_Carcassonne::fin_tour() {
         infos_scores[i]->setText(
                 QString("Score: %1").arg(cPartie->getpartie()->getJoueur(ALL_COULEURS[i])->getNbPoints()));
         infos_scores[i]->update();
+        cout << "affichage du score du joueur de la couleur : " << ParametresPartie::toStringCOULEUR(ALL_COULEURS[i])
+             << " score = " << cPartie->getpartie()->getJoueur(ALL_COULEURS[i])->getNbPoints() << endl;
 
     }
 
-
-    if (!coord_tuiles_modifiees.empty())
-        cout << "tuiles modifiees" << endl;
-    {
-        for (auto i: coord_tuiles_modifiees) { cout << i->toString(); }
-    }
 
     int index = 0;
     QIcon icon;
@@ -173,6 +168,7 @@ void Jeu_Carcassonne::test() {
             if (cPartie->getPlateau()->checkerTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1))) {
                 cPartie->getPlateau()->ajouterTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1));
                 cout << "tuile posee : " << tuile_active->toString() << endl;
+                cPartie->getPlateau()->afficherConsole();
                 QIcon icon;
                 QPixmap result(image.width(), image.height());
                 result.fill(Qt::transparent);
@@ -293,7 +289,7 @@ void Jeu_Carcassonne::initialisation(QString *joueurs, const int *tj) {
 void Jeu_Carcassonne::debut_tour() {
     numero_tour = numero_tour + 1;
     position_tour = 1;
-    score_suivant = 0;
+    i_score_suivant = 0;
     etape_action = 0;
     choix_action = 0;
     actions_finis = 0;
@@ -341,13 +337,13 @@ void Jeu_Carcassonne::debut_tour() {
     }
 
     setActions();
-
-    if (types_joueurs[numero_joueur] == 1) {
-        tourIARandom();
-    } else {
-        //le joueur humain peut prendre les commandes.
+    if (tuile_active != nullptr) {
+        if (types_joueurs[numero_joueur] == 1) {
+            tourIARandom();
+        } else {
+            //le joueur humain peut prendre les commandes.
+        }
     }
-
 }
 
 int Jeu_Carcassonne::getScore(const QString &_infos_scores) {
@@ -476,9 +472,10 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
         }
         if (actions_finis == 1) {
             ui->label_3->clear();
-            ui->label_3->setText(QString("Joueur %1:").arg(score_suivant + 1));
+            ui->label_3->setText(QString("Joueur %1:").arg(i_score_suivant + 1));
             position_tour = 3;
             updateRessources();
+            fin_tour();
         }
     }
 }

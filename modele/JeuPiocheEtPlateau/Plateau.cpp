@@ -238,6 +238,7 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
                 c->setMeeple(m);
                 return true;
             }
+            i++;
         }
 //
 //        while ((i < meeplesEnReserve.size() and couleur != meeplesEnReserve.at(i)->getCouleur() and
@@ -287,14 +288,16 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
                 retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
                 coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
             }
-        } else if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
+        }
+        if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 9) {
                     retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
                     coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
                 }
             }
-        } else if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
+        }
+        if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (retirerLeMeeple(meeplesPoses, meeplesEnReserve,
                                     c))//on retire les meeples présents dans les villes et chemins

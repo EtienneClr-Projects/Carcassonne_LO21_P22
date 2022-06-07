@@ -75,7 +75,7 @@ private:
 
     int position_tour = 0; //1=poser tuile piocher, 2=choix action, 3=score
     int numero_tour = -1;
-    int score_suivant = 0;//permet de vérifier que tout les joueurs ont eu leur score d'enregistré
+    int i_score_suivant = 0;//permet de vérifier que tous les joueurs ont eu leur score d'enregistré
     //pas oublier de les initialiser dans debut_tour
     int etape_action = 0;
     int choix_action = 0;//1 = ajouter Meeple
@@ -83,7 +83,7 @@ private:
 
     controleurPartie *cPartie;
     Tuile *tuile_active;
-    int index_tuile_active=0;
+    int index_tuile_active = 0;
 
     Ui::Jeu_Carcassonne *ui;
     QTableView *grid;
