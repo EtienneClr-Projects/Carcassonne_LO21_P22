@@ -5,8 +5,8 @@
         <file>Ressources/Abbe/Meeples/1AR.png</file>
         <file>Ressources/Abbe/Meeples/1AV.png</file>
         <file>Ressources/Abbe/Tuiles/2P1_P1_P1_P1_A2_P1_P1_C3_P1_.png</file>
-        <file>Ressources/Abbe/Tuiles/3P1_J4_P1_C2_C2_P1_P3_C2_P1_.png</file>
-        <file>Ressources/Abbe/Tuiles/4P1_C2_P3_P1_C2_P3_P1_C2_J3_.png</file>
+        <file>Ressources/Abbe/Tuiles/3P1_P13_P1_C2_C2_P1_P3_C2_P1_.png</file>
+        <file>Ressources/Abbe/Tuiles/4P1_C2_P3_P1_C2_P3_P1_C2_P33_.png</file>
         <file>Ressources/Abbe/Tuiles/4P1_P1_P1_P1_A1_P1_P1_P1_P1_.png</file>
         <file>Ressources/AubergesCathedrales/Meeples/1BB.png</file>
         <file>Ressources/AubergesCathedrales/Meeples/1BJ.png</file>
@@ -40,10 +40,10 @@
         <file>Ressources/MarchandsBatisseurs/Meeples/1CR.png</file>
         <file>Ressources/MarchandsBatisseurs/Meeples/1CV.png</file>
         <file>Ressources/MarchandsBatisseurs/Tuiles/..png</file>
-        <file>Ressources/Normal/Meeples/8NB.png</file>
-        <file>Ressources/Normal/Meeples/8NJ.png</file>
-        <file>Ressources/Normal/Meeples/8NR.png</file>
-        <file>Ressources/Normal/Meeples/8NV.png</file>
+        <file>Ressources/Normal/Meeples/7NB.png</file>
+        <file>Ressources/Normal/Meeples/7NJ.png</file>
+        <file>Ressources/Normal/Meeples/7NR.png</file>
+        <file>Ressources/Normal/Meeples/7NV.png</file>
         <file>Ressources/Normal/Tuiles/1P1_C2_P3_C4_F5_C6_P7_C8_P9_.png</file>
         <file>Ressources/Normal/Tuiles/1P1_P1_P1_V1_V1_V1_P2_P2_P2_.png</file>
         <file>Ressources/Normal/Tuiles/1V11_V1_V1_V1_V1_V1_V1_V1_V1_.png</file>
