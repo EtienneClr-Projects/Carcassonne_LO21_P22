@@ -36,6 +36,8 @@ Joueur * Zone::getGagnant() {
         if (m != nullptr) {
             cout << "m: " << m << endl;
             nbMeeplesParCouleur[m->getCouleur()]++;
+            if(m->getType()==MEEPLE_TYPE::GRAND_MEEPLE) //si grand meeple, on rajoute un point en plus
+                nbMeeplesParCouleur[m->getCouleur()]++;
         }
     }
 
