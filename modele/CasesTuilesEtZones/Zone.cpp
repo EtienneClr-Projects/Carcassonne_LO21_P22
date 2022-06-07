@@ -27,7 +27,7 @@ int Zone::getNombreDePoints() const {
  * Renvoie le gagnant actuel de la zone. C'est à dire celui qui a le plus de Meeples dans la zone.
  * @return le gagnant de la zone. nullptr si tous les joueurs en ont 0.
  */
-Joueur * Zone::getGagnant() {
+vector<Joueur *> Zone::getGagnant() {
     cout << "getGagnant" << endl;
     //on parcourt toutes les cases de la Zone, et on compte le nombre de Meeples de chaque COULEUR
     std::map<COULEUR, int> nbMeeplesParCouleur;
@@ -42,13 +42,16 @@ Joueur * Zone::getGagnant() {
     }
 
     //on cherche le gagnant
-    Joueur *gagnant = nullptr;
+    vector<Joueur *> gagnant;
     int nbMaxMeeples = 0;
     for (auto &it: nbMeeplesParCouleur) {
         if (it.second > nbMaxMeeples) {
-            gagnant = Partie::getInstance()->getJoueur(it.first);
+            gagnant.clear();
+            gagnant.push_back(Partie::getInstance()->getJoueur(it.first));
             nbMaxMeeples = it.second;
         }
+        if (it.second == nbMaxMeeples)
+            gagnant.push_back(Partie::getInstance()->getJoueur(it.first));
     }
 
     return gagnant;

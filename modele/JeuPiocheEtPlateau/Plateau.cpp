@@ -224,7 +224,7 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
         return false;
 
     Zone *zone = c->getZoneParente();
-    if (nullptr == zone->getGagnant()) {// si pas de meeple déjà posé dans la zone
+    if (zone->getGagnant().empty()) {// si pas de meeple déjà posé dans la zone
 
         unsigned int i = 0;
         //parcours des meeples en réserve
@@ -256,14 +256,7 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
 
 bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c) {
     if (c->getMeeplePose() != nullptr) {//si il y a un meeple
-        Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
-        if (joueurGagnant == nullptr) {
-            throw CarcassonneException("joueur gagnant null");
-        }
-        donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
-        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple et a maintenant "
-             << joueurGagnant->getNbPoints() << " points" << endl;
-
+        cout << "Joueur " << Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur())->getNom() << " a recupere un meeple" << endl;
 
         meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
         int i = 0;
@@ -282,10 +275,12 @@ bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &
 std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
     std::vector<Coord *> coord_tuiles_de_zones_ouvertes;
     for (auto zone: zones) {//on regarde toutes les zones
+        bool compterLesPoints=false;//pour savoir s'il faut ou non comptabiliser les points
+        vector<Joueur*> gagnantZone=zone->getGagnant();
         if (zone->getType() == ZONE_TYPE::ABBAYE) { // on retire les abbes
-            Case *c = zone->getCases()[0];//todo @Etienne debug, pourquoi [0]??
+            Case *c = zone->getCases()[0];
             if (CompterVoisins(c->getTuileParente()) == 9) {
-                retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
+                if(retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) compterLesPoints=true;
                 coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
             }
         }
@@ -297,13 +292,20 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
                 }
             }
         }
-        if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
+        else if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (retirerLeMeeple(meeplesPoses, meeplesEnReserve,
                                     c))//on retire les meeples présents dans les villes et chemins
                     coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
             }
         }
+        if (compterLesPoints)//si un meeple a été retiré, la zone est donc fermée, on peut compter les points
+            for (Joueur* joueur:gagnantZone){
+                donnerPointsPourJoueur(joueur, zone);
+                cout << "Joueur " << joueur->getNom() << "a maintenant "<< joueur->getNbPoints() << " points" << endl;
+            }
+
+
     }
     return coord_tuiles_de_zones_ouvertes;
 }
@@ -339,7 +341,7 @@ bool Plateau::retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meep
 /*
 void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
     for (auto zone: zones) {//on regarde toutes les zones
-        if (!(zone->estOuverte())) { // si la zone est fermée
+        if (!(zone->estOuverte()) && zone->getType()!=ZONE_TYPE::ABBAYE) { // si la zone est fermée
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (c->getMeeplePose() != nullptr) {//si il y a un meeple
                     meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
