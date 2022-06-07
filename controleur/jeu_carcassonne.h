@@ -23,6 +23,8 @@ static const char *const ajoutMeeple = "Ajouter Meeple Normal";
 
 static const char *const aucuneAction = "Aucune action";
 
+static const int gridWidthHeight = 100;
+
 #include "controleurpartie.h"
 #include "JoueurEtRessources/Joueur.h"
 

@@ -14,17 +14,16 @@ Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
     //création interface, notamment vuePlateau
     ui->setupUi(this);
     this->setWindowTitle(QString("Carcassonne"));
+    this->showMaximized();
 
-    //this->showFullScreen();
-    this->setFixedSize(1920 / 1.5, 900 / 1.5);
     grid = new QTableView;
     modele = new QStandardItemModel(20, 20, this);
     grid->setModel(modele);
-    grid->setFixedHeight(175 * 20 + 27);
-    grid->setFixedWidth(175 * 20 + 27);
+    grid->setFixedHeight(gridWidthHeight * 20 + 27);
+    grid->setFixedWidth(gridWidthHeight * 20 + 27);
     for (int i = 0; i < 20; i++) {
-        grid->setColumnWidth(i, 175);
-        grid->setRowHeight(i, 175);
+        grid->setColumnWidth(i, gridWidthHeight);
+        grid->setRowHeight(i, gridWidthHeight);
     }
     ui->scrollArea->setWidget(grid);
     //creation boutons de vuePlateau :
@@ -35,16 +34,16 @@ Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
         images_grilles[i] = pix;
         icon.addPixmap(pix);
         buttons[i]->setIcon(icon);
-        buttons[i]->setIconSize(QSize(170, 170));
-        buttons[i]->setFixedSize(175, 175);
+        buttons[i]->setIconSize(QSize(gridWidthHeight - 5, gridWidthHeight - 5));
+        buttons[i]->setFixedSize(gridWidthHeight, gridWidthHeight);
 
         connect(buttons[i], &QPushButton::clicked, this, &Jeu_Carcassonne::test);
         grid->setIndexWidget(grid->model()->index(i % 20, i / 20), buttons[i]);
     }
     //connection du bouton annuler
     connect(ui->pushButton_4, &QPushButton::clicked, this, &Jeu_Carcassonne::annuler);
-    ui->scrollArea->verticalScrollBar()->setSliderPosition((175 * 15) / 2);
-    ui->scrollArea->horizontalScrollBar()->setSliderPosition((175 * 15) / 2);
+    ui->scrollArea->verticalScrollBar()->setSliderPosition((gridWidthHeight * 15) / 2);
+    ui->scrollArea->horizontalScrollBar()->setSliderPosition((gridWidthHeight * 15) / 2);
 
 
 
@@ -241,9 +240,8 @@ void Jeu_Carcassonne::initialisation(QString *joueurs, int *tj) {
     infos_joueurs[0]->setStyleSheet("QLabel { color : blue}");
     infos_ressources[0]->setStyleSheet("QLabel { color : blue}");
     infos_scores[0]->setStyleSheet("QLabel { color : blue}");
-    infos_joueurs[1]->setStyleSheet("QLabel { color : jaune}");
-    infos_ressources[1]->setStyleSheet(
-            "QLabel { color : jaune}");//@Etienne todo vérifier que c'est jaune partout et pas orange
+    infos_joueurs[1]->setStyleSheet("QLabel { color : orange}");
+    infos_ressources[1]->setStyleSheet("QLabel { color : orange}");
     infos_scores[1]->setStyleSheet("QLabel { color : orange}");
     infos_joueurs[2]->setStyleSheet("QLabel { color : red}");
     infos_ressources[2]->setStyleSheet("QLabel { color : red}");
