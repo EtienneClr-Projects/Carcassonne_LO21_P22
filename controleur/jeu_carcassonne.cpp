@@ -187,6 +187,8 @@ void Jeu_Carcassonne::test() {
 
                 //la tuile est posée, le tour peut procéder
                 position_tour = 2;
+                //donner le focus au bouton OK
+                ui->pushButton_5->setFocus();
             }
         } else if ((cPartie->getPioche()->nbTuilesRestantes == 0) &&
                    (tuile_active != nullptr)) //dernier élément de la pioche
@@ -287,6 +289,8 @@ void Jeu_Carcassonne::initialisation(QString *joueurs, const int *tj) {
 }
 
 void Jeu_Carcassonne::debut_tour() {
+    //donner le focus au bouton Tourner
+    ui->pushButton->setFocus();
     numero_tour = numero_tour + 1;
     position_tour = 1;
     i_score_suivant = 0;
@@ -424,7 +428,8 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
     QListWidgetItem *item = ui->listWidget->currentItem();
 
     if (position_tour == 2) {
-        if (item->text() == QString(aucuneAction)) {
+        cout << "current item size: " << ui->listWidget->selectedItems().size() << endl;
+        if (ui->listWidget->selectedItems().empty() || item->text() == QString(aucuneAction)) {
             actions_finis = 1;
         } else if (item->text() == QString(ajoutMeeple) && etape_action == 0) {
             ui->listWidget->clear();
@@ -468,6 +473,12 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                 buttons[index_tuile_active]->setIcon(icon);
 
                 actions_finis = 1;
+            } else {
+                //si le type du joueur est de type 0, on affiche le message
+                if (types_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()] == 0) {
+                    QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser de meeple ici");
+                }
+                QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser de meeple ici");
             }
         }
         if (actions_finis == 1) {

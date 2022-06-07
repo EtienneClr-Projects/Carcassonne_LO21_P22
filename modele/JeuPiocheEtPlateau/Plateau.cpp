@@ -44,7 +44,7 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
         //on met à jour les ouvertures des zones
         int ttOuvertures = zoneCoteActuelle->ouvertures + caseTuileVoisine->getZoneParente()->ouvertures - 2;
         zoneCoteActuelle->ouvertures = ttOuvertures;
-//        caseTuileVoisine->getZoneParente()->ouvertures = ttOuvertures;//todo enlever ?
+        caseTuileVoisine->getZoneParente()->ouvertures = ttOuvertures;//todo enlever ?
 
         //puis on fusionne les zones
         transfererZone(caseTuileVoisine->getZoneParente(), zoneCoteActuelle);
@@ -216,7 +216,7 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
     //vérification que l'extension PAYSANS est activée
     if (c->getZoneType() == ZONE_TYPE::PRAIRIE && not Jeu::getInstance()->hasExtension(EXTENSION::PAYSANS)) {
         cout << "Vous devez avoir l'extension PAYSANS pour poser un meeple sur une case de type PRAIRIE"
-             << endl;//todo [LOW] @Etienne ou @Aness : en faire une boite de dialogue
+             << endl;
         return false;
     }
     if (c->getZoneType() == ZONE_TYPE::RIVIERE || c->getZoneType() ==
@@ -283,7 +283,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
     std::vector<Coord *> coord_tuiles_de_zones_ouvertes;
     for (auto zone: zones) {//on regarde toutes les zones
         if (zone->getType() == ZONE_TYPE::ABBAYE) { // on retire les abbes
-            Case *c = zone->getCases()[0];//todo @Etienne debug, pourquoi [0]??
+            Case *c = zone->getCases()[0];//parce qu'il y a qu'une seule case dans la zone abbaye
             if (CompterVoisins(c->getTuileParente()) == 9) {
                 retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
                 coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
