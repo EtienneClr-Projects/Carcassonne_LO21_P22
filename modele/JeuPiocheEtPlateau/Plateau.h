@@ -41,25 +41,27 @@ private :
 
     static bool fusionPossible(Zone *zone1, Zone *zone2);
 
-    Coord * findCoordTuile(Tuile *tuile);
-
     Tuile *findTuileVoisine(Coord *coordTuile, int i);
 
     void fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine);
 
 public:
+    static Coord * findCoordTuile(Tuile *tuile);//doit être public pour permettre à l'interface de connaître position des tuiles
+
     void fusionnerZonesAvecPlateau(Tuile *tuile);
 
     void ajouterTuile(Tuile *tuile, Coord *coord);
 
     std::string toString();
 
-    vector<Coord *> retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve);
+    bool retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c);
+
+    std::vector<Coord*> retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve);
 
     bool checkerTuile(Tuile *tuile, Coord *coord);
 
-    static bool poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
-                     vector<Meeple *> &meeplesEnReserve,const vector<EXTENSION> &extension);
+    bool poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
+                     vector<Meeple *> &meeplesEnReserve);
 
     static Plateau *getInstance(const vector<std::pair<Coord *, Tuile *>> &plateau) {
         if (instance == nullptr) {
@@ -88,13 +90,13 @@ public:
 
     Coord *getCoinBasDroite();
 
+    bool retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, COULEUR couleur);
+
     static void ColorForZone(void *console_color, const Case *c);
 
     void donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone);
-    bool retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c);
-    int CompterVoisins(Tuile* tuile);
 
-    bool retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, COULEUR couleur);
+    int CompterVoisins(Tuile* tuile);
 };
 
 #endif //CARCASSONNE_LO21_P22_PLATEAU_H

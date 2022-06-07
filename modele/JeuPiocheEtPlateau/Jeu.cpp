@@ -38,11 +38,11 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
         int iCase = 0;
         map<DIRECTION, Case *> cases;
         int iInfo = 0;
+        SUPP_TYPE suppType = SUPP_TYPE::AUCUN;
 
         for (auto &c: cheminImage.substr(1)) {
             ZONE_TYPE type;
             int idConnexion;
-            SUPP_TYPE suppType;
 
             if (iInfo == 0) {//type de la tuile
                 type = ParametresPartie::toZONE_TYPE(c);
@@ -67,6 +67,7 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
             if (c == '_') {//fin de la description de la case
                 cases[DIRECTIONS_ORDERED[iCase]] = new Case(type, DIRECTIONS_ORDERED[iCase], suppType, idConnexion);
                 iCase++;
+                suppType = SUPP_TYPE::AUCUN;
                 iInfo = 0;
                 if (iCase == 9) {//fin de la description de la tuile
                     break;
@@ -191,9 +192,10 @@ string Jeu::getCheminFromExtension(EXTENSION ext) {
     return chemin;
 }
 
-void Jeu::setExtensions(const vector<EXTENSION> &extensions) {
+void Jeu::setExtensions(const vector<EXTENSION> &_extensions) {
     vector<Tuile *> tuilesTemp;
-    for (auto &ext: extensions) {
+    for (auto &ext: _extensions) {
+        extensions.push_back(ext);
         if (ext == EXTENSION::RIVIERE) {
             getTuilesDesRessources(ext, &tuilesRiviere);
             // on veut que le tableau de tuilesRiviere soit mélangé et qu'il commence par la source et finisse par le lac
@@ -226,5 +228,12 @@ void Jeu::setExtensions(const vector<EXTENSION> &extensions) {
 
     //puis on donne les meeples à la Partie
     Partie::getInstance()->meeplesEnReserve = meeplesPossibleEnFonctionDesExtensions;
+}
+
+bool Jeu::hasExtension(EXTENSION ext) {
+    for (auto &e: extensions) {
+        if (e == ext) return true;
+    }
+    return false;
 }
 

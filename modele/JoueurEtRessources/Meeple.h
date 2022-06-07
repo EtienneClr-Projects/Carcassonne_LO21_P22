@@ -11,6 +11,7 @@ class Meeple {
     std::string cheminImage;
 
 public:
+    std::string getCheminImage() const {return cheminImage;}
     COULEUR getCouleur(){return  couleur;}
     MEEPLE_TYPE getType(){return type;}
 

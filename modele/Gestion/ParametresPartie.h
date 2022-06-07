@@ -41,6 +41,7 @@ enum class COULEUR {
 enum class SUPP_TYPE {
     BLASON, AUBERGE, BLE, TONNEAU, TISSU, AUCUN, JARDIN
 };
+
 /**
  * Les différentes extensions avec lesquelles il est possible de jouer.
  * Par exemple PAYSANS.
@@ -147,6 +148,10 @@ public:
 class CarcassonneException : public std::exception { //todo utiliser partout cette exception du coup
 public:
     explicit CarcassonneException(std::string i) : info(std::move(i)) {}
+
+    const char *what() const noexcept override {
+        return info.c_str();
+    }
 
     std::string getInfo() const { return info; }
 

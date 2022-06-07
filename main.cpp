@@ -154,7 +154,7 @@ int main() {
                 break;
         }
         if (choix != 6 && choix != 5) {
-            cout << "Voulez-vous ajouter une autre extension ? " << endl;
+            cout << "Voulez-vous ajouter une autre extensions ? " << endl;
             cout << "1 : Oui" << endl;
             cout << "2 : Non" << endl;
             cin >> choix;
@@ -272,7 +272,7 @@ int main() {
 }*/
 
 
-#include "vuepartie.h"
+#include "vue/vuepartie.h"
 #include <QApplication>
 
 int main(int argc, char *argv[]) {

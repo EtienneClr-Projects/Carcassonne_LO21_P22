@@ -27,6 +27,11 @@ controleurPartie::controleurPartie(int nb_joueurs, bool exPaysans, bool exAbbe, 
     jeu = Jeu::getInstance();
     jeu->setExtensions(extensionsChoisies);
 
+    partie = Partie::getInstance();
+    //partie->meeplesEnReserve = jeu->meeplesPossibleEnFonctionDesExtensions;
+    //vector<Meeple*> m;
+    //partie->meeplesPoses = m;
+
     pioche = new Pioche(jeu->tuiles);
     plateau = Plateau::getInstance();
 

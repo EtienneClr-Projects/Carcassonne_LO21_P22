@@ -58,16 +58,16 @@ std::string ParametresPartie::toStringDIRECTION(const DIRECTION dir) {
 
 
 /**
- * Renvoie l'extension choisie par l'utilisateur pour cette partie
- * @return l'extension choisie par l'utilisateur pour cette partie
+ * Renvoie l'extensions choisie par l'utilisateur pour cette partie
+ * @return l'extensions choisie par l'utilisateur pour cette partie
  */
 std::vector<EXTENSION> ParametresPartie::getExtensionsChoisies() const {
     return extensionsChoisies;
 }
 
 /**
- * Définit l'extension choisie par l'utilisateur pour cette partie
- * @param extChoisie l'extension choisie
+ * Définit l'extensions choisie par l'utilisateur pour cette partie
+ * @param extChoisie l'extensions choisie
  */
 void ParametresPartie::setExtensionsChoisies(std::vector<EXTENSION> extsChoisies) {
     ParametresPartie::extensionsChoisies = std::move(extsChoisies);

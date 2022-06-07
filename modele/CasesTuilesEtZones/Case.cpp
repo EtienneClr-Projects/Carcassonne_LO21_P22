@@ -10,11 +10,12 @@ std::string Case::toString() {
     res += ParametresPartie::toStringZONE_TYPE(zone_type);
     if (meeple_pose != nullptr)
         res += "m";//on signale la présence d'un meeple par un petit m
+//    else
+//        res += ParametresPartie::toStringSUPP_TYPE(supp_type);
+    else if (zone_parente != nullptr && zone_parente->getType() != ZONE_TYPE::PRAIRIE)
+        res += std::to_string(zone_parente->ouvertures);
     else
-        res += ParametresPartie::toStringSUPP_TYPE(supp_type);
-//    else if (zone_parente != nullptr)
-//        res += std::to_string(zone_parente->ouvertures);
-
+        res += " ";
     return res;
 }
 
