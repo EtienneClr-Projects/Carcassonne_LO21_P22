@@ -90,7 +90,7 @@ public:
 
     Coord *getCoinBasDroite();
 
-    bool retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, COULEUR couleur);
+    Coord* retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, COULEUR couleur);
 
     static void ColorForZone(void *console_color, const Case *c);
 
