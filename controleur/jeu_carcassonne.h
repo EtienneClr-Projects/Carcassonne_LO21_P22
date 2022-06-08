@@ -94,8 +94,8 @@ private:
     QLabel *infos_joueurs[4];
     QLabel *infos_scores[4];
     QLabel *infos_ressources[4];
-    int types_joueurs[4];//0=humain, 1 = IARAndom
-    COULEUR couleurs_joueurs[4] = {COULEUR::BLEU, COULEUR::JAUNE, COULEUR::ROUGE, COULEUR::VERT};
+    Joueur *liste_joueurs[4];//gettype() : 0=humain, 1 = IARAndom
+
     COULEUR couleur_actuelle;
     MEEPLE_TYPE meeple_type=MEEPLE_TYPE::NORMAL;
 
@@ -109,9 +109,6 @@ private:
     void fin_jeu();
 
     int getScore(const QString &_infos_scores);
-
-    int getMeeple(QString infos_ressources); //todo [LOW] @Aness, cette fonction n'est pas implémentée et pas utilisée ?
-
     void setActions();
 
     void updateRessources();

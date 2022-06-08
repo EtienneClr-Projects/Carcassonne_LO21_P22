@@ -59,16 +59,18 @@ Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
 }
 
 Jeu_Carcassonne::~Jeu_Carcassonne() {
-    delete cPartie;
-
 
     for (auto &button: buttons) {
         delete button;
     }
+    for (int i=0; i<cPartie->getParametresPartie()->getNombreJoueurs(); i++)
+    {
+        delete liste_joueurs[i];
+    }
     delete grid;
-//    delete joueurs_couleur;
     delete modele;
     delete ui;
+    delete cPartie;
 }
 
 
@@ -103,7 +105,8 @@ void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
 //    }
 }
 
-void Jeu_Carcassonne::fin_tour() {
+void Jeu_Carcassonne::fin_tour()
+{
     //update les meeples retirés des zones
     std::vector<Coord *> coord_tuiles_modifiees = cPartie->getPlateau()->retirerMeeples(
             cPartie->getpartie()->meeplesPoses,
@@ -135,6 +138,7 @@ void Jeu_Carcassonne::fin_tour() {
 
     if (tuile_active == nullptr)
     {
+        cout << "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii\n";
         fin_jeu();
     } else//tuile_active a encore la valeur de la tuile posée, mais elle va être changée dans debut_tour
     {
@@ -160,7 +164,6 @@ void Jeu_Carcassonne::fin_jeu()
             infos_joueurs[i]->setText(labelText);
             infos_joueurs[i]->update();
         }
-
     }
 
     for (int i = 0; i < nb; i++)
@@ -171,7 +174,7 @@ void Jeu_Carcassonne::fin_jeu()
         }
     }
     QMessageBox::information(this, "fin de Partie", infos_joueurs[joueur_victoire]->text().append(" a remporté(e) la partie."));
-}
+     }
 
 void Jeu_Carcassonne::on_pushButton_clicked()//tourner
 {
@@ -224,7 +227,7 @@ void Jeu_Carcassonne::test() {
             }
             else
             {
-                if (types_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()] == 0) {
+                if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0) {
                     QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser de tuile ici");
                 }
             }
@@ -255,7 +258,7 @@ void Jeu_Carcassonne::test() {
             }
             else
             {
-                if (types_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()] == 0) {
+                if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0) {
                     QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser de tuile ici");
                 }
             }
@@ -322,8 +325,12 @@ void Jeu_Carcassonne::initialisation(QString *joueurs, const int *tj) {
     }
 
     for (int i = 0; i < nb; i++) {//pour chaque joueur
-        types_joueurs[i] = tj[i];
-        if (types_joueurs[i] == 1) {
+
+        liste_joueurs[i] = new Joueur(joueurs[i].toStdString(), ALL_COULEURS[i]);
+        liste_joueurs[i]->setType(tj[i]);
+        cPartie->getpartie()->ajouterJoueur(liste_joueurs[i]);
+
+        if (liste_joueurs[i]->getType() == 1) {
             infos_joueurs[i]->setText(joueurs[i].append(" (Bot: IARandom)"));
         } else {
             infos_joueurs[i]->setText(joueurs[i]);
@@ -331,8 +338,6 @@ void Jeu_Carcassonne::initialisation(QString *joueurs, const int *tj) {
         infos_ressources[i]->setText(QString("Meeple: %1").arg(0));
         infos_scores[i]->setText(QString("Score: %1").arg(0));
 
-        auto *joueur = new Joueur(joueurs[i].toStdString(), ALL_COULEURS[i]);
-        cPartie->getpartie()->ajouterJoueur(joueur);
     }
 }
 
@@ -366,7 +371,7 @@ void Jeu_Carcassonne::debut_tour() {
     int nb = cPartie->getParametresPartie()->getNombreJoueurs();
     int numero_joueur = numero_tour % nb;
 
-    couleur_actuelle = couleurs_joueurs[numero_joueur];
+    couleur_actuelle = liste_joueurs[numero_joueur]->getCouleur();
 
     QString labelText;
 
@@ -395,7 +400,9 @@ void Jeu_Carcassonne::debut_tour() {
 
     setActions();
     if (tuile_active != nullptr) {
-        if (types_joueurs[numero_joueur] == 1) {
+        cout << tuile_active->toString();
+        cout << cPartie->getPioche()->nbTuilesRestantes << "\n\n\n\n\n\n\n\n\n";
+        if (liste_joueurs[numero_joueur]->getType() == 1) {
             tourIARandom();
         } else {
             //le joueur humain peut prendre les commandes.
@@ -445,7 +452,7 @@ void Jeu_Carcassonne::updateRessources() {
         abbe = 0;
         grand = 0;
         for (auto m: cPartie->getpartie()->meeplesEnReserve) {
-            if (m->getCouleur() == couleurs_joueurs[i]) {
+            if (m->getCouleur() == liste_joueurs[i]->getCouleur()) {
                 if (m->getType() == MEEPLE_TYPE::NORMAL) {
                     normal += 1;
                 }
@@ -580,7 +587,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                         actions_finis = 1;
                     } else {
                         //si le type du joueur est de type 0, on affiche le message
-                        if (types_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()] == 0)
+                        if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0)
                                 {
                                     QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser de meeple ici");
                                 }
@@ -660,7 +667,6 @@ void Jeu_Carcassonne::annuler() {
         etape_action = 0;
         choix_action = 0;
         actions_finis = 0;
-
     }
 }
 
