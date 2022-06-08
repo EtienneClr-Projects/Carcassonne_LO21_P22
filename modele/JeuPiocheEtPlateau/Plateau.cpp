@@ -37,18 +37,19 @@ void Plateau::fusionnerZonesAvecPlateau(Tuile *tuile) {
         if (tuileVoisine == nullptr) {
             continue; //si la tuile voisine n'existe pas on passe au côté suivant
         }
-
         //on fusionne la zoneCoteActuelle avec la zoneCoteActuelle de la tuile voisine pour les COTES
         Case *caseTuileVoisine = tuileVoisine->cases[DIRECTIONS_COTE_INVERSE[i]];
 
         //on met à jour les ouvertures des zones
-        int ttOuvertures = zoneCoteActuelle->ouvertures + caseTuileVoisine->getZoneParente()->ouvertures - 2;
+        int ttOuvertures = zoneCoteActuelle->ouvertures;
+        if (zoneCoteActuelle != caseTuileVoisine->getZoneParente()) {
+            ttOuvertures += caseTuileVoisine->getZoneParente()->ouvertures - 2;
+            //puis on fusionne les zones
+            transfererZone(caseTuileVoisine->getZoneParente(), zoneCoteActuelle);
+        } else {
+            ttOuvertures -= 2;
+        }
         zoneCoteActuelle->ouvertures = ttOuvertures;
-        caseTuileVoisine->getZoneParente()->ouvertures = ttOuvertures;//todo enlever ?
-
-        //puis on fusionne les zones
-        transfererZone(caseTuileVoisine->getZoneParente(), zoneCoteActuelle);
-
         // Si caseCote est Prairie ou chemin ou rivière, alors on peut fusionner aussi les COINS avec la case à côté
         fusionZonesCOINS(tuile, i, tuileVoisine);
     }
@@ -71,9 +72,9 @@ void Plateau::transfererZone(Zone *zoneASuppr, Zone *zoneB) {
         zoneB->ajouterCase(_case);
     }
 
-    if (zoneASuppr == zoneB) //si ce sont les mêmes adresses on supprime pas
-        return;
-//        throw std::invalid_argument("zoneASuppr == zoneB");
+    if (zoneASuppr == zoneB) { //si ce sont les mêmes adresses on supprime pas
+        return;//todo always false
+    }
 
     //on supprime la zone A de la liste
     int i = 0;
