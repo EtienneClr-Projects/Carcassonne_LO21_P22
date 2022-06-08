@@ -97,6 +97,7 @@ private:
     int types_joueurs[4];//0=humain, 1 = IARAndom
     COULEUR couleurs_joueurs[4] = {COULEUR::BLEU, COULEUR::JAUNE, COULEUR::ROUGE, COULEUR::VERT};
     COULEUR couleur_actuelle;
+    MEEPLE_TYPE meeple_type=MEEPLE_TYPE::NORMAL;
 
 
     void initialisation(QString *joueurs, const int *tj);
@@ -104,6 +105,8 @@ private:
     void debut_tour();
 
     void fin_tour();
+
+    void fin_jeu();
 
     int getScore(const QString &_infos_scores);
 

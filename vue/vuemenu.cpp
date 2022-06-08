@@ -7,6 +7,7 @@ vueMenu::vueMenu(QWidget *parent) :
     ui->setupUi(this);
     this->setWindowTitle(QString("Carcassonne"));
     setWindowFlags(Qt::Window | Qt::WindowMinimizeButtonHint | Qt::WindowMaximizeButtonHint);
+    ui->exAbbe->setText("L'Abbé");
 }
 
 vueMenu::~vueMenu() {
@@ -57,7 +58,11 @@ void vueMenu::on_pushButton_2_clicked() {
         QMessageBox::critical(this, "Erreur", "Vous avez déjà 4 joueurs. C'est le maximum!");
     } else if (ui->lineEdit->text() == "") {
         QMessageBox::critical(this, "Erreur", "Veuillez insérer un nom de joueur.");
-    } else {
+    } else if (ui->checkBox->isChecked() && (nb_joueurs == 0)) {
+        QMessageBox::critical(this, "Erreur", "Le premier joueur ne peut être un IA.");
+        ui->checkBox->setChecked(0);
+    }
+    else {
         joueurs[nb_joueurs] = ui->lineEdit->text();
         if(ui->checkBox->isChecked())
         {
