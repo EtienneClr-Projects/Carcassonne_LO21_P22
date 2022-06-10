@@ -213,12 +213,27 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
  */
 bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Meeple *> &meeplesPoses,
                           vector<Meeple *> &meeplesEnReserve) {
+
+    //vérifie qu'on ne pose pas un abbé n'importe où
+    if (type==MEEPLE_TYPE::ABBE && !(c->getZoneType() == ZONE_TYPE::PRAIRIE && c->getSuppType()==SUPP_TYPE::JARDIN)
+        && c->getZoneType() != ZONE_TYPE::ABBAYE) {
+        cout << "Vous ne pouvez pas poser un abbé autre part que sur une abbaye ou un jardin"
+             << endl;
+        return false;
+    }
     //vérification que l'extension PAYSANS est activée
     if (c->getZoneType() == ZONE_TYPE::PRAIRIE && not Jeu::getInstance()->hasExtension(EXTENSION::PAYSANS)) {
         cout << "Vous devez avoir l'extension PAYSANS pour poser un meeple sur une case de type PRAIRIE"
              << endl;//todo [LOW] @Etienne ou @Aness : en faire une boite de dialogue
         return false;
     }
+    //on vérifie qu'on ne pose pas de meeple normal sur un jardin
+    if (c->getZoneType() == ZONE_TYPE::PRAIRIE &&  c->getSuppType()==SUPP_TYPE::JARDIN && type!=MEEPLE_TYPE::ABBE) {
+        cout << "Vous devez poser un meeple Abbé sur un jardin"
+             << endl;
+        return false;
+    }
+
     if (c->getZoneType() == ZONE_TYPE::RIVIERE || c->getZoneType() ==
                                                   ZONE_TYPE::FIN_DE_ROUTE)//on a pas le droit de poser de meeples sur la rivière ou fin de route
         return false;
