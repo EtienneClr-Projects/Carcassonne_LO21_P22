@@ -218,8 +218,7 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
     //vérifie qu'on ne pose pas un abbé n'importe où
     if (type==MEEPLE_TYPE::ABBE && !(c->getZoneType() == ZONE_TYPE::PRAIRIE && c->getSuppType()==SUPP_TYPE::JARDIN)
         && c->getZoneType() != ZONE_TYPE::ABBAYE) {
-        cout << "Vous ne pouvez pas poser un abbé autre part que sur une abbaye ou un jardin"
-             << endl;
+        cout << "Vous ne pouvez pas poser un abbé autre part que sur une abbaye ou un jardin" << endl;
         return false;
     }
     //vérification que l'extension PAYSANS est activée
@@ -277,7 +276,8 @@ bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &
             throw CarcassonneException("joueur gagnant null");
         }
         donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
-        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple et a maintenant "
+        cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple de tyoe "
+             << ParametresPartie::toStringMEEPLE_TYPE(c->getMeeplePose()->getType()) << " et a maintenant "
              << joueurGagnant->getNbPoints() << " points" << endl;
 
 
@@ -299,21 +299,22 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
     std::vector<Coord *> coord_tuiles_de_zones_ouvertes;
     for (auto zone: zones) {//on regarde toutes les zones
         if (zone->getType() == ZONE_TYPE::ABBAYE) { // on retire les abbes
+            cout << "on regarde pour retirer une zone de type ABBAYE" << endl;
             Case *c = zone->getCases()[0];//parce qu'il y a qu'une seule case dans la zone abbaye
-            if (CompterVoisins(c->getTuileParente()) == 9) {
+            if (CompterVoisins(c->getTuileParente()) == 8) {
+                cout << "\t on retire le meeple de l'Abbaye" << endl;
                 retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
                 coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
             }
-        }
-        if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
+            cout << "nb de voisins : " << CompterVoisins(c->getTuileParente()) << endl;
+        } else if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
-                if (c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 9) {
+                if (c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 8) {
                     retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
                     coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
                 }
             }
-        }
-        if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
+        } else if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (retirerLeMeeple(meeplesPoses, meeplesEnReserve,
                                     c))//on retire les meeples présents dans les villes et chemins
@@ -522,12 +523,13 @@ int Plateau::CompterVoisins(Tuile *tuile) {
     Coord *co = findCoordTuile(tuile);
 
     for (int i = -1; i < 2; i++)
-        for (int j = -1; i < 2; i++) {
+        for (int j = -1; j < 2; j++) {
             auto voisin = new Coord(co->x_ + i, co->y_ + j);
             for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
                 if (std::find(begin(tuilesPassees), end(tuilesPassees), pairTuile.second) != tuilesPassees.end())
                     continue;
-                if (voisin->x_ == pairTuile.first->x_ && voisin->y_ == pairTuile.first->y_) {
+                if (voisin->x_ == pairTuile.first->x_ && voisin->y_ == pairTuile.first->y_ &&
+                    pairTuile.second != tuile) {
                     nbVoisins++;
                     tuilesPassees.push_back(pairTuile.second);
                 }
