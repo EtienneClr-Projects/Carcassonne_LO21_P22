@@ -216,19 +216,22 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
                           vector<Meeple *> &meeplesEnReserve) {
 
     //vérifie qu'on ne pose pas un abbé n'importe où
-    if (type==MEEPLE_TYPE::ABBE && !(c->getZoneType() == ZONE_TYPE::PRAIRIE && c->getSuppType()==SUPP_TYPE::JARDIN)
-        && c->getZoneType() != ZONE_TYPE::ABBAYE) {
-        cout << "Vous ne pouvez pas poser un abbé autre part que sur une abbaye ou un jardin" << endl;
-        return false;
+    if (type == MEEPLE_TYPE::ABBE) {
+        if (!(c->getZoneType() == ZONE_TYPE::PRAIRIE && c->getSuppType() == SUPP_TYPE::JARDIN) &&
+            c->getZoneType() != ZONE_TYPE::ABBAYE) {
+            cout << "Vous ne pouvez pas poser un abbe autre part que sur une abbaye ou un jardin" << endl;
+            return false;
+        }
     }
     //vérification que l'extension PAYSANS est activée
-    if (c->getZoneType() == ZONE_TYPE::PRAIRIE && not Jeu::getInstance()->hasExtension(EXTENSION::PAYSANS)) {
+    if (c->getZoneType() == ZONE_TYPE::PRAIRIE && not Jeu::getInstance()->hasExtension(EXTENSION::PAYSANS)
+        && type != MEEPLE_TYPE::ABBE) { //on a le droit de poser un ABBE sur une prairie
         cout << "Vous devez avoir l'extension PAYSANS pour poser un meeple sur une case de type PRAIRIE"
              << endl;//todo [LOW] @Etienne ou @Aness : en faire une boite de dialogue
         return false;
     }
     //on vérifie qu'on ne pose pas de meeple normal sur un jardin
-    if (c->getZoneType() == ZONE_TYPE::PRAIRIE &&  c->getSuppType()==SUPP_TYPE::JARDIN && type!=MEEPLE_TYPE::ABBE) {
+    if (c->getZoneType() == ZONE_TYPE::PRAIRIE && c->getSuppType() == SUPP_TYPE::JARDIN && type != MEEPLE_TYPE::ABBE) {
         cout << "Vous devez poser un meeple Abbé sur un jardin"
              << endl;
         return false;
@@ -508,8 +511,8 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
             tuilesPassees.push_back(c->getTuileParente());
         }
         if (pZone->getType() == ZONE_TYPE::ABBAYE ||
-            c->getSuppType() == SUPP_TYPE::JARDIN) {//todo [HIGH] @Daphne c'est pas que quand on en a 8 ici ?
-            pJoueur->ajouterPoints(CompterVoisins(c->getTuileParente()) + 1);//plus 1 pour la tuile elle-même
+            c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 8) {
+            pJoueur->ajouterPoints(9);
             tuilesPassees.push_back(c->getTuileParente());
         }
     }
