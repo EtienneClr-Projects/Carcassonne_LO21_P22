@@ -508,8 +508,8 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
             tuilesPassees.push_back(c->getTuileParente());
         }
         if (pZone->getType() == ZONE_TYPE::ABBAYE ||
-            c->getSuppType() == SUPP_TYPE::JARDIN) {//todo [HIGH] @Daphne c'est pas que quand on en a 9 ici ?
-            pJoueur->ajouterPoints(CompterVoisins(c->getTuileParente()));
+            c->getSuppType() == SUPP_TYPE::JARDIN) {//todo [HIGH] @Daphne c'est pas que quand on en a 8 ici ?
+            pJoueur->ajouterPoints(CompterVoisins(c->getTuileParente()) + 1);//plus 1 pour la tuile elle-même
             tuilesPassees.push_back(c->getTuileParente());
         }
     }
