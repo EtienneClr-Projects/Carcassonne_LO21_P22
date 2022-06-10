@@ -39,7 +39,7 @@ public:
 
     int getNombreDePoints() const;
 
-    Joueur * getGagnant();
+    std::vector<Joueur *> getGagnant();
 
     bool estOuverte() const;
 
