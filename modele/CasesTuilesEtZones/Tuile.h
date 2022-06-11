@@ -49,6 +49,7 @@ public:
 
     std::vector<std::pair<int, Zone *>> calcZonesInternes();
 
+    bool estDepart();
 };
 
 #endif

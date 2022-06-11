@@ -103,10 +103,11 @@ public:
 
     static std::vector<Case *> getCasesAdjacentes(Tuile *tuile, DIRECTION direction);
 
-    static int compterNbVillesAdjacentesFermees(Zone *zone);
+    static int compterNbVillesAdjacentesFermees(Zone *prairie);
 
     void finDePartie();
 
+    static int nombreDePrairie;
 };
 
 #endif //CARCASSONNE_LO21_P22_PLATEAU_H

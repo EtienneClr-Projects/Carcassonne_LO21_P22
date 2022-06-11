@@ -34,7 +34,12 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
     //pour chaque nom de fichier
     for (auto &cheminImage: v) {
         //on parcourt chaque caractère de la chaine
-        int nbTuilesDeCeType = (int) cheminImage[0] - 48; //conversion depuis l'ascii
+        int nbTuilesDeCeType;
+        if (cheminImage[0] == 'D')
+            nbTuilesDeCeType = 1;
+        else
+            nbTuilesDeCeType = (int) cheminImage[0] - 48; //conversion depuis l'ascii
+
         int iCase = 0;
         map<DIRECTION, Case *> cases;
         int iInfo = 0;
@@ -216,7 +221,7 @@ void Jeu::setExtensions(const vector<EXTENSION> &_extensions) {
             if (t->estLac()) lac = t;
             else if (t->estSource()) source = t;
             else
-                tuiles.push_back(t);
+                tuiles.push_back(t);//on ajoute la source en premier
         }
         tuiles.insert(tuiles.begin(), source);
         tuiles.push_back(lac);
@@ -224,8 +229,18 @@ void Jeu::setExtensions(const vector<EXTENSION> &_extensions) {
 
     //puis on ajoute les autres tuiles dans le désordre
     shuffle(tuilesTemp.begin(), tuilesTemp.end(), std::mt19937(std::random_device()()));
-    for (auto &t: tuilesTemp) {
-        tuiles.push_back(t);
+    //on cherche la tuile de départ, pour faire commencer par elle
+    if (!hasExtension(EXTENSION::RIVIERE)) {
+        for (auto &t: tuilesTemp) {
+            if (t->estDepart()) {
+                tuiles.insert(tuiles.begin(), t);
+                break;
+            }
+        }
+        for (auto &t: tuilesTemp) {
+            if (!t->estDepart())
+                tuiles.push_back(t);
+        }
     }
 
 

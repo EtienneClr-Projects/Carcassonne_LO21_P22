@@ -1,6 +1,7 @@
 #include <iostream>
 #include "CasesTuilesEtZones/Zone.h"
 #include "Gestion/Partie.h"
+#include "JeuPiocheEtPlateau/Plateau.h"
 
 
 /**
@@ -11,8 +12,9 @@
 
 Zone::Zone(Case *init_case) {
     this->type = init_case->getZoneType();
-
     this->cases.push_back(init_case);
+    Plateau::nombreDePrairie++;
+    this->id_zone = Plateau::nombreDePrairie;
 }
 
 const ZONE_TYPE &Zone::getType() {

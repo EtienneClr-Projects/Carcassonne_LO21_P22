@@ -3,7 +3,7 @@
 
 #include <QDialog>
 #include <QMessageBox>
-#include "../controleur/jeu_carcassonne.h"
+#include "jeu_carcassonne.h"
 
 namespace Ui {
     class vueMenu;

@@ -1,4 +1,5 @@
 #include "CasesTuilesEtZones/Case.h"
+#include "JeuPiocheEtPlateau/Plateau.h"
 
 
 Case::Case(ZONE_TYPE zt, DIRECTION d, SUPP_TYPE s, int i) : zone_type(zt), direction(d), supp_type(s), id_connexion(i),
@@ -7,17 +8,21 @@ Case::Case(ZONE_TYPE zt, DIRECTION d, SUPP_TYPE s, int i) : zone_type(zt), direc
 
 std::string Case::toString() {
     std::string res;
+    res += std::to_string(Plateau::compterNbVillesAdjacentesFermees(this->getZoneParente()));
     res += ParametresPartie::toStringZONE_TYPE(zone_type);
     if (meeple_pose != nullptr)
-        res += "m";//on signale la présence d'un meeple par un petit m
+        res += "m  ";//on signale la présence d'un meeple par un petit m
 //    else
 //        res += ParametresPartie::toStringSUPP_TYPE(supp_type);
-    else if (zone_parente != nullptr && zone_parente->getType() != ZONE_TYPE::PRAIRIE)
-        res += std::to_string(zone_parente->ouvertures);
+//    else if (zone_parente != nullptr && zone_parente->getType() != ZONE_TYPE::PRAIRIE)
+//        res += std::to_string(zone_parente->ouvertures);
     else if (supp_type != SUPP_TYPE::AUCUN)
-        res += ParametresPartie::toStringSUPP_TYPE(supp_type)[0];
-    else
-        res += " ";
+        res += ParametresPartie::toStringSUPP_TYPE(supp_type)[0] + "  ";
+    else// if (this->getZoneType()==ZONE_TYPE::PRAIRIE)
+//        res += std::to_string(Plateau::compterNbVillesAdjacentesFermees(this->getZoneParente()));
+        res += std::to_string(this->getZoneParente()->id_zone);
+//    else
+//        res += " ";
     return res;
 }
 

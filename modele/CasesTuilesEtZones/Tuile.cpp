@@ -136,3 +136,8 @@ bool Tuile::estLac() {
 const string &Tuile::getCheminImage() const {
     return cheminImage;
 }
+
+bool Tuile::estDepart() {
+    //retourne vrai si le nom de l'image commence par 'D'
+    return cheminImage.find('D') != -1;
+}

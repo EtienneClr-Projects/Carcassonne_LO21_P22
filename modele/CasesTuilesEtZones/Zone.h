@@ -33,6 +33,7 @@ protected:
 //##################################################################################################################
     //Méthodes
 public:
+    int id_zone = 0;//todo debug only
     int ouvertures = 0;
 
     const ZONE_TYPE &getType();

@@ -198,14 +198,6 @@ void Jeu_Carcassonne::test() {
             if (cPartie->getPlateau()->checkerTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1))) {
                 cPartie->getPlateau()->ajouterTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1));
                 cout << "tuile posee : " << tuile_active->toString() << endl;
-                //affichage de chaque case de la tuile
-                for (std::pair<const DIRECTION, Case *> c: tuile_active->getCases()) {
-                    if (c.second->getZoneType() == ZONE_TYPE::PRAIRIE) {
-                        cout << "\n\nNOMBRE DE VILLES ADJACENTES : "
-                             << Plateau::compterNbVillesAdjacentesFermees(c.second->getZoneParente()) << endl;
-                        continue;
-                    }
-                }
 
                 cPartie->getPlateau()->afficherConsole();
                 QIcon icon;

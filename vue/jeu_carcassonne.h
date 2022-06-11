@@ -1,25 +1,25 @@
 #ifndef JEU_CARCASSONNE_H
 #define JEU_CARCASSONNE_H
 
-static const char *const ajoutMeepleNO = "Ajouter Meeple Normal nord-ouest";
+static const char *const ajoutMeepleNO = "Ajouter Meeple nord-ouest";
 
-static const char *const ajoutMeepleN = "Ajouter Meeple Normal nord";
+static const char *const ajoutMeepleN = "Ajouter Meeple nord";
 
-static const char *const ajoutMeepleNE = "Ajouter Meeple Normal nord-est";
+static const char *const ajoutMeepleNE = "Ajouter Meeple nord-est";
 
-static const char *const ajoutMeepleO = "Ajouter Meeple Normal ouest";
+static const char *const ajoutMeepleO = "Ajouter Meeple ouest";
 
-static const char *const ajoutMeepleC = "Ajouter Meeple Normal centre";
+static const char *const ajoutMeepleC = "Ajouter Meeple centre";
 
-static const char *const ajoutMeepleE = "Ajouter Meeple Normal est";
+static const char *const ajoutMeepleE = "Ajouter Meeple est";
 
-static const char *const ajoutMeepleSO = "Ajouter Meeple Normal sud-ouest";
+static const char *const ajoutMeepleSO = "Ajouter Meeple sud-ouest";
 
-static const char *const ajoutMeepleS = "Ajouter Meeple Normal sud";
+static const char *const ajoutMeepleS = "Ajouter Meeple sud";
 
-static const char *const ajoutMeepleSE = "Ajouter Meeple Normal sud-est";
+static const char *const ajoutMeepleSE = "Ajouter Meeple sud-est";
 
-static const char *const ajoutMeeple = "Ajouter Meeple Normal";
+static const char *const ajoutMeeple = "Ajouter Meeple";
 
 static const char *const aucuneAction = "Aucune action";
 
@@ -30,7 +30,7 @@ static const int TOUR__CHOIX_ACTION = 2;
 static const int TOUR__SCORE = 3;
 
 
-#include "controleurpartie.h"
+#include "../controleur/controleurpartie.h"
 #include "JoueurEtRessources/Joueur.h"
 
 #include <QDialog>
