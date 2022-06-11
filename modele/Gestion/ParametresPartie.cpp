@@ -108,8 +108,6 @@ ZONE_TYPE ParametresPartie::toZONE_TYPE(char type) {
             return ZONE_TYPE::FIN_DE_ROUTE;
         case 'A':
             return ZONE_TYPE::ABBAYE;
-        case 'J':
-            return ZONE_TYPE::JARDIN;
         case 'L':
             return ZONE_TYPE::LAC;
         case 'S':
@@ -140,8 +138,6 @@ std::string ParametresPartie::toStringZONE_TYPE(const ZONE_TYPE type) {
             return "#";
         case ZONE_TYPE::ABBAYE:
             return "A";
-        case ZONE_TYPE::JARDIN:
-            return "J";
         case ZONE_TYPE::LAC:
             return "L";
         case ZONE_TYPE::SOURCE:

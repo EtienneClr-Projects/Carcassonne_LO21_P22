@@ -67,7 +67,7 @@ constexpr static const DIRECTION DIRECTIONS_COTE_INVERSE[]{
 // la source est équivalente au lac
 constexpr static const ZONE_TYPE ALL_ZONES_TYPES[] = {ZONE_TYPE::PRAIRIE, ZONE_TYPE::VILLE, ZONE_TYPE::CHEMIN,
                                                       ZONE_TYPE::AUTRE, ZONE_TYPE::RIVIERE, ZONE_TYPE::FIN_DE_ROUTE,
-                                                      ZONE_TYPE::ABBAYE, ZONE_TYPE::JARDIN, ZONE_TYPE::LAC,
+                                                      ZONE_TYPE::ABBAYE, ZONE_TYPE::LAC,
                                                       ZONE_TYPE::CATHEDRALE};
 
 constexpr static const SUPP_TYPE ALL_SUPPS_TYPES[] = {SUPP_TYPE::BLASON, SUPP_TYPE::AUBERGE, SUPP_TYPE::BLE,
