@@ -277,7 +277,8 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
 
 bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, Case *c) {
     if (c->getMeeplePose() != nullptr) {//si il y a un meeple
-        cout << "Joueur " << Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur())->getNom() << " a recupere un meeple" << endl;
+        cout << "Joueur " << Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur())->getNom()
+             << " a recupere un meeple" << endl;
         Joueur *joueurGagnant = Partie::getInstance()->getJoueur(c->getMeeplePose()->getCouleur());
         if (joueurGagnant == nullptr) {
             throw CarcassonneException("joueur gagnant null");
@@ -312,7 +313,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
                 cout << "\t on retire le meeple de l'Abbaye" << endl;
                 if (retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
                     compterLesPoints = true;
-                    coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));}
+                    coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
                 }
             }
         } else if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
@@ -321,7 +322,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
                     cout << "on retire une zone de type JARDIN" << endl;
                     if (retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
                         compterLesPoints = true;
-                        coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));}
+                        coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
                     }
                 }
             }
@@ -513,10 +514,10 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
     bool cathedrale = false;
     for (Case *c: pZone->getCases()) {
         if (c->getSuppType() == SUPP_TYPE::AUBERGE) {
-            auberge =true;
+            auberge = true;
         }
         if (c->getSuppType() == SUPP_TYPE::CATHEDRALE) {
-            cathedrale =true;
+            cathedrale = true;
         }
     }
     //pour chaque case de la zone, on ajoute les points au joueur
@@ -534,19 +535,17 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
             }
         }
         if (pZone->getType() == ZONE_TYPE::VILLE) {
-            if (cathedrale){
+            if (cathedrale) {
                 pJoueur->ajouterPoints(3);
-            }
-            else{
+            } else {
                 pJoueur->ajouterPoints(2);
             }
             tuilesPassees.push_back(c->getTuileParente());
         }
         if (pZone->getType() == ZONE_TYPE::CHEMIN) {
-            if (auberge){
+            if (auberge) {
                 pJoueur->ajouterPoints(2);
-            }
-            else{
+            } else {
                 pJoueur->ajouterPoints(1);
             }
             tuilesPassees.push_back(c->getTuileParente());
@@ -564,17 +563,15 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
 }
 
 
-void Plateau::finDePartie(){
-    for (auto zone : zones) {
+void Plateau::finDePartie() {
+    for (auto zone: zones) {
         vector<Joueur *> joueur = zone->getGagnant();
-        for (auto j : joueur) {
+        for (auto j: joueur) {
             donnerPointsPourJoueurFinDePartie(j, zone);
         }
 
     }
 }
-
-
 
 
 void Plateau::donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone) {
@@ -585,10 +582,10 @@ void Plateau::donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone) {
     bool cathedrale = false;
     for (Case *c: pZone->getCases()) {
         if (c->getSuppType() == SUPP_TYPE::AUBERGE) {
-            auberge =true;
+            auberge = true;
         }
         if (c->getSuppType() == SUPP_TYPE::CATHEDRALE) {
-            cathedrale =true;
+            cathedrale = true;
         }
     }
 
@@ -602,19 +599,17 @@ void Plateau::donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone) {
             pJoueur->ajouterPoints(1);
         }
         if (pZone->getType() == ZONE_TYPE::VILLE) {
-            if (cathedrale){
+            if (cathedrale) {
                 pJoueur->ajouterPoints(0);
-            }
-            else {
+            } else {
                 pJoueur->ajouterPoints(1);
             }
             tuilesPassees.push_back(c->getTuileParente());
         }
-        if (pZone->getType() == ZONE_TYPE::CHEMIN){
-            if (auberge){
+        if (pZone->getType() == ZONE_TYPE::CHEMIN) {
+            if (auberge) {
                 pJoueur->ajouterPoints(0);
-            }
-            else{
+            } else {
                 pJoueur->ajouterPoints(1);
             }
             tuilesPassees.push_back(c->getTuileParente());
@@ -626,7 +621,7 @@ void Plateau::donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone) {
         }
     }
     //cas spécifique : prairie
-    if (pZone->getType() == ZONE_TYPE::PRAIRIE){
+    if (pZone->getType() == ZONE_TYPE::PRAIRIE) {
         pJoueur->ajouterPoints(compterNbVillesAdjacentesFermees(pZone));
     }
 
@@ -654,14 +649,12 @@ int Plateau::CompterVoisins(Tuile *tuile) {
 }
 
 
-
-
-int Plateau::compterNbVillesAdjacentesFermees(Zone * zone) {
+int Plateau::compterNbVillesAdjacentesFermees(Zone *zone) {
     int nbVillesAdjacentesFermees = 0;
     std::set<Zone *> villesAdjacentes;//Set : pour qu'il n'y ait pas de doublons
 
     //parcours des cases de la zone
-    for (Case* c : zone->getCases()) {
+    for (Case *c: zone->getCases()) {
         //pour chaque case de la zone, on cherche ses cases adjacentes dans la tuile
         std::vector<Case *> voisins = getCasesAdjacentes(c->getTuileParente(), c->getDirection());
 

@@ -33,7 +33,7 @@
         <file>Ressources/AubergesCathedrales/Tuiles/1V1_V1_P3_V1_C22_P3_P4_C2_P3_.png</file>
         <file>Ressources/AubergesCathedrales/Tuiles/1V1_V1_V1_V2_P3_V4_P3_P3_P3_.png</file>
         <file>Ressources/AubergesCathedrales/Tuiles/1V1_V1_V1_V2_P3_V4_V5_V5_V5_.png</file>
-        <file>Ressources/AubergesCathedrales/Tuiles/2V1_V1_V1_V1_c1_V1_V1_V1_V1_.png</file>
+        <file>Ressources/AubergesCathedrales/Tuiles/2V1_V1_V1_V1_V14_V1_V1_V1_V1_.png</file>
         <file>Ressources/MarchandsBatisseurs/Meeples/1CB.png</file>
         <file>Ressources/MarchandsBatisseurs/Meeples/1CJ.png</file>
         <file>Ressources/MarchandsBatisseurs/Meeples/1CN.png</file>
@@ -60,7 +60,8 @@
         <file>Ressources/Normal/Tuiles/3V1_V1_P2_V1_P2_P2_P2_P2_P2_.png</file>
         <file>Ressources/Normal/Tuiles/4P1_C2_P3_P1_C2_P3_P1_C2_P3_.png</file>
         <file>Ressources/Normal/Tuiles/4P1_P1_P1_C2_F3_C4_P5_C6_P7_.png</file>
-        <file>Ressources/Normal/Tuiles/4P1_V2_P1_C3_C3_C3_P4_P4_P4_.png</file>
+        <file>Ressources/Normal/Tuiles/3P1_V2_P1_C3_C3_C3_P4_P4_P4_.png</file>
+        <file>Ressources/Normal/Tuiles/DP1_V2_P1_C3_C3_C3_P4_P4_P4_.png</file>
         <file>Ressources/Normal/Tuiles/4V11_V1_V1_V1_V1_V1_P2_P2_P2_.png</file>
         <file>Ressources/Normal/Tuiles/5P1_V2_P1_P1_P1_P1_P1_P1_P1_.png</file>
         <file>Ressources/Normal/Tuiles/5V11_V1_P2_V1_C3_C3_P2_C3_P4_.png</file>

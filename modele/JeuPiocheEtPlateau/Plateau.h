@@ -45,6 +45,8 @@ private :
 
     void fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine);
 
+    void donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone);
+
 public:
     static Coord * findCoordTuile(Tuile *tuile);//doit être public pour permettre à l'interface de connaître position des tuiles
 
@@ -96,7 +98,6 @@ public:
 
     void donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone);
 
-    void donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone);
 
     int CompterVoisins(Tuile* tuile);
     std::vector<Case *> getCasesAdjacentes(Tuile *tuile, DIRECTION direction);

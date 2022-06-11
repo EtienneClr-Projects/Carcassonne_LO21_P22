@@ -137,12 +137,21 @@ void Jeu_Carcassonne::fin_tour()
 
 void Jeu_Carcassonne::fin_jeu()
 {
+    cPartie->getPlateau()->finDePartie();
     cout << "\nnous sommes en fin de partie\n";
+    for (int i = 0; i < cPartie->getParametresPartie()->getNombreJoueurs(); i++) {
+        infos_scores[i]->setText(
+                QString("Score: %1").arg(cPartie->getpartie()->getJoueur(ALL_COULEURS[i])->getNbPoints()));
+        infos_scores[i]->update();
+        cout << "affichage du score du joueur de la couleur : " << ParametresPartie::toStringCOULEUR(ALL_COULEURS[i])
+             << " score = " << cPartie->getpartie()->getJoueur(ALL_COULEURS[i])->getNbPoints() << endl;
+    }
+
     //création d'une nouvelle fenêtre avec les résultats
     QString labelText;
     int joueur_victoire = 0;
-    int nb =cPartie->getParametresPartie()->getNombreJoueurs();
-    int numero_joueur = numero_tour%nb;
+    int nb = cPartie->getParametresPartie()->getNombreJoueurs();
+    int numero_joueur = numero_tour % nb;
 
     for (int i = 0; i < nb; i++) {
         labelText.clear();
