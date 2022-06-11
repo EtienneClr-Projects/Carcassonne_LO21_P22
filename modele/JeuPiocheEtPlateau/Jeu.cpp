@@ -60,6 +60,9 @@ void Jeu::getTuilesDesRessources(EXTENSION _extension, vector<Tuile *> *_tuiles)
                 if (c == '3') { //jardin
                     suppType = SUPP_TYPE::JARDIN;
                 }
+                if (c == '4') { //cathedrale
+                    suppType = SUPP_TYPE::CATHEDRALE;
+                }
 
             }
             iInfo++;

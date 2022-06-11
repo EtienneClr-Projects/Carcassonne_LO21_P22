@@ -112,8 +112,7 @@ ZONE_TYPE ParametresPartie::toZONE_TYPE(char type) {
             return ZONE_TYPE::LAC;
         case 'S':
             return ZONE_TYPE::SOURCE;
-        case 'c':
-            return ZONE_TYPE::CATHEDRALE;
+
         default:
             throw std::invalid_argument("Type de zone invalide (toZONE_TYPE) : " + std::string(1, type));
     }
@@ -142,8 +141,7 @@ std::string ParametresPartie::toStringZONE_TYPE(const ZONE_TYPE type) {
             return "L";
         case ZONE_TYPE::SOURCE:
             return "S";
-        case ZONE_TYPE::CATHEDRALE:
-            return "c";
+
         default:
             throw std::invalid_argument("Type de zone invalide (toString Zone)");
     }
@@ -273,6 +271,8 @@ std::string ParametresPartie::toStringSUPP_TYPE(SUPP_TYPE type) {
             return " ";
         case SUPP_TYPE::JARDIN:
             return "Jar";
+        case SUPP_TYPE::CATHEDRALE:
+            return "Cat";
         default:
             throw std::invalid_argument("Type de supplement invalide");
     }

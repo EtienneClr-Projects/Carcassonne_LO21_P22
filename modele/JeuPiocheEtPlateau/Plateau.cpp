@@ -312,7 +312,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
                 cout << "\t on retire le meeple de l'Abbaye" << endl;
                 if (retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
                     compterLesPoints = true;
-                    coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                    coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));}
                 }
             }
         } else if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
@@ -321,7 +321,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
                     cout << "on retire une zone de type JARDIN" << endl;
                     if (retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
                         compterLesPoints = true;
-                        coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                        coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));}
                     }
                 }
             }
@@ -515,7 +515,7 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
         if (c->getSuppType() == SUPP_TYPE::AUBERGE) {
             auberge =true;
         }
-        if (pZone->getType() == ZONE_TYPE::CATHEDRALE) {
+        if (c->getSuppType() == SUPP_TYPE::CATHEDRALE) {
             cathedrale =true;
         }
     }
@@ -526,7 +526,12 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
             continue;
 
         if (c->getSuppType() == SUPP_TYPE::BLASON) {
-            pJoueur->ajouterPoints(2);
+            if (cathedrale){
+                pJoueur->ajouterPoints(3);
+            }
+            else {
+                pJoueur->ajouterPoints(2);
+            }
         }
         if (pZone->getType() == ZONE_TYPE::VILLE) {
             if (cathedrale){
@@ -582,7 +587,7 @@ void Plateau::donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone) {
         if (c->getSuppType() == SUPP_TYPE::AUBERGE) {
             auberge =true;
         }
-        if (pZone->getType() == ZONE_TYPE::CATHEDRALE) {
+        if (c->getSuppType() == SUPP_TYPE::CATHEDRALE) {
             cathedrale =true;
         }
     }

@@ -11,7 +11,7 @@ static const int COLOR_NORMALE = 15;
  * Le type de la zone : PRAIRIE, VILLE, CHEMIN, ou AUTRE ou FIN pour une fin de chemin
  */
 enum class ZONE_TYPE {
-    PRAIRIE, VILLE, CHEMIN, AUTRE, RIVIERE, FIN_DE_ROUTE, ABBAYE, LAC, SOURCE, CATHEDRALE
+    PRAIRIE, VILLE, CHEMIN, AUTRE, RIVIERE, FIN_DE_ROUTE, ABBAYE, LAC, SOURCE
 };
 /**
  * La direction suivant les 9 cardinaux.
@@ -39,7 +39,7 @@ enum class COULEUR {
  * Un paramètre supplémentaire des cases. Si elles possèdent un blason par exemple.
  */
 enum class SUPP_TYPE {
-    BLASON, AUBERGE, BLE, TONNEAU, TISSU, AUCUN, JARDIN
+    BLASON, AUBERGE, BLE, TONNEAU, TISSU, AUCUN, JARDIN, CATHEDRALE
 };
 
 /**
@@ -67,12 +67,11 @@ constexpr static const DIRECTION DIRECTIONS_COTE_INVERSE[]{
 // la source est équivalente au lac
 constexpr static const ZONE_TYPE ALL_ZONES_TYPES[] = {ZONE_TYPE::PRAIRIE, ZONE_TYPE::VILLE, ZONE_TYPE::CHEMIN,
                                                       ZONE_TYPE::AUTRE, ZONE_TYPE::RIVIERE, ZONE_TYPE::FIN_DE_ROUTE,
-                                                      ZONE_TYPE::ABBAYE, ZONE_TYPE::LAC,
-                                                      ZONE_TYPE::CATHEDRALE};
+                                                      ZONE_TYPE::ABBAYE, ZONE_TYPE::LAC};
 
 constexpr static const SUPP_TYPE ALL_SUPPS_TYPES[] = {SUPP_TYPE::BLASON, SUPP_TYPE::AUBERGE, SUPP_TYPE::BLE,
                                                       SUPP_TYPE::TONNEAU,
-                                                      SUPP_TYPE::TISSU,};
+                                                      SUPP_TYPE::TISSU,SUPP_TYPE::CATHEDRALE, SUPP_TYPE::JARDIN};
 
 constexpr static const MEEPLE_TYPE ALL_MEEPLES_TYPES[] = {MEEPLE_TYPE::ABBE, MEEPLE_TYPE::GRAND_MEEPLE,
                                                           MEEPLE_TYPE::NORMAL,
