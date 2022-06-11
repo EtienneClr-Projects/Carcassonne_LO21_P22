@@ -223,6 +223,15 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
              << endl;
         return false;
     }
+
+    //vérification que l'extension ABBAYE est activée
+    if (c->getZoneType() == ZONE_TYPE::ABBAYE && not Jeu::getInstance()->hasExtension(EXTENSION::ABBE)) {
+        cout << "Vous devez avoir l'extension ABBE pour poser un meeple sur une case de type ABBAYE"
+             << endl;
+        return false;
+    }
+
+
     //vérification que l'extension PAYSANS est activée
     if (c->getZoneType() == ZONE_TYPE::PRAIRIE && not Jeu::getInstance()->hasExtension(EXTENSION::PAYSANS)) {
         cout << "Vous devez avoir l'extension PAYSANS pour poser un meeple sur une case de type PRAIRIE"
