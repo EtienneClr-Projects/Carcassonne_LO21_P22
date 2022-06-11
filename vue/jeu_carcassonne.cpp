@@ -398,6 +398,26 @@ void Jeu_Carcassonne::debut_tour() {
             //le joueur humain peut prendre les commandes.
         }
     }
+
+
+    //on colore en vert les tuiles où il est possible de poser la tuile active
+    //on parcourt tous les boutons du plateau
+    for (int iBtn = 0; iBtn < 400; iBtn++) {
+        //on essaie les 4 rotations de la tuile
+        for (int rotTuile = 0; rotTuile < 4; rotTuile++) {
+            //on regarde si checkerTuile retourne true à la position du bouton
+            if (cPartie->getPlateau()->checkerTuile(tuile_active, new Coord(iBtn / 20 + 1, iBtn % 20 + 1))) {
+                //on colorie le bouton en vert
+                buttons[iBtn]->setStyleSheet("background-color: green");
+                tuile_active->pivoterTuileSensTrigo(4 - rotTuile);
+                break;
+            } else {
+                //on enleve la couleur
+                buttons[iBtn]->setStyleSheet("background-color: white");
+            }
+            tuile_active->pivoterTuileSensTrigo(1);
+        }
+    }
 }
 
 
