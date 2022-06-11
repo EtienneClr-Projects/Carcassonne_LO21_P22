@@ -222,19 +222,19 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
             cout << "Vous ne pouvez pas poser un abbe autre part que sur une abbaye ou un jardin" << endl;
             return false;
         }
-    }
-    //vérification que l'extension PAYSANS est activée
-    if (c->getZoneType() == ZONE_TYPE::PRAIRIE && not Jeu::getInstance()->hasExtension(EXTENSION::PAYSANS)
-        && type != MEEPLE_TYPE::ABBE) { //on a le droit de poser un ABBE sur une prairie
-        cout << "Vous devez avoir l'extension PAYSANS pour poser un meeple sur une case de type PRAIRIE"
-             << endl;//todo [LOW] @Etienne ou @Aness : en faire une boite de dialogue
-        return false;
-    }
-    //on vérifie qu'on ne pose pas de meeple normal sur un jardin
-    if (c->getZoneType() == ZONE_TYPE::PRAIRIE && c->getSuppType() == SUPP_TYPE::JARDIN && type != MEEPLE_TYPE::ABBE) {
-        cout << "Vous devez poser un meeple Abbé sur un jardin"
-             << endl;
-        return false;
+    } else {
+        //vérification que l'extension PAYSANS est activée
+        if (c->getZoneType() == ZONE_TYPE::PRAIRIE &&
+            not Jeu::getInstance()->hasExtension(EXTENSION::PAYSANS)) { //on a le droit de poser un ABBE sur une prairie
+            cout << "Vous devez avoir l'extension PAYSANS pour poser un meeple sur une case de type PRAIRIE" << endl;
+            return false;
+        }
+        //on vérifie qu'on ne pose pas de meeple normal sur un jardin
+        if (c->getZoneType() == ZONE_TYPE::PRAIRIE && c->getSuppType() == SUPP_TYPE::JARDIN) {
+            cout << "Vous devez poser un meeple Abbé sur un jardin"
+                 << endl;
+            return false;
+        }
     }
 
     if (c->getZoneType() == ZONE_TYPE::RIVIERE || c->getZoneType() ==
@@ -242,7 +242,8 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
         return false;
 
     Zone *zone = c->getZoneParente();
-    if (zone->getGagnant().empty()) {// si pas de meeple déjà posé dans la zone
+    // si pas de meeple déjà posé dans la zone. Mais pour les prairies on peut avoir plusieurs jardins avec abbés
+    if (zone->getGagnant().empty() || c->getSuppType() == SUPP_TYPE::JARDIN) {
 
         unsigned int i = 0;
         //parcours des meeples en réserve

@@ -14,6 +14,8 @@ std::string Case::toString() {
 //        res += ParametresPartie::toStringSUPP_TYPE(supp_type);
     else if (zone_parente != nullptr && zone_parente->getType() != ZONE_TYPE::PRAIRIE)
         res += std::to_string(zone_parente->ouvertures);
+    else if (supp_type != SUPP_TYPE::AUCUN)
+        res += ParametresPartie::toStringSUPP_TYPE(supp_type)[0];
     else
         res += " ";
     return res;
