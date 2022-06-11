@@ -480,7 +480,8 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
     if (position_tour == TOUR__CHOIX_ACTION) {
         if (ui->listWidget->selectedItems().empty() || item->text() == QString(aucuneAction)) {
             actions_finis = 1;
-        } else if (item->text() == QString(ajoutMeeple) && etape_action == 0) {
+        }
+        else if (item->text() == QString(ajoutMeeple) && etape_action == 0) {
             ui->listWidget->clear();
             ui->listWidget->addItem(ajoutMeepleNO);
             ui->listWidget->addItem(ajoutMeepleN);
@@ -520,7 +521,10 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                                                    cPartie->getpartie()->meeplesEnReserve, couleur_actuelle);
             if (coord_tmp == nullptr)
             {
-                QMessageBox::warning(this, "Erreur", "Vous n'avez pas de Meeple Abbe sur le plateau.'");
+                if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0)
+                {
+                    QMessageBox::warning(this, "Erreur", "Vous n'avez pas de Meeple Abbe sur le plateau.'");
+                }
             }
             else
             {
@@ -550,11 +554,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             ui->listWidget->addItem(ajoutMeepleSE);
             meeple_type=MEEPLE_TYPE::GRAND_MEEPLE;
         }
-        /*else if (item->text() == QString(ajoutMeeple) && etape_action == 0)
-        {
-
-        }*/
-        else if (!ui->listWidget->selectedItems().empty())
+        else if (!ui->listWidget->selectedItems().empty() && etape_action == 1)
         {
             cout << "\n bouton OK appuyé\n";
              if (etape_action == 1 && choix_action == 1 && tuile_active != nullptr)//ajouter meeple de type meeple_type
@@ -593,7 +593,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                         //si le type du joueur est de type 0, on affiche le message
                         if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0)
                                 {
-                                    QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser de meeple ici");
+                                    QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser ce meeple ici");
                                 }
                             }
                     }
