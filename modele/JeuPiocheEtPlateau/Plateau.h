@@ -99,11 +99,14 @@ public:
     void donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone);
 
 
-    int CompterVoisins(Tuile* tuile);
-    std::vector<Case *> getCasesAdjacentes(Tuile *tuile, DIRECTION direction);
-    int compterNbVillesAdjacentesFermees(Zone * zone);
+    int CompterVoisins(Tuile *tuile);
+
+    static std::vector<Case *> getCasesAdjacentes(Tuile *tuile, DIRECTION direction);
+
+    static int compterNbVillesAdjacentesFermees(Zone *zone);
+
     void finDePartie();
 
-    };
+};
 
 #endif //CARCASSONNE_LO21_P22_PLATEAU_H

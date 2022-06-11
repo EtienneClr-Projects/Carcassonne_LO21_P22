@@ -245,7 +245,7 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
 
     Zone *zone = c->getZoneParente();
     // si pas de meeple déjà posé dans la zone. Mais pour les prairies on peut avoir plusieurs jardins avec abbés
-    if (zone->getGagnant().empty() || c->getSuppType() == SUPP_TYPE::JARDIN) {
+    if (zone->getGagnants().empty() || c->getSuppType() == SUPP_TYPE::JARDIN) {
 
         unsigned int i = 0;
         //parcours des meeples en réserve
@@ -306,7 +306,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
     std::vector<Coord *> coord_tuiles_de_zones_ouvertes;
     for (auto zone: zones) {//on regarde toutes les zones
         bool compterLesPoints = false;
-        vector<Joueur *> gagnantsZone = zone->getGagnant();
+        vector<Joueur *> gagnantsZone = zone->getGagnants();
         if (zone->getType() == ZONE_TYPE::ABBAYE) { // on retire les abbes
             Case *c = zone->getCases()[0];//parce qu'il y a qu'une seule case dans la zone abbaye
             if (CompterVoisins(c->getTuileParente()) == 8) {
@@ -527,10 +527,9 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
             continue;
 
         if (c->getSuppType() == SUPP_TYPE::BLASON) {
-            if (cathedrale){
+            if (cathedrale) {
                 pJoueur->ajouterPoints(3);
-            }
-            else {
+            } else {
                 pJoueur->ajouterPoints(2);
             }
         }
@@ -565,11 +564,10 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
 
 void Plateau::finDePartie() {
     for (auto zone: zones) {
-        vector<Joueur *> joueur = zone->getGagnant();
+        vector<Joueur *> joueur = zone->getGagnants();
         for (auto j: joueur) {
             donnerPointsPourJoueurFinDePartie(j, zone);
         }
-
     }
 }
 
@@ -622,9 +620,8 @@ void Plateau::donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone) {
     }
     //cas spécifique : prairie
     if (pZone->getType() == ZONE_TYPE::PRAIRIE) {
-        pJoueur->ajouterPoints(3*compterNbVillesAdjacentesFermees(pZone));
+        pJoueur->ajouterPoints(3 * compterNbVillesAdjacentesFermees(pZone));
     }
-
 }
 
 int Plateau::CompterVoisins(Tuile *tuile) {
@@ -657,14 +654,14 @@ int Plateau::compterNbVillesAdjacentesFermees(Zone *zone) {
     for (Case *c: zone->getCases()) {
         //pour chaque case de la zone, on cherche ses cases adjacentes dans la tuile
         std::vector<Case *> voisins = getCasesAdjacentes(c->getTuileParente(), c->getDirection());
-
-        for (Case* c : voisins){
+        for (Case *_c: voisins) {
+            cout << "voisin : " << _c->toString() << endl;
             //on parcours toutes les cases voisines et on compte sa zone une seule fois
-            if(c->getZoneType() == ZONE_TYPE::VILLE && !c->getZoneParente()->estOuverte()){
-                villesAdjacentesFermees.insert(c->getZoneParente());
+            if (_c->getZoneType() == ZONE_TYPE::VILLE && !_c->getZoneParente()->estOuverte()) {
+                villesAdjacentesFermees.insert(_c->getZoneParente());
             }
         }
-        return villesAdjacentesFermees.size();
+        return (int) villesAdjacentesFermees.size();
 
         /*for (auto &Z: villesAdjacentesFermees) {
         //puis pour chaque voisin, on regarde si c'est une ville fermée

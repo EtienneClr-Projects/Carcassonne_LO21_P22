@@ -63,8 +63,7 @@ Jeu_Carcassonne::~Jeu_Carcassonne() {
     for (auto &button: buttons) {
         delete button;
     }
-    for (int i=0; i<cPartie->getParametresPartie()->getNombreJoueurs(); i++)
-    {
+    for (int i = 0; i < cPartie->getParametresPartie()->getNombreJoueurs(); i++) {
         delete liste_joueurs[i];
     }
     delete grid;
@@ -103,8 +102,7 @@ void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
 //    }
 }
 
-void Jeu_Carcassonne::fin_tour()
-{
+void Jeu_Carcassonne::fin_tour() {
     //update les meeples retirés des zones
     std::vector<Coord *> coord_tuiles_modifiees = cPartie->getPlateau()->retirerMeeples(
             cPartie->getpartie()->meeplesPoses,
@@ -135,8 +133,7 @@ void Jeu_Carcassonne::fin_tour()
     debut_tour();
 }
 
-void Jeu_Carcassonne::fin_jeu()
-{
+void Jeu_Carcassonne::fin_jeu() {
     cPartie->getPlateau()->finDePartie();
     cout << "\nnous sommes en fin de partie\n";
     for (int i = 0; i < cPartie->getParametresPartie()->getNombreJoueurs(); i++) {
@@ -165,14 +162,13 @@ void Jeu_Carcassonne::fin_jeu()
         }
     }
 
-    for (int i = 0; i < nb; i++)
-    {
-        if (getScore(infos_scores[joueur_victoire]->text()) < getScore(infos_scores[i]->text()))
-        {
+    for (int i = 0; i < nb; i++) {
+        if (getScore(infos_scores[joueur_victoire]->text()) < getScore(infos_scores[i]->text())) {
             joueur_victoire = i;
         }
     }
-    QMessageBox::information(this, "fin de Partie", infos_joueurs[joueur_victoire]->text().append(" a remporté(e) la partie."));
+    QMessageBox::information(this, "fin de Partie",
+                             infos_joueurs[joueur_victoire]->text().append(" a remporté(e) la partie."));
 }
 
 void Jeu_Carcassonne::on_pushButton_clicked()//tourner
@@ -202,6 +198,15 @@ void Jeu_Carcassonne::test() {
             if (cPartie->getPlateau()->checkerTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1))) {
                 cPartie->getPlateau()->ajouterTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1));
                 cout << "tuile posee : " << tuile_active->toString() << endl;
+                //affichage de chaque case de la tuile
+                for (std::pair<const DIRECTION, Case *> c: tuile_active->getCases()) {
+                    if (c.second->getZoneType() == ZONE_TYPE::PRAIRIE) {
+                        cout << "\n\nNOMBRE DE VILLES ADJACENTES : "
+                             << Plateau::compterNbVillesAdjacentesFermees(c.second->getZoneParente()) << endl;
+                        continue;
+                    }
+                }
+
                 cPartie->getPlateau()->afficherConsole();
                 QIcon icon;
                 QPixmap result(image.width(), image.height());
@@ -223,9 +228,7 @@ void Jeu_Carcassonne::test() {
                 position_tour = TOUR__CHOIX_ACTION;
                 //donner le focus au bouton OK
                 ui->pushButton_5->setFocus();
-            }
-            else
-            {
+            } else {
                 if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0) {
                     QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser de tuile ici");
                 }
@@ -420,8 +423,7 @@ void Jeu_Carcassonne::setActions() {
             ui->listWidget->addItem("Ajouter Meeple Abbe");
             ui->listWidget->addItem("Retirer Meeple Abbe");
         }
-        if (e == EXTENSION::AUBERGES_CATHEDRALES)
-        {
+        if (e == EXTENSION::AUBERGES_CATHEDRALES) {
             ui->listWidget->addItem("Ajouter Grand Meeple");
         }
         //rajouter d'autres actions en fonctions d'extensions
@@ -489,8 +491,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
     if (position_tour == TOUR__CHOIX_ACTION) {
         if (ui->listWidget->selectedItems().empty() || item->text() == QString(aucuneAction)) {
             actions_finis = 1;
-        }
-        else if (item->text() == QString(ajoutMeeple) && etape_action == 0) {
+        } else if (item->text() == QString(ajoutMeeple) && etape_action == 0) {
             ui->listWidget->clear();
             ui->listWidget->addItem(ajoutMeepleNO);
             ui->listWidget->addItem(ajoutMeepleN);
@@ -503,9 +504,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             ui->listWidget->addItem(ajoutMeepleSE);
             choix_action = 1;
             etape_action = 1;
-        }
-        else if (item->text() == "Ajouter Meeple Abbe" && etape_action == 0)
-        {
+        } else if (item->text() == "Ajouter Meeple Abbe" && etape_action == 0) {
             ui->listWidget->clear();
             ui->listWidget->addItem(ajoutMeepleNO);
             ui->listWidget->addItem(ajoutMeepleN);
@@ -518,25 +517,20 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             ui->listWidget->addItem(ajoutMeepleSE);
             choix_action = 1;
             etape_action = 1;
-            meeple_type=MEEPLE_TYPE::ABBE;
-        }
-        else if (item->text() == "Retirer Meeple Abbe" && etape_action == 0)
-        {
+            meeple_type = MEEPLE_TYPE::ABBE;
+        } else if (item->text() == "Retirer Meeple Abbe" && etape_action == 0) {
             //choix_action = 2;
             //etape_action = 1;
 
             ui->listWidget->clear();
-            Coord* coord_tmp = cPartie->getPlateau()->retirerAbbe(cPartie->getpartie()->meeplesPoses,
-                                                   cPartie->getpartie()->meeplesEnReserve, couleur_actuelle);
-            if (coord_tmp == nullptr)
-            {
-                if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0)
-                {
+            Coord *coord_tmp = cPartie->getPlateau()->retirerAbbe(cPartie->getpartie()->meeplesPoses,
+                                                                  cPartie->getpartie()->meeplesEnReserve,
+                                                                  couleur_actuelle);
+            if (coord_tmp == nullptr) {
+                if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0) {
                     QMessageBox::warning(this, "Erreur", "Vous n'avez pas de Meeple Abbe sur le plateau.'");
                 }
-            }
-            else
-            {
+            } else {
                 QIcon icon;
                 int index = (coord_tmp->x_ - 1) * 20 + (coord_tmp->y_ - 1);
                 cout << "x: " << coord_tmp->x_ << " y: " << coord_tmp->y_ << "index: " << index << endl;
@@ -546,9 +540,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                 actions_finis = 1;
             }
             //ui->listWidget->addItem("Sélectionner une tuile.");
-        }
-        else if (item->text() == "Ajouter Grand Meeple" && etape_action == 0)
-        {
+        } else if (item->text() == "Ajouter Grand Meeple" && etape_action == 0) {
             choix_action = 1;
             etape_action = 1;
             ui->listWidget->clear();
@@ -561,51 +553,49 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             ui->listWidget->addItem(ajoutMeepleSO);
             ui->listWidget->addItem(ajoutMeepleS);
             ui->listWidget->addItem(ajoutMeepleSE);
-            meeple_type=MEEPLE_TYPE::GRAND_MEEPLE;
-        }
-        else if (!ui->listWidget->selectedItems().empty() && etape_action == 1)
-        {
+            meeple_type = MEEPLE_TYPE::GRAND_MEEPLE;
+        } else if (!ui->listWidget->selectedItems().empty() && etape_action == 1) {
             cout << "\n bouton OK appuyé\n";
-             if (etape_action == 1 && choix_action == 1 && tuile_active != nullptr)//ajouter meeple de type meeple_type
-                {
-                    cout << "\noption 1\n";
-                    if (cPartie->getPlateau()->poserMeeple(couleur_actuelle,
-                                                           tuile_active->getCase(stringBtnToDir(item->text())),
-                                                           meeple_type, cPartie->getpartie()->meeplesPoses,
-                                                           cPartie->getpartie()->meeplesEnReserve)) {
-                        cout << "\n1\n";
-                        QPixmap image = images_grilles[index_tuile_active];
-                        cout << "\n1\n";
-                        QIcon icon;
-                        QPixmap result(image.width(), image.height());
-                        result.fill(Qt::transparent);
-                        QPainter painter(&result);
-                        painter.drawPixmap(0, 0, image);
-                        cout << "\n1\n";
-                        QPixmap meeple_image;
-                        for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
-                            if (m->getCouleur() == couleur_actuelle && m->getType() == meeple_type) {
-                                QPixmap meep(QString::fromStdString(m->getCheminImage()));
-                                meeple_image = meep;
-                                break;
-                            }
+            if (etape_action == 1 && choix_action == 1 && tuile_active != nullptr)//ajouter meeple de type meeple_type
+            {
+                cout << "\noption 1\n";
+                if (cPartie->getPlateau()->poserMeeple(couleur_actuelle,
+                                                       tuile_active->getCase(stringBtnToDir(item->text())),
+                                                       meeple_type, cPartie->getpartie()->meeplesPoses,
+                                                       cPartie->getpartie()->meeplesEnReserve)) {
+                    cout << "\n1\n";
+                    QPixmap image = images_grilles[index_tuile_active];
+                    cout << "\n1\n";
+                    QIcon icon;
+                    QPixmap result(image.width(), image.height());
+                    result.fill(Qt::transparent);
+                    QPainter painter(&result);
+                    painter.drawPixmap(0, 0, image);
+                    cout << "\n1\n";
+                    QPixmap meeple_image;
+                    for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
+                        if (m->getCouleur() == couleur_actuelle && m->getType() == meeple_type) {
+                            QPixmap meep(QString::fromStdString(m->getCheminImage()));
+                            meeple_image = meep;
+                            break;
                         }
-                        cout << "\n1\n";
-                        meeple_image = meeple_image.scaledToHeight(40);
-                        painter.drawPixmap(getXCaseFromDir(item->text()), getYCaseFromDir(item->text()), meeple_image);
-                        icon.addPixmap(result);
-                        buttons[index_tuile_active]->setIcon(icon);
-                        cout << "\n1\n";
-                        actions_finis = 1;
-                    } else {
-                        cout << "\noption 2\n";
-                        //si le type du joueur est de type 0, on affiche le message
-                        if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0)
-                                {
-                                    QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser ce meeple ici");
-                                }
-                            }
                     }
+                    cout << "\n1\n";
+                    meeple_image = meeple_image.scaledToHeight(40);
+                    painter.drawPixmap(getXCaseFromDir(item->text()), getYCaseFromDir(item->text()), meeple_image);
+                    icon.addPixmap(result);
+                    buttons[index_tuile_active]->setIcon(icon);
+                    cout << "\n1\n";
+                    actions_finis = 1;
+                } else {
+                    cout << "\noption 2\n";
+                    //si le type du joueur est de type 0, on affiche le message
+                    if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() ==
+                        0) {
+                        QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser ce meeple ici");
+                    }
+                }
+            }
             cout << "\n fin option 1\n";
         }
 
@@ -619,13 +609,10 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             position_tour = TOUR__SCORE;
 
             updateRessources();
-            if (tuile_active==nullptr)
-            {
+            if (tuile_active == nullptr) {
                 cout << "\nfin du jeu\n";
                 fin_jeu();
-            }
-            else
-            {
+            } else {
                 cout << "\n fin de tour\n";
                 fin_tour();
             }
