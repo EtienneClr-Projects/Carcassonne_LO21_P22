@@ -279,10 +279,10 @@ bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &
         if (joueurGagnant == nullptr) {
             throw CarcassonneException("joueur gagnant null");
         }
-        donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
+//        donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
         cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple de type "
-             << ParametresPartie::toStringMEEPLE_TYPE(c->getMeeplePose()->getType()) << " et a maintenant "
-             << joueurGagnant->getNbPoints() << " points" << endl;
+             << ParametresPartie::toStringMEEPLE_TYPE(c->getMeeplePose()->getType()) << endl;// " et a maintenant "
+//             << joueurGagnant->getNbPoints() << " points" << endl;
 
 
         meeplesEnReserve.push_back(c->getMeeplePose());//on l'ajoute dans le tableau des meeples en réserve
@@ -298,32 +298,44 @@ bool Plateau::retirerLeMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &
     } else { return false; }
 }
 
-
 std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve) {
     std::vector<Coord *> coord_tuiles_de_zones_ouvertes;
     for (auto zone: zones) {//on regarde toutes les zones
+        bool compterLesPoints = false;
+        vector<Joueur *> gagnantsZone = zone->getGagnant();
         if (zone->getType() == ZONE_TYPE::ABBAYE) { // on retire les abbes
             Case *c = zone->getCases()[0];//parce qu'il y a qu'une seule case dans la zone abbaye
             if (CompterVoisins(c->getTuileParente()) == 8) {
                 cout << "\t on retire le meeple de l'Abbaye" << endl;
-                retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
-                coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                if (retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
+                    compterLesPoints = true;
+                    coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                }
             }
         } else if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 8) {
                     cout << "on retire une zone de type JARDIN" << endl;
-                    retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
-                    coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                    if (retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
+                        compterLesPoints = true;
+                        coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                    }
                 }
             }
         } else if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
-                if (retirerLeMeeple(meeplesPoses, meeplesEnReserve,
-                                    c))//on retire les meeples présents dans les villes et chemins
+                if (retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
+                    compterLesPoints = true;
                     coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                }
             }
         }
+
+        if (compterLesPoints)//si un meeple a été retiré, la zone est donc fermée, on peut compter les points
+            for (Joueur *joueur: gagnantsZone) {
+                donnerPointsPourJoueur(joueur, zone);
+                cout << "Joueur " << joueur->getNom() << "a maintenant " << joueur->getNbPoints() << " points" << endl;
+            }
     }
     return coord_tuiles_de_zones_ouvertes;
 }

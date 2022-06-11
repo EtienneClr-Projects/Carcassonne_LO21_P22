@@ -28,33 +28,41 @@ int Zone::getNombreDePoints() const {
  * @return le gagnant de la zone. nullptr si tous les joueurs en ont 0.
  */
 vector<Joueur *> Zone::getGagnant() {
+    cout << "\n\n\n" << endl;
     cout << "getGagnant" << endl;
     //on parcourt toutes les cases de la Zone, et on compte le nombre de Meeples de chaque COULEUR
     std::map<COULEUR, int> nbMeeplesParCouleur;
     for (Case *c: this->cases) {
         Meeple *m = c->getMeeplePose();
         if (m != nullptr) {
-            cout << "m: " << m << endl;
+            cout << "m: " << ParametresPartie::toStringCOULEUR(m->getCouleur()) << endl;
             nbMeeplesParCouleur[m->getCouleur()]++;
-            if(m->getType()==MEEPLE_TYPE::GRAND_MEEPLE) //si grand meeple, on rajoute un point en plus
+            if (m->getType() == MEEPLE_TYPE::GRAND_MEEPLE) { //si grand meeple, on rajoute un point en plus
+                cout << "GRAND MEEPLE ! PLUS 1 MEEPLE" << endl;
                 nbMeeplesParCouleur[m->getCouleur()]++;
+            }
         }
     }
 
-    //on cherche le gagnant
-    vector<Joueur *> gagnant;
+    //on cherche le gagnants
+    vector<Joueur *> gagnants;
     int nbMaxMeeples = 0;
     for (auto &it: nbMeeplesParCouleur) {
         if (it.second > nbMaxMeeples) {
-            gagnant.clear();
-            gagnant.push_back(Partie::getInstance()->getJoueur(it.first));
+            gagnants.clear();
+            gagnants.push_back(Partie::getInstance()->getJoueur(it.first));
             nbMaxMeeples = it.second;
-        }
-        if (it.second == nbMaxMeeples)
-            gagnant.push_back(Partie::getInstance()->getJoueur(it.first));
+        } else if (it.second == nbMaxMeeples)
+            gagnants.push_back(Partie::getInstance()->getJoueur(it.first));
     }
-
-    return gagnant;
+    //affichage des gagnants
+    cout << "gagnants: ";
+    for (Joueur *j: gagnants)
+        cout << ParametresPartie::toStringCOULEUR(j->getCouleur()) << " : " << nbMeeplesParCouleur[j->getCouleur()]
+             << endl;
+    cout << endl;
+    cout << "\n\n\n" << endl;
+    return gagnants;
 }
 
 /**
