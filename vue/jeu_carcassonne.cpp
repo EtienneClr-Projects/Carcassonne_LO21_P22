@@ -45,8 +45,10 @@ Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
 
     ui->scrollArea->verticalScrollBar()->setSliderPosition((gridWidthHeight * 15) / 2);
     ui->scrollArea->horizontalScrollBar()->setSliderPosition((gridWidthHeight * 15) / 2);
-
-
+    ui->lineEdit->close();
+    ui->label_3->close();
+    ui->label_2->close();
+    ui->pushButton_2->close();
 
 
     //débuter le jeu : premier tour
@@ -113,8 +115,6 @@ void Jeu_Carcassonne::fin_tour() {
         infos_scores[i]->setText(
                 QString("Score: %1").arg(cPartie->getpartie()->getJoueur(ALL_COULEURS[i])->getNbPoints()));
         infos_scores[i]->update();
-        cout << "affichage du score du joueur de la couleur : " << ParametresPartie::toStringCOULEUR(ALL_COULEURS[i])
-             << " score = " << cPartie->getpartie()->getJoueur(ALL_COULEURS[i])->getNbPoints() << endl;
     }
 
 
@@ -122,9 +122,7 @@ void Jeu_Carcassonne::fin_tour() {
     QIcon icon;
     if (!coord_tuiles_modifiees.empty()) {
         for (auto c: coord_tuiles_modifiees) {
-            std::cout << "c la fin" << endl;
             index = (c->x_ - 1) * 20 + (c->y_ - 1);
-            cout << "x: " << c->x_ << " y: " << c->y_ << "index: " << index << endl;
             icon.addPixmap(images_grilles[index]);
             buttons[index]->setIcon(icon);
         }
@@ -135,13 +133,10 @@ void Jeu_Carcassonne::fin_tour() {
 
 void Jeu_Carcassonne::fin_jeu() {
     cPartie->getPlateau()->finDePartie();
-    cout << "\nnous sommes en fin de partie\n";
     for (int i = 0; i < cPartie->getParametresPartie()->getNombreJoueurs(); i++) {
         infos_scores[i]->setText(
                 QString("Score: %1").arg(cPartie->getpartie()->getJoueur(ALL_COULEURS[i])->getNbPoints()));
         infos_scores[i]->update();
-        cout << "affichage du score du joueur de la couleur : " << ParametresPartie::toStringCOULEUR(ALL_COULEURS[i])
-             << " score = " << cPartie->getpartie()->getJoueur(ALL_COULEURS[i])->getNbPoints() << endl;
     }
 
     //création d'une nouvelle fenêtre avec les résultats
@@ -197,7 +192,6 @@ void Jeu_Carcassonne::test() {
         if (cPartie->getPioche()->nbTuilesRestantes != 0) {
             if (cPartie->getPlateau()->checkerTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1))) {
                 cPartie->getPlateau()->ajouterTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1));
-                cout << "tuile posee : " << tuile_active->toString() << endl;
 
                 cPartie->getPlateau()->afficherConsole();
                 QIcon icon;
@@ -334,7 +328,6 @@ void Jeu_Carcassonne::initialisation(QString *joueurs, const int *tj) {
 
 void Jeu_Carcassonne::debut_tour() {
     //donner le focus au bouton Tourner
-    cout << "\n début de tour\n";
     ui->pushButton->setFocus();
     numero_tour = numero_tour + 1;
     position_tour = TOUR__POSER_TUILE_PIOCHEE;
@@ -395,34 +388,34 @@ void Jeu_Carcassonne::debut_tour() {
         if (liste_joueurs[numero_joueur]->getType() == 1) {
             tourIARandom();
         } else {
-            //le joueur humain peut prendre les commandes.
-        }
-    }
 
 
-    //on colore en vert les tuiles où il est possible de poser la tuile active
-    //on parcourt tous les boutons du plateau
-    int nbPossibilites = 0;
-    for (int iBtn = 0; iBtn < 400; iBtn++) {
-        //on essaie les 4 rotations de la tuile
-        for (int rotTuile = 0; rotTuile < 4; rotTuile++) {
-            //on regarde si checkerTuile retourne true à la position du bouton
-            if (cPartie->getPlateau()->checkerTuile(tuile_active, new Coord(iBtn / 20 + 1, iBtn % 20 + 1))) {
-                //on colorie le bouton en vert
-                buttons[iBtn]->setStyleSheet("background-color: green");
-                tuile_active->pivoterTuileSensTrigo(4 - rotTuile);
-                nbPossibilites++;
-                break;
-            } else {
-                //on enleve la couleur
-                buttons[iBtn]->setStyleSheet("background-color: white");
+            //on colore en vert les tuiles où il est possible de poser la tuile active
+            //on parcourt tous les boutons du plateau
+            int nbPossibilites = 0;
+            for (int iBtn = 0; iBtn < 400; iBtn++) {
+                //on essaie les 4 rotations de la tuile
+                for (int rotTuile = 0; rotTuile < 4; rotTuile++) {
+                    //on regarde si checkerTuile retourne true à la position du bouton
+                    if (cPartie->getPlateau()->checkerTuile(tuile_active, new Coord(iBtn / 20 + 1, iBtn % 20 + 1))) {
+                        //on colorie le bouton en vert
+                        buttons[iBtn]->setStyleSheet("background-color: green");
+                        tuile_active->pivoterTuileSensTrigo(4 - rotTuile);
+                        nbPossibilites++;
+                        break;
+                    } else {
+                        //on enleve la couleur
+                        buttons[iBtn]->setStyleSheet("background-color: white");
+                    }
+                    tuile_active->pivoterTuileSensTrigo(1);
+                }
             }
-            tuile_active->pivoterTuileSensTrigo(1);
+            if (nbPossibilites == 0) {
+                //on affiche un message d'erreur
+                QMessageBox::warning(this, "Erreur",
+                                     "Aucune position possible pour la tuile active. Recommencez la partie !");
+            }
         }
-    }
-    if (nbPossibilites == 0) {
-        //on affiche un message d'erreur
-        QMessageBox::warning(this, "Erreur", "Aucune position possible pour la tuile active. Recommencez la partie !");
     }
 }
 
@@ -551,7 +544,6 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             } else {
                 QIcon icon;
                 int index = (coord_tmp->x_ - 1) * 20 + (coord_tmp->y_ - 1);
-                cout << "x: " << coord_tmp->x_ << " y: " << coord_tmp->y_ << "index: " << index << endl;
                 icon.addPixmap(images_grilles[index]);
                 buttons[index]->setIcon(icon);
 
@@ -573,23 +565,18 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             ui->listWidget->addItem(ajoutMeepleSE);
             meeple_type = MEEPLE_TYPE::GRAND_MEEPLE;
         } else if (!ui->listWidget->selectedItems().empty() && etape_action == 1) {
-            cout << "\n bouton OK appuyé\n";
             if (etape_action == 1 && choix_action == 1 && tuile_active != nullptr)//ajouter meeple de type meeple_type
             {
-                cout << "\noption 1\n";
                 if (cPartie->getPlateau()->poserMeeple(couleur_actuelle,
                                                        tuile_active->getCase(stringBtnToDir(item->text())),
                                                        meeple_type, cPartie->getpartie()->meeplesPoses,
                                                        cPartie->getpartie()->meeplesEnReserve)) {
-                    cout << "\n1\n";
                     QPixmap image = images_grilles[index_tuile_active];
-                    cout << "\n1\n";
                     QIcon icon;
                     QPixmap result(image.width(), image.height());
                     result.fill(Qt::transparent);
                     QPainter painter(&result);
                     painter.drawPixmap(0, 0, image);
-                    cout << "\n1\n";
                     QPixmap meeple_image;
                     for (auto m: cPartie->getJeu()->meeplesPossibleEnFonctionDesExtensions) {
                         if (m->getCouleur() == couleur_actuelle && m->getType() == meeple_type) {
@@ -598,15 +585,12 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                             break;
                         }
                     }
-                    cout << "\n1\n";
                     meeple_image = meeple_image.scaledToHeight(40);
                     painter.drawPixmap(getXCaseFromDir(item->text()), getYCaseFromDir(item->text()), meeple_image);
                     icon.addPixmap(result);
                     buttons[index_tuile_active]->setIcon(icon);
-                    cout << "\n1\n";
                     actions_finis = 1;
                 } else {
-                    cout << "\noption 2\n";
                     //si le type du joueur est de type 0, on affiche le message
                     if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() ==
                         0) {
@@ -614,7 +598,6 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
                     }
                 }
             }
-            cout << "\n fin option 1\n";
         }
 
         if (actions_finis == 1) {
@@ -628,10 +611,8 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
 
             updateRessources();
             if (tuile_active == nullptr) {
-                cout << "\nfin du jeu\n";
                 fin_jeu();
             } else {
-                cout << "\n fin de tour\n";
                 fin_tour();
             }
         }
@@ -651,7 +632,6 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
 
         for (int i = 0; i < random + 1; i++) {
             on_pushButton_clicked();
-            //cout << "Hello\n";
         }
 
         for (int i = 0; i < 10; i++) {
@@ -660,7 +640,6 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
             std::uniform_int_distribution<int> uni(0, 399);
             random = uni(rng);
             buttons[random]->clicked();
-            //cout << nb_choix << "Kitty\n";
             if (position_tour == TOUR__CHOIX_ACTION) {
                 break;
             } else if (nb_choix >= 20000)//pas de choix possibles
@@ -684,7 +663,6 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
             annuler();
         } else {
             ui->listWidget->setCurrentRow(random);
-            cout << "actions finis" << position_tour << "\n";
             on_pushButton_5_clicked();
         }
     }
