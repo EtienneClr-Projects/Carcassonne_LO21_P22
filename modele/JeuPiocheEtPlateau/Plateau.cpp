@@ -617,7 +617,7 @@ void Plateau::donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone) {
     }
     //cas spécifique : prairie
     if (pZone->getType() == ZONE_TYPE::PRAIRIE){
-        pJoueur->ajouterPoints(compterNbVillesAdjacentesFermees(pZone));
+        pJoueur->ajouterPoints(3*compterNbVillesAdjacentesFermees(pZone));
     }
 
 }
@@ -647,19 +647,29 @@ int Plateau::CompterVoisins(Tuile *tuile) {
 
 int Plateau::compterNbVillesAdjacentesFermees(Zone * zone) {
     int nbVillesAdjacentesFermees = 0;
-    std::set<Zone *> villesAdjacentes;//Set : pour qu'il n'y ait pas de doublons
+    std::set<Zone *> villesAdjacentesFermees;//Set : pour qu'il n'y ait pas de doublons
 
     //parcours des cases de la zone
     for (Case* c : zone->getCases()) {
         //pour chaque case de la zone, on cherche ses cases adjacentes dans la tuile
         std::vector<Case *> voisins = getCasesAdjacentes(c->getTuileParente(), c->getDirection());
 
+        for (Case* c : voisins){
+            //on parcours toutes les cases voisines et on compte sa zone une seule fois
+            if(c->getZoneType() == ZONE_TYPE::VILLE && !c->getZoneParente()->estOuverte()){
+                villesAdjacentesFermees.insert(c->getZoneParente());
+            }
+        }
+        return villesAdjacentesFermees.size();
+
+        /*for (auto &Z: villesAdjacentesFermees) {
         //puis pour chaque voisin, on regarde si c'est une ville fermée
         for (auto &C: voisins) {
             if (C->getZoneType() == ZONE_TYPE::VILLE && !C->getZoneParente()->estOuverte()) {
                 nbVillesAdjacentesFermees++;
             }
-        }
+        }*/
+
     }
 
     return nbVillesAdjacentesFermees;
