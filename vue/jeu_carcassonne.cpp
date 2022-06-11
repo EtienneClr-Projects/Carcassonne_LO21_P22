@@ -637,20 +637,19 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
             //cout << nb_choix << "Kitty\n";
             if (position_tour == TOUR__CHOIX_ACTION) {
                 break;
-            } else if (nb_choix >= 10000)//pas de choix possibles
+            } else if (nb_choix >= 20000)//pas de choix possibles
             {
-                cout << "why\n";
                 position_tour = TOUR__CHOIX_ACTION;
                 break;
             }
         }
     }
     while (position_tour == TOUR__CHOIX_ACTION) {
-        if (nb_choix >= 10000)//pas de choix possibles
+        if (nb_choix >= 20000)//pas de choix possibles
         {
+            QMessageBox::warning(this, "Erreur", "Il n'y a plus de possibilités, recommencez la partie !");
             break;
         }
-        //cout << "Dog\n";
         count = ui->listWidget->count();
         std::mt19937 rng(rd());// random-number engine Mersenne-Twister
         std::uniform_int_distribution<int> uni(0, count);

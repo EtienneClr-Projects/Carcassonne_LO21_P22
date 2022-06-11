@@ -230,18 +230,18 @@ void Jeu::setExtensions(const vector<EXTENSION> &_extensions) {
     //puis on ajoute les autres tuiles dans le désordre
     shuffle(tuilesTemp.begin(), tuilesTemp.end(), std::mt19937(std::random_device()()));
     //on cherche la tuile de départ, pour faire commencer par elle
-    if (!hasExtension(EXTENSION::RIVIERE)) {
+    if (!hasExtension(EXTENSION::RIVIERE))
         for (auto &t: tuilesTemp) {
             if (t->estDepart()) {
                 tuiles.insert(tuiles.begin(), t);
                 break;
             }
         }
-        for (auto &t: tuilesTemp) {
-            if (!t->estDepart())
-                tuiles.push_back(t);
-        }
+    for (auto &t: tuilesTemp) {
+        if (!t->estDepart())
+            tuiles.push_back(t);
     }
+
 
 
     //puis on donne les meeples à la Partie
