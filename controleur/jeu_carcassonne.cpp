@@ -409,8 +409,7 @@ void Jeu_Carcassonne::setActions() {
     for (auto e: extensionsChoisies) {
         if (e == EXTENSION::ABBE) {
             ui->listWidget->addItem("Ajouter Meeple Abbe");
-            ui->listWidget->addItem("Retirer Meeple dans Abbeye");
-            ui->listWidget->addItem("Retirer Meeple dans Jardin");
+            ui->listWidget->addItem("Retirer Meeple Abbe");
         }
         if (e == EXTENSION::AUBERGES_CATHEDRALES)
         {
@@ -513,10 +512,27 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
         }
         else if (item->text() == "Retirer Meeple Abbe" && etape_action == 0)
         {
-            choix_action = 2;
-            etape_action = 1;
+            //choix_action = 2;
+            //etape_action = 1;
+
             ui->listWidget->clear();
-            ui->listWidget->addItem("Sélectionner une tuile.");
+            Coord* coord_tmp = cPartie->getPlateau()->retirerAbbe(cPartie->getpartie()->meeplesPoses,
+                                                   cPartie->getpartie()->meeplesEnReserve, couleur_actuelle);
+            if (coord_tmp == nullptr)
+            {
+                QMessageBox::warning(this, "Erreur", "Vous n'avez pas de Meeple Abbe sur le plateau.'");
+            }
+            else
+            {
+                QIcon icon;
+                int index = (coord_tmp->x_ - 1) * 20 + (coord_tmp->y_ - 1);
+                cout << "x: " << coord_tmp->x_ << " y: " << coord_tmp->y_ << "index: " << index << endl;
+                icon.addPixmap(images_grilles[index]);
+                buttons[index]->setIcon(icon);
+
+                actions_finis = 1;
+            }
+            //ui->listWidget->addItem("Sélectionner une tuile.");
         }
         else if (item->text() == "Ajouter Grand Meeple" && etape_action == 0)
         {
