@@ -328,7 +328,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
     return coord_tuiles_de_zones_ouvertes;
 }
 
-bool Plateau::retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, COULEUR couleur) {
+Coord *Plateau::retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meeplesEnReserve, COULEUR couleur) {
     for (auto zone: zones) {
         if (zone->getType() == ZONE_TYPE::ABBAYE || zone->getType() == ZONE_TYPE::PRAIRIE)
             for (auto c: zone->getCases()) {
@@ -349,11 +349,11 @@ bool Plateau::retirerAbbe(vector<Meeple *> &meeplesPoses, vector<Meeple *> &meep
                         donnerPointsPourJoueur(joueurGagnant, c->getZoneParente());
                         cout << "Joueur " << joueurGagnant->getNom() << " a recupere un meeple ABBE" << endl;
                         c->retirerMeeplePose(); // on retire le meeple de la case
-                        return true;
+                        return findCoordTuile(c->getTuileParente());
                     }
             }
     }
-    return false; //si les conditions ne sont pas respectées, il reçoit une erreur
+    return nullptr; //si les conditions ne sont pas respectées, rien n'est retiré
 }
 
 /*
