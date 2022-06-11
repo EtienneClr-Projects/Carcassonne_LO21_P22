@@ -9,8 +9,10 @@
 #include <algorithm>
 
 #include "CasesTuilesEtZones/Tuile.h"
+#include "CasesTuilesEtZones/Prairie.h"
 #include "Gestion/Coord.h"
 #include "Gestion/Partie.h"
+#include <set>
 
 using namespace std;
 Plateau *Plateau::instance = nullptr;
@@ -293,6 +295,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
     for (auto zone: zones) {//on regarde toutes les zones
         bool compterLesPoints=false;//pour savoir s'il faut ou non comptabiliser les points
         vector<Joueur*> gagnantZone=zone->getGagnant();
+
         if (zone->getType() == ZONE_TYPE::ABBAYE) { // on retire les abbes
             Case *c = zone->getCases()[0];
             if (CompterVoisins(c->getTuileParente()) == 9) {
@@ -300,7 +303,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
                 coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
             }
         }
-        if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
+        else if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 9) {
                     retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
@@ -491,6 +494,17 @@ Coord *Plateau::getCoinBasDroite() {
 void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
 // en fonction du type de la zone, on affecte pas le même nombre de points avec la méthode joueur.ajouterPoints
     vector<Tuile *> tuilesPassees;
+    //on vérifie s'il y a une auberge ou une cathédrale sur le chemin
+    bool auberge = false;
+    bool cathedrale = false;
+    for (Case *c: pZone->getCases()) {
+        if (c->getSuppType() == SUPP_TYPE::AUBERGE) {
+            auberge =true;
+        }
+        if (pZone->getType() == ZONE_TYPE::CATHEDRALE) {
+            cathedrale =true;
+        }
+    }
     //pour chaque case de la zone, on ajoute les points au joueur
     for (Case *c: pZone->getCases()) {
         //si la tuile parente de la case est dans tuilesPassees, on continue;
@@ -501,11 +515,21 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
             pJoueur->ajouterPoints(2);
         }
         if (pZone->getType() == ZONE_TYPE::VILLE) {
-            pJoueur->ajouterPoints(2);
+            if (cathedrale){
+                pJoueur->ajouterPoints(3);
+            }
+            else{
+                pJoueur->ajouterPoints(2);
+            }
             tuilesPassees.push_back(c->getTuileParente());
         }
         if (pZone->getType() == ZONE_TYPE::CHEMIN) {
-            pJoueur->ajouterPoints(1);
+            if (auberge){
+                pJoueur->ajouterPoints(2);
+            }
+            else{
+                pJoueur->ajouterPoints(1);
+            }
             tuilesPassees.push_back(c->getTuileParente());
         }
         if (pZone->getType() == ZONE_TYPE::ABBAYE ||
@@ -517,6 +541,74 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
 
 }
 
+
+void Plateau::finDePartie(){
+    for (auto zone : zones) {
+        vector<Joueur *> joueur = zone->getGagnant();
+        for (auto j : joueur) {
+            donnerPointsPourJoueurFinDePartie(j, zone);
+        }
+
+    }
+}
+
+
+
+
+void Plateau::donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone) {
+// en fonction du type de la zone, on affecte pas le même nombre de points avec la méthode joueur.ajouterPoints
+    vector<Tuile *> tuilesPassees;
+    //on vérifie s'il y a une auberge ou une cathédrale sur le chemin
+    bool auberge = false;
+    bool cathedrale = false;
+    for (Case *c: pZone->getCases()) {
+        if (c->getSuppType() == SUPP_TYPE::AUBERGE) {
+            auberge =true;
+        }
+        if (pZone->getType() == ZONE_TYPE::CATHEDRALE) {
+            cathedrale =true;
+        }
+    }
+
+    //pour chaque case de la zone, on ajoute les points au joueur
+    for (Case *c: pZone->getCases()) {
+        //si la tuile parente de la case est dans tuilesPassees, on continue;
+        if (std::find(begin(tuilesPassees), end(tuilesPassees), c->getTuileParente()) != tuilesPassees.end())
+            continue;
+
+        if (c->getSuppType() == SUPP_TYPE::BLASON) {
+            pJoueur->ajouterPoints(1);
+        }
+        if (pZone->getType() == ZONE_TYPE::VILLE) {
+            if (cathedrale){
+                pJoueur->ajouterPoints(0);
+            }
+            else {
+                pJoueur->ajouterPoints(1);
+            }
+            tuilesPassees.push_back(c->getTuileParente());
+        }
+        if (pZone->getType() == ZONE_TYPE::CHEMIN){
+            if (auberge){
+                pJoueur->ajouterPoints(0);
+            }
+            else{
+                pJoueur->ajouterPoints(1);
+            }
+            tuilesPassees.push_back(c->getTuileParente());
+        }
+        if (pZone->getType() == ZONE_TYPE::ABBAYE ||
+            c->getSuppType() == SUPP_TYPE::JARDIN) {
+            pJoueur->ajouterPoints(CompterVoisins(c->getTuileParente()));
+            tuilesPassees.push_back(c->getTuileParente());
+        }
+    }
+    //cas spécifique : prairie
+    if (pZone->getType() == ZONE_TYPE::PRAIRIE){
+        pJoueur->ajouterPoints(compterNbVillesAdjacentesFermees(pZone));
+    }
+
+}
 
 int Plateau::CompterVoisins(Tuile *tuile) {
     int nbVoisins = 0;
@@ -536,4 +628,81 @@ int Plateau::CompterVoisins(Tuile *tuile) {
             }
         }
     return nbVoisins;
+}
+
+
+
+
+int Plateau::compterNbVillesAdjacentesFermees(Zone * zone) {
+    int nbVillesAdjacentesFermees = 0;
+    std::set<Zone *> villesAdjacentes;//Set : pour qu'il n'y ait pas de doublons
+
+    //parcours des cases de la zone
+    for (Case* c : zone->getCases()) {
+        //pour chaque case de la zone, on cherche ses cases adjacentes dans la tuile
+        std::vector<Case *> voisins = getCasesAdjacentes(c->getTuileParente(), c->getDirection());
+
+        //puis pour chaque voisin, on regarde si c'est une ville fermée
+        for (auto &C: voisins) {
+            if (C->getZoneType() == ZONE_TYPE::VILLE && !C->getZoneParente()->estOuverte()) {
+                nbVillesAdjacentesFermees++;
+            }
+        }
+    }
+
+    return nbVillesAdjacentesFermees;
+}
+
+/**
+ * Renvoie les cases adjacentes à une case de la zone.
+ * @param tuile
+ * @param direction
+ * @return
+ */
+std::vector<Case *> Plateau::getCasesAdjacentes(Tuile *tuile, DIRECTION direction) {
+    std::vector<Case *> casesAdjacentes;
+    if (direction != DIRECTION::MILIEU) {
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::MILIEU]);
+    }
+    if (direction == DIRECTION::NORD) {
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::NORD_OUEST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::NORD_EST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::OUEST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::EST]);
+    }
+    if (direction == DIRECTION::SUD) {
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::SUD_OUEST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::SUD_EST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::OUEST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::EST]);
+    }
+    if (direction == DIRECTION::EST) {
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::NORD_EST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::SUD_EST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::SUD]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::NORD]);
+    }
+    if (direction == DIRECTION::OUEST) {
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::NORD_OUEST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::SUD_OUEST]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::SUD]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::NORD]);
+    }
+    if (direction == DIRECTION::NORD_EST) {
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::NORD]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::EST]);
+    }
+    if (direction == DIRECTION::NORD_OUEST) {
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::NORD]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::OUEST]);
+    }
+    if (direction == DIRECTION::SUD_EST) {
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::SUD]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::EST]);
+    }
+    if (direction == DIRECTION::SUD_OUEST) {
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::SUD]);
+        casesAdjacentes.push_back(tuile->cases[DIRECTION::OUEST]);
+    }
+    return casesAdjacentes;
 }
