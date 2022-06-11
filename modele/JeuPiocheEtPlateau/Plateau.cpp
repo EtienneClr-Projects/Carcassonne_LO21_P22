@@ -526,6 +526,9 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
         //si la tuile parente de la case est dans tuilesPassees, on continue;
         if (std::find(begin(tuilesPassees), end(tuilesPassees), c->getTuileParente()) != tuilesPassees.end())
             continue;
+        if (c->getSuppType() == SUPP_TYPE::JARDIN) {
+            cout << "€€€€€€€€€€€€€€€€€€€€€€€" << endl;
+        }
 
         if (c->getSuppType() == SUPP_TYPE::BLASON) {
             if (cathedrale) {
@@ -552,12 +555,14 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
         }
         if (pZone->getType() == ZONE_TYPE::ABBAYE ||
             c->getSuppType() == SUPP_TYPE::JARDIN) {
-            if (c->getMeeplePose() != nullptr && c->getMeeplePose()->getCouleur() == pJoueur->getCouleur()) {
-                cout << "ajout de " << CompterVoisins(c->getTuileParente()) + 1 << "points pour jardin ou abbaye"
-                     << endl;
-                pJoueur->ajouterPoints(CompterVoisins(c->getTuileParente()) + 1);
-                tuilesPassees.push_back(c->getTuileParente());
-            }
+            cout << "essai d'ajout de points pour le joueur "
+                 << ParametresPartie::toStringCOULEUR(pJoueur->getCouleur()) << endl;
+//            if (c->getMeeplePose() != nullptr && c->getMeeplePose()->getCouleur() == pJoueur->getCouleur()) {
+            cout << "ajout de " << CompterVoisins(c->getTuileParente()) + 1 << "points pour jardin ou abbaye"
+                 << endl;
+            pJoueur->ajouterPoints(CompterVoisins(c->getTuileParente()) + 1);
+            tuilesPassees.push_back(c->getTuileParente());
+//            }
         }
     }
 }
