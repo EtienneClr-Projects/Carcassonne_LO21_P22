@@ -299,23 +299,30 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
         if (zone->getType() == ZONE_TYPE::ABBAYE) { // on retire les abbes
             Case *c = zone->getCases()[0];
             if (CompterVoisins(c->getTuileParente()) == 9) {
-                if(retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) compterLesPoints=true;
-                coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                if(retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)){
+                    compterLesPoints=true;
+                    coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                }
             }
         }
         else if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 9) {
-                    retirerLeMeeple(meeplesPoses, meeplesEnReserve, c);
-                    coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                    if(retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
+                        compterLesPoints = true;
+                        coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                    }
                 }
             }
         }
         else if (!(zone->estOuverte()) && zone->getType() != ZONE_TYPE::FIN_DE_ROUTE) { // si la zone est fermée
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
-                if (retirerLeMeeple(meeplesPoses, meeplesEnReserve,
-                                    c))//on retire les meeples présents dans les villes et chemins
+                if(retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
+                    //on retire les meeples présents dans les villes et chemins
+                    compterLesPoints = true;
                     coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
+                }
+
             }
         }
         if (compterLesPoints)//si un meeple a été retiré, la zone est donc fermée, on peut compter les points
@@ -501,7 +508,7 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
         if (c->getSuppType() == SUPP_TYPE::AUBERGE) {
             auberge =true;
         }
-        if (pZone->getType() == ZONE_TYPE::CATHEDRALE) {
+        if (c->getSuppType() == SUPP_TYPE::CATHEDRALE) {
             cathedrale =true;
         }
     }
@@ -512,7 +519,12 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
             continue;
 
         if (c->getSuppType() == SUPP_TYPE::BLASON) {
-            pJoueur->ajouterPoints(2);
+            if (cathedrale){
+                pJoueur->ajouterPoints(3);
+            }
+            else {
+                pJoueur->ajouterPoints(2);
+            }
         }
         if (pZone->getType() == ZONE_TYPE::VILLE) {
             if (cathedrale){
@@ -565,7 +577,7 @@ void Plateau::donnerPointsPourJoueurFinDePartie(Joueur *pJoueur, Zone *pZone) {
         if (c->getSuppType() == SUPP_TYPE::AUBERGE) {
             auberge =true;
         }
-        if (pZone->getType() == ZONE_TYPE::CATHEDRALE) {
+        if (c->getSuppType() == SUPP_TYPE::CATHEDRALE) {
             cathedrale =true;
         }
     }
