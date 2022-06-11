@@ -402,6 +402,7 @@ void Jeu_Carcassonne::debut_tour() {
 
     //on colore en vert les tuiles où il est possible de poser la tuile active
     //on parcourt tous les boutons du plateau
+    int nbPossibilites = 0;
     for (int iBtn = 0; iBtn < 400; iBtn++) {
         //on essaie les 4 rotations de la tuile
         for (int rotTuile = 0; rotTuile < 4; rotTuile++) {
@@ -410,6 +411,7 @@ void Jeu_Carcassonne::debut_tour() {
                 //on colorie le bouton en vert
                 buttons[iBtn]->setStyleSheet("background-color: green");
                 tuile_active->pivoterTuileSensTrigo(4 - rotTuile);
+                nbPossibilites++;
                 break;
             } else {
                 //on enleve la couleur
@@ -417,6 +419,10 @@ void Jeu_Carcassonne::debut_tour() {
             }
             tuile_active->pivoterTuileSensTrigo(1);
         }
+    }
+    if (nbPossibilites == 0) {
+        //on affiche un message d'erreur
+        QMessageBox::warning(this, "Erreur", "Aucune position possible pour la tuile active. Recommencez la partie !");
     }
 }
 
