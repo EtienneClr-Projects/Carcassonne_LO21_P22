@@ -25,6 +25,11 @@ static const char *const aucuneAction = "Aucune action";
 
 static const int gridWidthHeight = 100;
 
+static const int TOUR__POSER_TUILE_PIOCHEE = 1;//utilisés dans position_tour
+static const int TOUR__CHOIX_ACTION = 2;
+static const int TOUR__SCORE = 3;
+
+
 #include "controleurpartie.h"
 #include "JoueurEtRessources/Joueur.h"
 

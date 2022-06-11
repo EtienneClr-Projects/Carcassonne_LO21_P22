@@ -6,6 +6,14 @@
 #include "Gestion/ParametresPartie.h"
 
 class Joueur {
+private :
+    /**
+     * Le type du joueur : virtuel>0 ou réel=0
+     */
+    int type = 0;
+    int points;
+    std::string nom;
+    COULEUR couleur;
 
 public :
     Joueur(std::string n, COULEUR c) :
@@ -23,18 +31,9 @@ public :
         return type;
     }
 
-    void setType(int type) {
-        Joueur::type = type;
+    void setType(int _type) {
+        type = _type;
     }
-
-private :
-    /**
-     * Le type du joueur : virtuel>0 ou réel=0
-     */
-    int type = 0;
-    int points;
-    std::string nom;
-    COULEUR couleur;
 
 };
 

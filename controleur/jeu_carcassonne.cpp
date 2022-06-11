@@ -75,9 +75,9 @@ Jeu_Carcassonne::~Jeu_Carcassonne() {
 
 
 void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
-{
+{//todo enlever
 
-//    if (position_tour == 3) {
+//    if (position_tour == TOUR_SCORE) {
 //        if (ui->lineEdit->text() != "") {
 //            int nouveau_score = ui->lineEdit->text().toInt();
 //
@@ -168,7 +168,7 @@ void Jeu_Carcassonne::fin_jeu()
 
 void Jeu_Carcassonne::on_pushButton_clicked()//tourner
 {
-    if (position_tour == 1) {
+    if (position_tour == TOUR__POSER_TUILE_PIOCHEE) {
         QPixmap rotated = ui->label_tuile->pixmap().transformed(QTransform().rotate(-90));
         ui->label_tuile->setPixmap(rotated);
         tuile_active->pivoterTuileSensTrigo(1);
@@ -186,7 +186,7 @@ void Jeu_Carcassonne::test() {
     }
     index_tuile_active = index;
 
-    if (position_tour == 1) {
+    if (position_tour == TOUR__POSER_TUILE_PIOCHEE) {
         QPixmap image = ui->label_tuile->pixmap();
 
         if (cPartie->getPioche()->nbTuilesRestantes != 0) {
@@ -211,7 +211,7 @@ void Jeu_Carcassonne::test() {
                 ui->label_tuile->setPixmap(pix);
 
                 //la tuile est posée, le tour peut procéder
-                position_tour = 2;
+                position_tour = TOUR__CHOIX_ACTION;
                 //donner le focus au bouton OK
                 ui->pushButton_5->setFocus();
             }
@@ -244,19 +244,16 @@ void Jeu_Carcassonne::test() {
                 tuile_active = nullptr;
 
                 //la tuile est posée, le tour peut procéder
-                position_tour = 2;
-            }
-            else
-            {
+                position_tour = TOUR__CHOIX_ACTION;
+            } else {
                 if (liste_joueurs[numero_tour % cPartie->getParametresPartie()->getNombreJoueurs()]->getType() == 0) {
                     QMessageBox::warning(this, "Erreur", "Vous ne pouvez pas poser de tuile ici");
                 }
             }
         }
     }
-    if (position_tour == 2) {
-        if (choix_action == 2 && etape_action == 1)
-        {
+    if (position_tour == TOUR__CHOIX_ACTION) {
+        if (choix_action == 2 && etape_action == 1) {
             //cPartie->getPlateau()->retirerAbbe()
         }
     }
@@ -336,7 +333,7 @@ void Jeu_Carcassonne::debut_tour() {
     cout << "\n début de tour\n";
     ui->pushButton->setFocus();
     numero_tour = numero_tour + 1;
-    position_tour = 1;
+    position_tour = TOUR__POSER_TUILE_PIOCHEE;
     i_score_suivant = 0;
     etape_action = 0;
     choix_action = 0;
@@ -481,11 +478,10 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
 {
     QListWidgetItem *item = ui->listWidget->currentItem();
 
-    if (position_tour == 2) {
+    if (position_tour == TOUR__CHOIX_ACTION) {
         if (ui->listWidget->selectedItems().empty() || item->text() == QString(aucuneAction)) {
             actions_finis = 1;
-        }
-        else if (item->text() == QString(ajoutMeeple) && etape_action == 0) {
+        } else if (item->text() == QString(ajoutMeeple) && etape_action == 0) {
             ui->listWidget->clear();
             ui->listWidget->addItem(ajoutMeepleNO);
             ui->listWidget->addItem(ajoutMeepleN);
@@ -595,7 +591,7 @@ void Jeu_Carcassonne::on_pushButton_5_clicked()//bouton OK
             ui->label_3->clear();
             ui->label_3->setText(QString("Le score est traité\n automatiquement\n à chaque fin de tour."));
 
-            position_tour = 3;
+            position_tour = TOUR__SCORE;
 
             updateRessources();
             if (tuile_active==nullptr)
@@ -618,7 +614,7 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
     int nb_choix = 0;
     int count = 0;
 
-    while (position_tour == 1) {
+    while (position_tour == TOUR__POSER_TUILE_PIOCHEE) {
         std::mt19937 rng(rd());// random-number engine Mersenne-Twister
         std::uniform_int_distribution<int> uni(0, 3);
         random = uni(rng);
@@ -635,18 +631,17 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
             random = uni(rng);
             buttons[random]->clicked();
             //cout << nb_choix << "Kitty\n";
-            if (position_tour == 2) {
+            if (position_tour == TOUR__CHOIX_ACTION) {
                 break;
-            }
-            else if (nb_choix >= 10000)//pas de choix possibles
+            } else if (nb_choix >= 10000)//pas de choix possibles
             {
                 cout << "why\n";
-                position_tour = 2;
+                position_tour = TOUR__CHOIX_ACTION;
                 break;
             }
         }
     }
-    while (position_tour == 2) {
+    while (position_tour == TOUR__CHOIX_ACTION) {
         if (nb_choix >= 10000)//pas de choix possibles
         {
             break;
@@ -667,9 +662,9 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
 }
 
 void Jeu_Carcassonne::annuler() {
-    if (position_tour == 2) {
+    if (position_tour == TOUR__CHOIX_ACTION) {
         setActions();
-        meeple_type=MEEPLE_TYPE::NORMAL;
+        meeple_type = MEEPLE_TYPE::NORMAL;
         etape_action = 0;
         choix_action = 0;
         actions_finis = 0;
