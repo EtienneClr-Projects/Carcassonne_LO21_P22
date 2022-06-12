@@ -35,7 +35,7 @@ class Jeu {
     Jeu() = default;
 
     ~Jeu() {
-        //todo
+
     }
 
     vector<EXTENSION> extensions;
