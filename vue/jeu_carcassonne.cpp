@@ -162,6 +162,11 @@ void Jeu_Carcassonne::test() {
         if (cPartie->getPioche()->nbTuilesRestantes != 0) {
             if (cPartie->getPlateau()->checkerTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1))) {
                 cPartie->getPlateau()->ajouterTuile(tuile_active, new Coord(index / 20 + 1, index % 20 + 1));
+                //si la tuile est la tuile source, on donne la dirSource à Plateau
+                if (tuile_active->estSource())
+                    for (DIRECTION dir: DIRECTIONS_COTE)//on cherche dans quelle direction elle part
+                        if (tuile_active->getCase(dir)->getZoneType() == ZONE_TYPE::RIVIERE)
+                            cPartie->getPlateau()->setDirSource(dir);
 
                 cPartie->getPlateau()->afficherConsole();
                 QIcon icon;

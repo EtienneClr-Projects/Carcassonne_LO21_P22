@@ -26,6 +26,11 @@ class Plateau {
 private :
     static Plateau *instance;
     std::vector<std::pair<Coord *, Tuile *>> plateau;
+    DIRECTION dirSource;
+public:
+    void setDirSource(DIRECTION dirSource);
+
+private:
 
     explicit Plateau(const vector<std::pair<Coord *, Tuile *>> &p) : plateau(p) {};
 

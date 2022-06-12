@@ -148,24 +148,48 @@ void Plateau::fusionZonesCOINS(Tuile *tuile, int i, Tuile *tuileVoisine) {
 
 
 bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
+    map<DIRECTION, Case *> cases = tuile->getCases();
+//##########################################################
+//checker riviere
+    bool checkRiviere = true;
+    for (auto i: DIRECTIONS_ORDERED) {
+        if (cases[i]->getZoneType() == ZONE_TYPE::RIVIERE) {
+            checkRiviere = false;
+        }
+    }//si il y a une rivière sur la tuile
+    //on doit vérifier que le côté rivière est bien collé  1 fois à un voisin.
+    if (cases[DIRECTION::MILIEU]->getZoneType() == ZONE_TYPE::SOURCE) checkRiviere = true;
+
+
+
+
+//##########################################################
+/*
+ * règle pour la rivière qui tourne : on doit vérifier que la rivière ne fait pas demi-tour, pourr cela,
+ * on a la direction initiale de la tuile source, et on vérifie ici, que le joueur ne veut pas poser une tuile
+ * avec une rivière qui part vers la direction inverse de la dir de la tuile source
+*/
+    //on cherche la dir interdite :
+    DIRECTION dirInterdite = DIRECTION::MILIEU;
+    int i = 0;
+    for (; i < 4; i++) {
+        if (DIRECTIONS_COTE[i] == dirSource) dirInterdite = DIRECTIONS_COTE_INVERSE[i];
+    }
+    bool testerDouVientRiviere = false;
+    if (cases[dirInterdite]->getZoneType() == ZONE_TYPE::RIVIERE)//si une riviere pointe vers la dir interdite
+        if (cases[dirSource]->getZoneType() != ZONE_TYPE::RIVIERE)
+            testerDouVientRiviere = true;
+
+
+
+
+//##########################################################
     //on prend les voisins de la tuile
     auto voisin_droit = new Coord(coord->x_ + 1, coord->y_);
     auto voisin_gauche = new Coord(coord->x_ - 1, coord->y_);
     auto voisin_haut = new Coord(coord->x_, coord->y_ - 1);
     auto voisin_bas = new Coord(coord->x_, coord->y_ + 1);
-
-    map<DIRECTION, Case *> cases = tuile->getCases();
-
-    //checker riviere
-    bool checkerRiviere = true;
-    for (auto i: DIRECTIONS_ORDERED) {
-        if (cases[i]->getZoneType() == ZONE_TYPE::RIVIERE)
-            checkerRiviere = false;
-    }//si il y a une rivière sur la tuile
-    //on doit vérifier que le côté rivière est bien collé  1 fois à un voisin.
-    if (cases[DIRECTION::MILIEU]->getZoneType() == ZONE_TYPE::SOURCE) checkerRiviere = true;
     bool a_un_voisin = false;//vérifier que la tuile a bien un voisin
-
     for (std::pair<Coord *, Tuile *> pairTuile: plateau) {
 
         map<DIRECTION, Case *> casesVoisines = pairTuile.second->getCases();
@@ -177,34 +201,47 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
         if (pairTuile.first->x_ == voisin_droit->x_ && pairTuile.first->y_ == voisin_droit->y_) {
             a_un_voisin = true;
             if (cases[DIRECTION::EST]->getZoneType() != casesVoisines[DIRECTION::OUEST]->getZoneType()) return false;
-            if (cases[DIRECTION::EST]->getZoneType() == ZONE_TYPE::RIVIERE) checkerRiviere = true;
+            if (cases[DIRECTION::EST]->getZoneType() == ZONE_TYPE::RIVIERE) {
+                if (testerDouVientRiviere && dirInterdite != DIRECTION::EST)
+                    return false; //la riviere n'est pas bien orientée !!
+                checkRiviere = true;
+            }
         }
         if (pairTuile.first->x_ == voisin_gauche->x_ && pairTuile.first->y_ == voisin_gauche->y_) {
             a_un_voisin = true;
             if (cases[DIRECTION::OUEST]->getZoneType() != casesVoisines[DIRECTION::EST]->getZoneType()) return false;
-            if (cases[DIRECTION::OUEST]->getZoneType() == ZONE_TYPE::RIVIERE) checkerRiviere = true;
+            if (cases[DIRECTION::OUEST]->getZoneType() == ZONE_TYPE::RIVIERE) {
+                if (testerDouVientRiviere && dirInterdite != DIRECTION::OUEST) return false;
+                checkRiviere = true;
+            }
         }
         if (pairTuile.first->x_ == voisin_haut->x_ && pairTuile.first->y_ == voisin_haut->y_) {
             a_un_voisin = true;
             if (cases[DIRECTION::NORD]->getZoneType() != casesVoisines[DIRECTION::SUD]->getZoneType()) return false;
-            if (cases[DIRECTION::NORD]->getZoneType() == ZONE_TYPE::RIVIERE) checkerRiviere = true;
+            if (cases[DIRECTION::NORD]->getZoneType() == ZONE_TYPE::RIVIERE) {
+                if (testerDouVientRiviere && dirInterdite != DIRECTION::NORD) return false;
+                checkRiviere = true;
+            }
         }
         if (pairTuile.first->x_ == voisin_bas->x_ && pairTuile.first->y_ == voisin_bas->y_) {
             a_un_voisin = true;
             if (cases[DIRECTION::SUD]->getZoneType() != casesVoisines[DIRECTION::NORD]->getZoneType()) return false;
-            if (cases[DIRECTION::SUD]->getZoneType() == ZONE_TYPE::RIVIERE) checkerRiviere = true;
+            if (cases[DIRECTION::SUD]->getZoneType() == ZONE_TYPE::RIVIERE) {
+                if (testerDouVientRiviere && dirInterdite != DIRECTION::SUD) return false;
+                checkRiviere = true;
+            }
         }
     }
-//    return a_un_voisin || plateau.empty(); //s'il y a un voisin ou si c'est la premiere tuile placée on peut la poser
 
-    //si la condition de la rivière est bien respectée
-    if (checkerRiviere)
+//si la condition de la rivière est bien respectée
+    if (checkRiviere)
         return a_un_voisin ||
-               plateau.empty(); //s'il y a un voisin ou si c'est la premiere tuile placée on peut la poser
-    else { return false; }
+               plateau.
 
-
-    //règle pour la rivière qui tourne
+                       empty(); //s'il y a un voisin ou si c'est la premiere tuile placée on peut la poser
+    else {
+        return false;
+    }
 
 }
 
@@ -435,7 +472,7 @@ void Plateau::afficherConsole() {
     }
 }
 
-void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
+//void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
 //    //cf https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.codeproject.com%2FArticles%2F24896%2FJLib-A-Windows-Console-Library&psig=AOvVaw2HJb7bJSXUngLwowMwWUs7&ust=1653986979192000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCIjbmefXifgCFQAAAAAdAAAAABAD
 //
 //    switch (c->getZoneType()) {
@@ -472,7 +509,7 @@ void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
 //        case ZONE_TYPE::AUTRE:
 //            break;
 //    }
-}
+//}
 
 Coord *Plateau::getCoinHautGauche() {
     auto *coinHautGauche = new Coord(tailleMaxPlateau,
@@ -728,4 +765,8 @@ std::vector<Case *> Plateau::getCasesAdjacentes(Tuile *tuile, DIRECTION directio
         casesAdjacentes.push_back(tuile->cases[DIRECTION::OUEST]);
     }
     return casesAdjacentes;
+}
+
+void Plateau::setDirSource(DIRECTION dirSource) {
+    Plateau::dirSource = dirSource;
 }
