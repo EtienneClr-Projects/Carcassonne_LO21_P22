@@ -277,6 +277,7 @@ bool Plateau::poserMeeple(COULEUR couleur, Case *c, MEEPLE_TYPE type, vector<Mee
                  << endl;
             return false;
         }
+        if (c->getZoneType() == ZONE_TYPE::ABBAYE) return false;
     }
 
     if (c->getZoneType() == ZONE_TYPE::RIVIERE || c->getZoneType() ==

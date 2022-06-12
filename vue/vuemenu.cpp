@@ -50,9 +50,6 @@ void vueMenu::on_pushButton_2_clicked() {
         QMessageBox::critical(this, "Erreur", "Vous avez déjà 4 joueurs. C'est le maximum!");
     } else if (ui->lineEdit->text() == "") {
         QMessageBox::critical(this, "Erreur", "Veuillez insérer un nom de joueur.");
-    } else if (ui->checkBox->isChecked() && (nb_joueurs == 0)) {
-        QMessageBox::critical(this, "Erreur", "Le premier joueur ne peut être un IA.");
-        ui->checkBox->setChecked(false);
     }
     else {
         joueurs[nb_joueurs] = ui->lineEdit->text();

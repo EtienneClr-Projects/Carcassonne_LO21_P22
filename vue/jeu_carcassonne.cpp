@@ -620,7 +620,7 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
             buttons[random]->clicked();
             if (position_tour == TOUR__CHOIX_ACTION) {
                 break;
-            } else if (nb_choix >= 20000)//pas de choix possibles
+            } else if (nb_choix >= 40000)//pas de choix possibles
             {
                 position_tour = TOUR__CHOIX_ACTION;
                 break;
@@ -628,7 +628,7 @@ void Jeu_Carcassonne::tourIARandom()//appelé dans début_tour
         }
     }
     while (position_tour == TOUR__CHOIX_ACTION) {
-        if (nb_choix >= 20000)//pas de choix possibles
+        if (nb_choix >= 40000)//pas de choix possibles
         {
             QMessageBox::warning(this, "Erreur", "Il n'y a plus de possibilités, recommencez la partie !");
             break;
