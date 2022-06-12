@@ -64,19 +64,6 @@ constexpr static const DIRECTION DIRECTIONS_COTE_INVERSE[]{
         DIRECTION::SUD, DIRECTION::EST, DIRECTION::NORD, DIRECTION::OUEST
 };//utilisé pour trouver la case adjacente à une tuile. Cf Plateau::fusionnerZonesAvecPlateau()
 
-// la source est équivalente au lac
-constexpr static const ZONE_TYPE ALL_ZONES_TYPES[] = {ZONE_TYPE::PRAIRIE, ZONE_TYPE::VILLE, ZONE_TYPE::CHEMIN,
-                                                      ZONE_TYPE::AUTRE, ZONE_TYPE::RIVIERE, ZONE_TYPE::FIN_DE_ROUTE,
-                                                      ZONE_TYPE::ABBAYE, ZONE_TYPE::LAC};
-
-constexpr static const SUPP_TYPE ALL_SUPPS_TYPES[] = {SUPP_TYPE::BLASON, SUPP_TYPE::AUBERGE, SUPP_TYPE::BLE,
-                                                      SUPP_TYPE::TONNEAU,
-                                                      SUPP_TYPE::TISSU,SUPP_TYPE::CATHEDRALE, SUPP_TYPE::JARDIN};
-
-constexpr static const MEEPLE_TYPE ALL_MEEPLES_TYPES[] = {MEEPLE_TYPE::ABBE, MEEPLE_TYPE::GRAND_MEEPLE,
-                                                          MEEPLE_TYPE::NORMAL,
-                                                          MEEPLE_TYPE::BATISSEUR, MEEPLE_TYPE::COCHON};
-
 
 #include "Coord.h"
 #include <vector>
@@ -151,8 +138,6 @@ public:
     const char *what() const noexcept override {
         return info.c_str();
     }
-
-    std::string getInfo() const { return info; }
 
 private:
     std::string info;

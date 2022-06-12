@@ -74,36 +74,6 @@ Jeu_Carcassonne::~Jeu_Carcassonne() {
     delete cPartie;
 }
 
-
-void Jeu_Carcassonne::on_pushButton_2_clicked()//suivant
-{//todo enlever
-
-//    if (position_tour == TOUR_SCORE) {
-//        if (ui->lineEdit->text() != "") {
-//            int nouveau_score = ui->lineEdit->text().toInt();
-//
-//            nouveau_score = nouveau_score + getScore(infos_scores[i_score_suivant]->text());
-//            infos_scores[i_score_suivant]->clear();
-//            infos_scores[i_score_suivant]->setText(QString("Score: %1").arg(nouveau_score));
-//            infos_scores[i_score_suivant]->update();
-//            i_score_suivant = i_score_suivant + 1;
-//
-//            ui->lineEdit->setText(QString(""));
-//
-//            if (i_score_suivant == cPartie->getParametresPartie()->getNombreJoueurs()) {
-//                //nouveau tour
-//                fin_tour();
-//
-//            } else {
-//                ui->label_3->clear();
-//                ui->label_3->setText(QString("Joueur %1:").arg(i_score_suivant + 1));
-//            }
-//        } else {
-//            QMessageBox::critical(this, "Erreur", "Veuillez insérer un score.");
-//        }
-//    }
-}
-
 void Jeu_Carcassonne::fin_tour() {
     //update les meeples retirés des zones
     std::vector<Coord *> coord_tuiles_modifiees = cPartie->getPlateau()->retirerMeeples(

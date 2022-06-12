@@ -9,7 +9,6 @@
 #include <algorithm>
 
 #include "CasesTuilesEtZones/Tuile.h"
-#include "CasesTuilesEtZones/Prairie.h"
 #include "Gestion/Coord.h"
 #include "Gestion/Partie.h"
 #include <set>
@@ -76,7 +75,7 @@ void Plateau::transfererZone(Zone *zoneASuppr, Zone *zoneB) {
     }
 
     if (zoneASuppr == zoneB) { //si ce sont les mêmes adresses on supprime pas
-        return;//todo always false
+        return;
     }
 
     //on supprime la zone A de la liste
@@ -203,7 +202,10 @@ bool Plateau::checkerTuile(Tuile *tuile, Coord *coord) {
         return a_un_voisin ||
                plateau.empty(); //s'il y a un voisin ou si c'est la premiere tuile placée on peut la poser
     else { return false; }
-    //todo @daphne ajouter règle rivière qui tourne
+
+
+    //règle pour la rivière qui tourne
+
 }
 
 /**
@@ -320,7 +322,7 @@ std::vector<Coord *> Plateau::retirerMeeples(vector<Meeple *> &meeplesPoses, vec
         } else if (zone->getType() == ZONE_TYPE::PRAIRIE) { //on retire les meeples qui sont dans les jardins
             for (auto c: zone->getCases()) {//pour toutes les cases de cette zone
                 if (c->getSuppType() == SUPP_TYPE::JARDIN && CompterVoisins(c->getTuileParente()) == 8) {
-                    cout << "on retire une zone de type JARDIN" << endl;
+                    cout << "on retire un meeple sur un JARDIN" << endl;
                     if (retirerLeMeeple(meeplesPoses, meeplesEnReserve, c)) {
                         compterLesPoints = true;
                         coord_tuiles_de_zones_ouvertes.push_back(Plateau::findCoordTuile(c->getTuileParente()));
@@ -398,13 +400,12 @@ void Plateau::retirerMeeple(vector<Meeple *> &meeplesPoses, vector<Meeple *> &me
 */
 
 void Plateau::afficherConsole() {
-//    HANDLE console_color;
+//    HANDLE console_color; //pour afficher en couleur le plateau (ne fonctionne que sur windows, avec la lib windows.h
 //    console_color = GetStdHandle(STD_OUTPUT_HANDLE);
 //on trouve le coin en haut à gauche du plateau par rapport aux coordonnées (x,y) des tuiles
 //puis on affiche toutes les tuiles une par une
     Coord *coinHautGauche = getCoinHautGauche();
     Coord *coinBasDroite = getCoinBasDroite();
-//    cout << "coins :" << coinHautGauche->toString() << " " << coinBasDroite->toString() << endl;
     for (int y = coinHautGauche->y_; y <= coinBasDroite->y_; y++) {
         for (int iYCase = 0; iYCase < 3; iYCase++) {//permet de passer sur les 3 hauteurs de cases
             for (int x = coinHautGauche->x_; x <= coinBasDroite->x_; x++) {
@@ -420,7 +421,7 @@ void Plateau::afficherConsole() {
                         }
                     }
                     if (!found)
-                        cout << "     ";
+                        cout << "   ";
                 }
                 //affichage de la ligne de separation verticale
                 cout << "|";
@@ -430,11 +431,11 @@ void Plateau::afficherConsole() {
         //affichage de la ligne de separation horizontale
         for (int iSep = 0; iSep <= coinBasDroite->x_ - coinHautGauche->x_; iSep++)
             cout << "----------";
-        cout << endl;
+        cout << "\n\n\n\n";
     }
 }
-//
-//void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
+
+void Plateau::ColorForZone(HANDLE console_color, const Case *c) {
 //    //cf https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.codeproject.com%2FArticles%2F24896%2FJLib-A-Windows-Console-Library&psig=AOvVaw2HJb7bJSXUngLwowMwWUs7&ust=1653986979192000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCIjbmefXifgCFQAAAAAdAAAAABAD
 //
 //    switch (c->getZoneType()) {
@@ -471,7 +472,7 @@ void Plateau::afficherConsole() {
 //        case ZONE_TYPE::AUTRE:
 //            break;
 //    }
-//}
+}
 
 Coord *Plateau::getCoinHautGauche() {
     auto *coinHautGauche = new Coord(tailleMaxPlateau,
@@ -501,7 +502,6 @@ Coord *Plateau::getCoinBasDroite() {
         }
     }
     if (coinBasDroite->x_ == -tailleMaxPlateau || coinBasDroite->y_ == -tailleMaxPlateau) {
-        cout << "erreur dans le calcul du coin bas droite" << endl;
         throw CarcassonneException("erreur dans le calcul du coin bas droite");
     }
     return coinBasDroite;
@@ -526,9 +526,6 @@ void Plateau::donnerPointsPourJoueur(Joueur *pJoueur, Zone *pZone) {
         //si la tuile parente de la case est dans tuilesPassees, on continue;
         if (std::find(begin(tuilesPassees), end(tuilesPassees), c->getTuileParente()) != tuilesPassees.end())
             continue;
-        if (c->getSuppType() == SUPP_TYPE::JARDIN) {
-            cout << "€€€€€€€€€€€€€€€€€€€€€€€" << endl;
-        }
 
         if (c->getSuppType() == SUPP_TYPE::BLASON) {
             if (cathedrale) {
@@ -653,7 +650,6 @@ int Plateau::CompterVoisins(Tuile *tuile) {
 
 
 int Plateau::compterNbVillesAdjacentesFermees(Zone *prairie) {
-//    cout << "entree dans la methode compterNbVillesAdjacentesFermees" << endl;
     std::set<Zone *> villesAdjacentesFermees;//Set : pour qu'il n'y ait pas de doublons
 
     //parcours des cases de la prairie
@@ -663,7 +659,6 @@ int Plateau::compterNbVillesAdjacentesFermees(Zone *prairie) {
         for (Case *_c: voisins) {
             //on parcours toutes les cases voisines et on compte sa prairie une seule fois
             if (_c->getZoneType() == ZONE_TYPE::VILLE && !_c->getZoneParente()->estOuverte()) {
-//                cout << "ajout de la prairie VILLE fermee" <<ParametresPartie::toStringZONE_TYPE(_c->getZoneParente()->getType()) << endl;
                 villesAdjacentesFermees.insert(_c->getZoneParente());
             }
         }

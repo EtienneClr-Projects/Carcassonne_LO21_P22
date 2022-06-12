@@ -3,7 +3,6 @@
 #include <random>
 #include <string>
 #include <vector>
-#include <dirent.h>
 #include <algorithm>
 #include "CasesTuilesEtZones/Tuile.h"
 #include "JoueurEtRessources/Meeple.h"
@@ -145,22 +144,11 @@ void Jeu::lireDossier(const std::string &chemin, stringVec &vecteurDeStrings) {
     QStringList images = directory.entryList(QStringList() << "*.png" << "*.PNG", QDir::Files);
             foreach(QString filename, images) {
             if (filename[0] != '.') {//pour ne pas ajouter les noms . et ..
-                //cout << "Lets go!\n";
 
                 std::string filename_std = filename.toUtf8().constData();
                 vecteurDeStrings.push_back(filename_std);
             }
         }
-    /*
-    DIR *dirp = opendir(chemin.c_str());
-    struct dirent *dp;
-    while ((dp = readdir(dirp)) != nullptr) {
-        if (dp->d_name[0] != '.') {//pour ne pas ajouter les noms . et ..
-            vecteurDeStrings.push_back(dp->d_name);
-        }
-    }
-    closedir(dirp);
-    */
 }
 
 /**

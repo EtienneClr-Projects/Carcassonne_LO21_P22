@@ -33,12 +33,9 @@ public:
 //##################################################################################################################
     //Méthodes
 public:
-    int id_zone = 0;//todo debug only
     int ouvertures = 0;
 
     const ZONE_TYPE &getType();
-
-    int getNombreDePoints() const;
 
     std::vector<Joueur *> getGagnants();
 
@@ -49,8 +46,6 @@ public:
     std::string toString();
 
     void ajouterCase(Case *c);
-
-    void supprimerCase(Case *pCase);
 
     explicit Zone(Case *init_case);
 };

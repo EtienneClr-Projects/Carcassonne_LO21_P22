@@ -14,15 +14,10 @@ Zone::Zone(Case *init_case) {
     this->type = init_case->getZoneType();
     this->cases.push_back(init_case);
     Plateau::nombreDePrairie++;
-    this->id_zone = Plateau::nombreDePrairie;
 }
 
 const ZONE_TYPE &Zone::getType() {
     return this->type;
-}
-
-int Zone::getNombreDePoints() const {
-    return this->points;
 }
 
 /**
@@ -30,13 +25,11 @@ int Zone::getNombreDePoints() const {
  * @return le gagnant de la zone. nullptr si tous les joueurs en ont 0.
  */
 vector<Joueur *> Zone::getGagnants() {
-    cout << "getGagnants" << endl;
     //on parcourt toutes les cases de la Zone, et on compte le nombre de Meeples de chaque COULEUR
     std::map<COULEUR, int> nbMeeplesParCouleur;
     for (Case *c: this->cases) {
         Meeple *m = c->getMeeplePose();
         if (m != nullptr) {
-            cout << "m: " << ParametresPartie::toStringCOULEUR(m->getCouleur()) << endl;
             nbMeeplesParCouleur[m->getCouleur()]++;
             if (m->getType() == MEEPLE_TYPE::GRAND_MEEPLE) { //si grand meeple, on rajoute un point en plus
                 cout << "GRAND MEEPLE ! PLUS 1 MEEPLE" << endl;
@@ -56,12 +49,6 @@ vector<Joueur *> Zone::getGagnants() {
         } else if (it.second == nbMaxMeeples)
             gagnants.push_back(Partie::getInstance()->getJoueur(it.first));
     }
-    //affichage des gagnants
-    cout << "gagnants: ";
-    for (Joueur *j: gagnants)
-        cout << ParametresPartie::toStringCOULEUR(j->getCouleur()) << " : " << nbMeeplesParCouleur[j->getCouleur()]
-             << endl;
-    cout << endl;
     return gagnants;
 }
 
@@ -102,15 +89,6 @@ std::string Zone::toString() {
     }
     s += "ouvertures = "+std::to_string(ouvertures);
     return s;
-}
-
-void Zone::supprimerCase(Case *pCase) {
-    for (int i = 0; i < this->cases.size(); i++) {
-        if (this->cases[i] == pCase) {
-            this->cases.erase(this->cases.begin() + i);
-            return;
-        }
-    }
 }
 
 

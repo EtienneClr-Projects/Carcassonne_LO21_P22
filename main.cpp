@@ -244,7 +244,7 @@ int main() {
                 }
                 DIRECTION dir = DIRECTIONS_ORDERED[choixDir - 1];
                 auto *meeple = new Meeple(MEEPLE_TYPE::NORMAL, joueur->getCouleur(),
-                                          "");//todo uniquement pour les tests
+                                          "");//uniquement pour les tests
 
                 if (plateau->poserMeeple(meeple->getCouleur(), t->getCase(dir), meeple->getType(), partie->meeplesPoses,
                                          partie->meeplesEnReserve)) {

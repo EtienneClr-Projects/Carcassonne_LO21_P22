@@ -19,27 +19,19 @@ void vueMenu::on_pushButton_clicked() {
     if (nb_joueurs > 1)////////////////////
     {
         if (ui->exAbbe->isChecked()) {
-            exAbbe = 1;
+            exAbbe = true;
         }
         if (ui->exPaysans->isChecked()) {
-            exPaysans = 1;
+            exPaysans = true;
         }
         if (ui->exCathAub->isChecked()) {
-            exCathAub = 1;
+            exCathAub = true;
         }
         if (ui->exRiviere->isChecked()) {
-            exRiviere = 1;
+            exRiviere = true;
         }
 
 
-        //Compléter paramètres de la partie (et joueurs)
-
-
-        for (int i=0; i<nb_joueurs; i++)
-        {
-            cout << type_joueurs[i] << "\n";
-        }
-        cout << "\nHello\n";
         jeu_carca = new Jeu_Carcassonne(joueurs, nb_joueurs, type_joueurs,
                                         exPaysans, exAbbe, exCathAub, exRiviere, this);
         jeu_carca->setModal(true);
@@ -60,14 +52,14 @@ void vueMenu::on_pushButton_2_clicked() {
         QMessageBox::critical(this, "Erreur", "Veuillez insérer un nom de joueur.");
     } else if (ui->checkBox->isChecked() && (nb_joueurs == 0)) {
         QMessageBox::critical(this, "Erreur", "Le premier joueur ne peut être un IA.");
-        ui->checkBox->setChecked(0);
+        ui->checkBox->setChecked(false);
     }
     else {
         joueurs[nb_joueurs] = ui->lineEdit->text();
         if(ui->checkBox->isChecked())
         {
-            type_joueurs[nb_joueurs]=1;
-            ui->checkBox->setChecked(0);
+            type_joueurs[nb_joueurs] = 1;
+            ui->checkBox->setChecked(false);
         }
         else
         {

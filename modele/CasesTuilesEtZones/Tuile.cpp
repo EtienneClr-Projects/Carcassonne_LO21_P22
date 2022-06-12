@@ -1,6 +1,5 @@
 
 #include "CasesTuilesEtZones/Tuile.h"
-#include "JeuPiocheEtPlateau/Plateau.h"
 
 # include <string>
 # include <map>
@@ -70,7 +69,7 @@ Case *Tuile::getCase(DIRECTION d) const {
 }
 
 void Tuile::afficher() const {
-//    HANDLE console_color;
+//    HANDLE console_color;//pour afficher la tuile en couleur en console. Utilise la lib windows.h
 //    console_color = GetStdHandle(STD_OUTPUT_HANDLE);
     cout << "tuile:\n";
     for (int i = 1; i < 10; i++) {

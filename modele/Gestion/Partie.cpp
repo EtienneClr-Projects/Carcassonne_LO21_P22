@@ -2,7 +2,6 @@
 // Created by etienne on 27/04/2022.
 //
 
-#include <iostream>
 #include "Partie.h"
 
 
@@ -15,7 +14,6 @@ const vector<Joueur *> &Partie::getJoueurs() const {
 
 Joueur *Partie::getJoueur(COULEUR couleur) {
     for (auto joueur: joueurs) {
-        std::cout << "joueur: " << joueur << std::endl;
         if (joueur->getCouleur() == couleur) {
             return joueur;
         }
