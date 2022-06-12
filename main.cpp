@@ -269,12 +269,13 @@ int main() {
 }*/
 
 
-#include "vue/vuepartie.h"
 #include <QApplication>
+#include "vuemenu.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
-    vuePartie w;
-    w.show();
+    vueMenu vue;
+    vue.show();
+
     return a.exec();
 }
