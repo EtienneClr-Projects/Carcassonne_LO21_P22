@@ -15,6 +15,9 @@ Jeu_Carcassonne::Jeu_Carcassonne(QString *joueurs,
     ui->setupUi(this);
     this->setWindowTitle(QString("Carcassonne"));
     this->showMaximized();
+    //affiche me bouton maximiser
+    this->setWindowFlag(Qt::WindowMaximizeButtonHint);
+    this->setWindowFlag(Qt::WindowMinimizeButtonHint);
 
     grid = new QTableView;
     modele = new QStandardItemModel(20, 20, this);
