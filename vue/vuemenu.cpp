@@ -11,12 +11,12 @@ vueMenu::vueMenu(QWidget *parent) :
 }
 
 vueMenu::~vueMenu() {
-    delete jeu_carca;
+    delete jeuCarca;
     delete ui;
 }
 
 void vueMenu::on_pushButton_clicked() {
-    if (nb_joueurs > 1)////////////////////
+    if (nbJoueurs > 1)////////////////////
     {
         if (ui->exAbbe->isChecked()) {
             exAbbe = true;
@@ -32,10 +32,10 @@ void vueMenu::on_pushButton_clicked() {
         }
 
 
-        jeu_carca = new Jeu_Carcassonne(joueurs, nb_joueurs, type_joueurs,
-                                        exPaysans, exAbbe, exCathAub, exRiviere, this);
-        jeu_carca->setModal(true);
-        jeu_carca->exec();
+        jeuCarca = new Jeu_Carcassonne(joueurs, nbJoueurs, typeJoueurs,
+                                       exPaysans, exAbbe, exCathAub, exRiviere, this);
+        jeuCarca->setModal(true);
+        jeuCarca->exec();
 
         this->close();
     } else {
@@ -46,24 +46,20 @@ void vueMenu::on_pushButton_clicked() {
 
 
 void vueMenu::on_pushButton_2_clicked() {
-    if (nb_joueurs > 3) {
+    if (nbJoueurs > 3) {
         QMessageBox::critical(this, "Erreur", "Vous avez déjà 4 joueurs. C'est le maximum!");
     } else if (ui->lineEdit->text() == "") {
         QMessageBox::critical(this, "Erreur", "Veuillez insérer un nom de joueur.");
-    }
-    else {
-        joueurs[nb_joueurs] = ui->lineEdit->text();
-        if(ui->checkBox->isChecked())
-        {
-            type_joueurs[nb_joueurs] = 1;
+    } else {
+        joueurs[nbJoueurs] = ui->lineEdit->text();
+        if (ui->checkBox->isChecked()) {
+            typeJoueurs[nbJoueurs] = 1;
             ui->checkBox->setChecked(false);
+        } else {
+            typeJoueurs[nbJoueurs] = 0;
         }
-        else
-        {
-            type_joueurs[nb_joueurs]=0;
-        }
-        nb_joueurs++;
-        ui->label_2->setText(QString("Joueurs (%1 enregistrés) :").arg(nb_joueurs));
+        nbJoueurs++;
+        ui->label_2->setText(QString("Joueurs (%1 enregistrés) :").arg(nbJoueurs));
         ui->lineEdit->setText(QString(""));
     }
 }

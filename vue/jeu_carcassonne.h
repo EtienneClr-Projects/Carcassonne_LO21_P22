@@ -25,7 +25,7 @@ static const char *const aucuneAction = "Aucune action";
 
 static const int gridWidthHeight = 100;
 
-static const int TOUR__POSER_TUILE_PIOCHEE = 1;//utilisés dans position_tour
+static const int TOUR__POSER_TUILE_PIOCHEE = 1;//utilisés dans positionTour
 static const int TOUR__CHOIX_ACTION = 2;
 static const int TOUR__SCORE = 3;
 
@@ -76,40 +76,40 @@ private slots:
 private:
     std::random_device rd;//pour IA random
 
-    int position_tour = 0; //1=poser tuile piocher, 2=choix action, 3=score
-    int numero_tour = -1;
+    int positionTour = 0; //1=poser tuile piocher, 2=choix action, 3=score
+    int numeroTour = -1;
     int i_score_suivant = 0;//permet de vérifier que tous les joueurs ont eu leur score d'enregistré
-    //pas oublier de les initialiser dans debut_tour
-    int etape_action = 0;
-    int choix_action = 0;//1 = ajouter Meeple
-    int actions_finis = 0;//1 si actions en cours
+    //pas oublier de les initialiser dans debutTour
+    int etapeAction = 0;
+    int choixAction = 0;//1 = ajouter Meeple
+    int actionsFinies = 0;//1 si actions en cours
 
     controleurPartie *cPartie;
-    Tuile *tuile_active;
-    int index_tuile_active = 0;
+    Tuile *tuileActive;
+    int indexTuileActive = 0;
 
     Ui::Jeu_Carcassonne *ui;
     QTableView *grid;
     QStandardItemModel *modele;
 
     QPushButton *buttons[400];
-    QPixmap images_grilles[400];
-    QLabel *infos_joueurs[4];
-    QLabel *infos_scores[4];
-    QLabel *infos_ressources[4];
-    Joueur *liste_joueurs[4];//gettype() : 0=humain, 1 = IARAndom
+    QPixmap imagesGrilles[400];
+    QLabel *infosJoueurs[4];
+    QLabel *infosScores[4];
+    QLabel *infosRessources[4];
+    Joueur *listeJoueurs[4];//gettype() : 0=humain, 1 = IARAndom
 
-    COULEUR couleur_actuelle;
-    MEEPLE_TYPE meeple_type=MEEPLE_TYPE::NORMAL;
+    COULEUR couleurActuelle;
+    MEEPLE_TYPE meepleType = MEEPLE_TYPE::NORMAL;
 
 
     void initialisation(QString *joueurs, const int *tj);
 
-    void debut_tour();
+    void debutTour();
 
-    void fin_tour();
+    void finTour();
 
-    void fin_jeu();
+    void finJeu();
 
     int getScore(const QString &_infos_scores);
     void setActions();

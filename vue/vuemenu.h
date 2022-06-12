@@ -26,13 +26,13 @@ private slots:
 private:
     Ui::vueMenu *ui;
     QString joueurs[4];
-    int type_joueurs[4];
-    int nb_joueurs = 0;
-    bool exPaysans = 0;
-    bool exAbbe = 0;
-    bool exCathAub = 0;
-    bool exRiviere = 0;
-    Jeu_Carcassonne *jeu_carca;
+    int typeJoueurs[4];
+    int nbJoueurs = 0;
+    bool exPaysans = false;
+    bool exAbbe = false;
+    bool exCathAub = false;
+    bool exRiviere = false;
+    Jeu_Carcassonne *jeuCarca;
 };
 
 #endif // VUEMENU_H
